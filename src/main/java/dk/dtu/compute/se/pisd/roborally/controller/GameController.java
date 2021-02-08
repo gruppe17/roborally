@@ -197,7 +197,14 @@ public class GameController {
 
     // TODO Assignment V2
     public void moveForward(@NotNull Player player) {
-
+        if (player == null) return; //This should never happen, but we test for it anyway?
+        Space currentSpace = player.getSpace();
+        if (currentSpace != null) {
+            Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
+            if (target != null && target.getPlayer() == null){
+                player.setSpace(target); //identical to target.setPlayer(player);
+            }
+        }
     }
 
     // TODO Assignment V2
