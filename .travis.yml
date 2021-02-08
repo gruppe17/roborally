@@ -1,8 +1,8 @@
 language: java
 jdk: openjdk15
-deploy:
-  provider: releases
-  api_key: "$GH_TOKEN"
-  file: "$ReleaseFileName"
-  skip_cleanup: true
-  draft: true
+# deploy:
+  # provider: releases
+  # api_key: "$GH_TOKEN"
+  # file: "$ReleaseFileName"
+  # skip_cleanup: true
+  # draft: true
