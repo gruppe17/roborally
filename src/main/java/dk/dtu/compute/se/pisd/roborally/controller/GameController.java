@@ -195,6 +195,12 @@ public class GameController {
         }
     }
 
+    /**
+     * <p>Moves the player in the direction of their current heading by the specified distance</p>
+     *
+     * @param player The player to move
+     * @param distance The amount of spaces to move in the current direction
+     */
     public void moveForward(@NotNull Player player, int distance) {
         if (player == null) return; //This should never happen, but we test for it anyway?
 
@@ -213,25 +219,45 @@ public class GameController {
         }
     }
 
-    // TODO Assignment V2
+    /**
+     * <p>Moves the player forward by one</p>
+     * <p>Identical to {@code moveForward(player, 1)}</p>
+     * @param player the player to move
+     */
     public void moveForward(@NotNull Player player) {
         moveForward(player, 1);
     }
 
-    // TODO Assignment V2
+    /**
+     * <p>Moves the player forward by two</p>
+     * <p>Identical to {@code moveForward(player, 2)} </p>
+     * @param player the player to move
+     */
     public void fastForward(@NotNull Player player) {
-
+        moveForward(player, 2);
     }
 
-    // TODO Assignment V2
+    public void turnRight(@NotNull Player player, ) {
+        player.setHeading(player.getHeading().next());
+    }
+
+    /**
+     * <p>Turns player/robot to the right by one </p>
+     * <p>  </p>
+     * @param player
+     */
     public void turnRight(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().next());
     }
 
-    // TODO Assignment V2
+    /**
+     * Turns player/robot to the left by one
+     * @param player
+     */
     public void turnLeft(@NotNull Player player) {
-
+        player.setHeading(player.getHeading().prev());
     }
+
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
