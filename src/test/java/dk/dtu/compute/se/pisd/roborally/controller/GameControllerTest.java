@@ -59,4 +59,27 @@ class GameControllerTest {
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
     }
 
+    @Test
+    void testMoveForward() {
+    }
+
+    @Test
+    void testMoveForward1() {
+    }
+
+    @Test
+    void fastForward() {
+    }
+
+    @Test
+    void turnRight() {
+    }
+
+    @Test
+    void testTurnRight() {
+    }
+
+    @Test
+    void turnLeft() {
+    }
 }
