@@ -195,16 +195,27 @@ public class GameController {
         }
     }
 
-    // TODO Assignment V2
-    public void moveForward(@NotNull Player player) {
+    public void moveForward(@NotNull Player player, int distance) {
         if (player == null) return; //This should never happen, but we test for it anyway?
+
         Space currentSpace = player.getSpace();
         if (currentSpace != null) {
-            Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
-            if (target != null && target.getPlayer() == null){
-                player.setSpace(target); //identical to target.setPlayer(player);
+            for (int i = 0; i < distance; i++) {
+                Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
+                if (target != null && target.getPlayer() == null){
+                    currentSpace = target;
+                }
+                else{
+                    break;
+                }
             }
+            player.setSpace(currentSpace); //identical to target.setPlayer(player);
         }
+    }
+
+    // TODO Assignment V2
+    public void moveForward(@NotNull Player player) {
+        moveForward(player, 1);
     }
 
     // TODO Assignment V2
