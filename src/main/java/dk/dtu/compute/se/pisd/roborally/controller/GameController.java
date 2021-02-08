@@ -230,32 +230,41 @@ public class GameController {
 
     /**
      * <p>Moves the player forward by two</p>
-     * <p>Identical to {@code moveForward(player, 2)} </p>
-     * @param player the player to move
+     * <p>Identical to {@code moveForward(player, 2)}</p>
+     * @param player The player to move
      */
     public void fastForward(@NotNull Player player) {
         moveForward(player, 2);
     }
 
-    public void turnRight(@NotNull Player player, ) {
-        player.setHeading(player.getHeading().next());
+    /**
+     * Turns a player heading by π/4 * {@code numTimes}
+     * @param player Player to turn
+     * @param numTimes Number of times to turn right
+     */
+    public void turnRight(@NotNull Player player, int numTimes) {
+        Heading heading = player.getHeading();
+        for (int i = 0; i < numTimes; i++) {
+            heading = heading.next();
+        }
+        player.setHeading(heading);
     }
 
     /**
-     * <p>Turns player/robot to the right by one </p>
-     * <p>  </p>
-     * @param player
+     * <p>Turns player/robot by π/4</p>
+     * @param player The player to move
      */
     public void turnRight(@NotNull Player player) {
-        player.setHeading(player.getHeading().next());
+        turnRight(player, 1);
     }
 
     /**
-     * Turns player/robot to the left by one
-     * @param player
+     * <p>Turns player/robot by -π/4</p>
+     * @param player The player to move
      */
     public void turnLeft(@NotNull Player player) {
         player.setHeading(player.getHeading().prev());
+       //turnRight(player,3);
     }
 
 
