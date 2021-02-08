@@ -197,7 +197,7 @@ public class GameController {
 
     /**
      * <p>Moves the player in the direction of their current heading by the specified distance</p>
-     *
+     * <p>The distance wraps around the map</p>
      * @param player The player to move
      * @param distance The amount of spaces to move in the current direction
      */
