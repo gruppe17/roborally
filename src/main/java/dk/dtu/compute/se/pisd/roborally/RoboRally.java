@@ -39,20 +39,9 @@ import javafx.stage.Stage;
  */
 public class RoboRally extends Application {
 
-    /**
-     * The minimum width of that application window
-     */
     private static final int MIN_APP_WIDTH = 600;
 
-
-    /**
-     * The main window of the application
-     */
     private Stage stage;
-
-    /**
-     * The main pane in the stage(window).
-     */
     private BorderPane boardRoot;
     // private RoboRallyMenuBar menuBar;
 
@@ -63,11 +52,6 @@ public class RoboRally extends Application {
         super.init();
     }
 
-    /**
-     * <p>Initialises and displays the program window.</p>
-     * <p>This method is run through the {@code launch} method in {@code Application}.</p>
-     * @param primaryStage The current window
-     */
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
@@ -94,10 +78,6 @@ public class RoboRally extends Application {
         stage.show();
     }
 
-    /**
-     * Creates a board view as a child to the root {@code BorderPane}
-     * @param gameController the {@code GameController} to use for the {@code BoardView}
-     */
     public void createBoardView(GameController gameController) {
         // if present, remove old BoardView
         boardRoot.getChildren().clear();
@@ -107,13 +87,10 @@ public class RoboRally extends Application {
             BoardView boardView = new BoardView(gameController);
             boardRoot.setCenter(boardView);
         }
+
         stage.sizeToScene();
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     @Override
     public void stop() throws Exception {
         super.stop();
@@ -124,10 +101,6 @@ public class RoboRally extends Application {
         //     so that the AppController can take care of that.
     }
 
-    /**
-     *
-     * @param args
-     */
     public static void main(String[] args) {
         launch(args);
     }

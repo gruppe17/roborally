@@ -49,6 +49,7 @@ public class Space extends Subject {
         return player;
     }
 
+    //TODO: add javadoc comment explaining this method (importantly, it is responsible for setting the old spaces player to null and the players space to this)
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
         if (player != oldPlayer &&

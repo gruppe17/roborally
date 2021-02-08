@@ -128,10 +128,6 @@ public class Board extends Subject {
         }
     }
 
-    public Player getNextPlayer() {
-        return getPlayer((getPlayerNumber(current) + 1) % getPlayersNumber());
-    }
-
     public Phase getPhase() {
         return phase;
     }
@@ -204,41 +200,16 @@ public class Board extends Subject {
         return getSpace(x, y);
     }
 
-    /**
-     * Get a status message that includes information about current player and number of moves.
-     * @return a {@code String} representing the text to be written in the bottom of the GUI
-     */
     public String getStatusMessage() {
-        // This is actually a view aspect, but for making the first task easy for
+        // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
         // status of the game
-        return "Player = " + getCurrentPlayer().getName() + ", Number of moves: " + getMoveCounter();
+
+        // XXX: V2 changed the status so that it shows the phase, the player and the step
+        return "Phase: " + getPhase().name() +
+                ", Player = " + getCurrentPlayer().getName() +
+                ", Step: " + getStep();
     }
 
-    /**
-     * Counter for the number of completed moves
-     */
-    private int moveCounter = 0;
-
-
-    public int getMoveCounter() {
-        return moveCounter;
-    }
-
-    public void setMoveCounter(int moveCounter) {
-        if (moveCounter == this.moveCounter) return;
-        if (moveCounter < 0) moveCounter = 0;
-        this.moveCounter = moveCounter;
-        notifyChange();
-    }
-
-    /**
-     * Increments the move counter by numMoves.
-     * @param numMoves the number of moves to increment {@code moveCounter} by.
-     */
-    public void addMoveCounter(int numMoves) {
-        if (numMoves == 0) return;
-        setMoveCounter(getMoveCounter() + numMoves);
-    }
 
 }

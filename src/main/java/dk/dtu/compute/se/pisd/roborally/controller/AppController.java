@@ -27,7 +27,6 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
 import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import javafx.application.Platform;
@@ -48,7 +47,6 @@ import java.util.Optional;
  *
  */
 public class AppController implements Observer {
-    
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
@@ -86,17 +84,21 @@ public class AppController implements Observer {
                 board.addPlayer(player);
                 player.setSpace(board.getSpace(i % board.width, i));
             }
-            board.setCurrentPlayer(board.getPlayer(0));
+
+            // XXX: V2
+            // board.setCurrentPlayer(board.getPlayer(0));
+            gameController.startProgrammingPhase();
+
             roboRally.createBoardView(gameController);
         }
     }
 
     public void saveGame() {
-        // XXX needs to be implememged eventually
+        // XXX needs to be implemented eventually
     }
 
     public void loadGame() {
-        // XXX needs to be implememged eventually
+        // XXX needs to be implememted eventually
         // for now, we just create a new game
         if (gameController == null) {
             newGame();
