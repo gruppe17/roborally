@@ -60,19 +60,16 @@ class GameControllerTest {
     }
 
     @Test
-    void testMoveForward() {
+    void testMoveForwardByN() {
+        
     }
 
     @Test
-    void testMoveForward1() {
+    void testMoveForwardBy1() {
     }
 
     @Test
-    void fastForward() {
-    }
-
-    @Test
-    void turnRight() {
+    void testFastForward() {
     }
 
     @Test
@@ -80,6 +77,10 @@ class GameControllerTest {
     }
 
     @Test
-    void turnLeft() {
+    void testTurnRightByN() {
+    }
+
+    @Test
+    void testTurnLeft() {
     }
 }
