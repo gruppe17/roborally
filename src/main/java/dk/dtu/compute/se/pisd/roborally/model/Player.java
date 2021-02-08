@@ -96,6 +96,7 @@ public class Player extends Subject {
         return space;
     }
 
+    //TODO: add javadoc comment explaining this method (importantly, it is responsible for setting the old spaces player to null)
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space != oldSpace &&
