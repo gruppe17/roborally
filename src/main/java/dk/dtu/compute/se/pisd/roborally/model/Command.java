@@ -32,7 +32,6 @@ import java.util.List;
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
 public enum Command {
-
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
