@@ -26,32 +26,27 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * ...
+ * A Command that takes a name and other commands as options
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
 public enum Command {
 
-    // This is a very simplistic way of realizing different commands.
-
     FORWARD("Fwd"),
     RIGHT("Turn Right"),
     LEFT("Turn Left"),
     FAST_FORWARD("Fast Fwd"),
-
-    // XXX Assignment V3
     OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
+    /**
+     * <p>The name of the command</p>
+     */
     final public String displayName;
 
-    // XXX Assignment V3
-    // Command(String displayName) {
-    //     this.displayName = displayName;
-    // }
-    //
-    // replaced by the code below:
-
+    /**
+     * The list of commands that can be chosen between.
+     */
     final private List<Command> options;
 
     Command(String displayName, Command... options) {
@@ -59,10 +54,19 @@ public enum Command {
         this.options = List.of(options);
     }
 
+    /**
+     * <p>Returns true if the commands is interactive.</p>
+     * <p> An interactive command lets the player select between options </p>
+     * @return
+     */
     public boolean isInteractive() {
         return !options.isEmpty();
     }
 
+    /**
+     * <p>Returns the commands that can be selected between</p>
+     * @return
+     */
     public List<Command> getOptions() {
         return options;
     }
