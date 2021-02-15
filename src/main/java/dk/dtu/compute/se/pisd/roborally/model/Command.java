@@ -45,10 +45,15 @@ public enum Command {
     final public String displayName;
 
     /**
-     * The list of commands that can be chosen between.
+     * <p>The list of commands that can be chosen between.</p>
      */
     final private List<Command> options;
 
+    /**
+     * <p>Creates an instance of Command</p>
+     * @param displayName The display name of the command
+     * @param options A list of Command objects representing the possible commands to choose between
+     */
     Command(String displayName, Command... options) {
         this.displayName = displayName;
         this.options = List.of(options);
@@ -56,8 +61,8 @@ public enum Command {
 
     /**
      * <p>Returns true if the commands is interactive.</p>
-     * <p> An interactive command lets the player select between options </p>
-     * @return
+     * <p>An interactive command lets the player select between options.</p>
+     * @return A boolean indicating if the command is interactive
      */
     public boolean isInteractive() {
         return !options.isEmpty();
@@ -65,7 +70,7 @@ public enum Command {
 
     /**
      * <p>Returns the commands that can be selected between</p>
-     * @return
+     * @return A list of possible commands
      */
     public List<Command> getOptions() {
         return options;
