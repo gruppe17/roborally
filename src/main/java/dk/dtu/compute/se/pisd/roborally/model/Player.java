@@ -44,6 +44,11 @@ public class Player extends Subject {
     private String color;
 
     private Space space;
+
+    /**
+     * The distance to the priority space.
+     * @see Board#prioritySpace
+     */
     private int distanceToPrioritySpace;
     private Heading heading = SOUTH;
 
@@ -130,8 +135,9 @@ public class Player extends Subject {
     }
 
     /**
-     * <p>Returns the distance to the priority antenna</p>
-     * @return an int representing the distance to the priority antenna
+     * <p>Returns the rectilinear distance to the priority antenna</p>
+     * @return an int representing the rectilinear distance to the priority antenna
+     * @see #distanceToPrioritySpace
      */
     public int getDistanceToPrioritySpace() {
         return distanceToPrioritySpace;
