@@ -37,7 +37,7 @@ public class GameController {
     public GameController(@NotNull Board board) {
         this.board = board;
     }
-    
+
     // XXX: V2
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
@@ -118,7 +118,52 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
+    //Todo: please fix
+    //This really should not be here
+    private Player[] prioritySortedPlayers;
+    private int prioritySortedPlayersIndex = 0;
+    private void executeNextStep() {
+        if (prioritySortedPlayers == null) prioritySortedPlayers = board.getSortedPlayerArray(); //If this whole thing was permanent it should be set in constructor.
+        //Player currentPlayer = board.getCurrentPlayer();
+        Player currentPlayer = prioritySortedPlayers[prioritySortedPlayersIndex];
+        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
+            int step = board.getStep();
+            if (step >= 0 && step < Player.NO_REGISTERS) {
+                CommandCard card = currentPlayer.getProgramField(step).getCard();
+                if (card != null) {
+                    Command command = card.command;
+                    executeCommand(currentPlayer, command);
+                }
+                if (prioritySortedPlayersIndex++ < prioritySortedPlayers.length) {
+                    board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
+                } else {
+                    step++;
+                    prioritySortedPlayersIndex = 0;
+                    prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
+                    if (step < Player.NO_REGISTERS) {
+                        makeProgramFieldsVisible(step);
+                        board.setStep(step);
+                        board.setCurrentPlayer(board.getPlayer(0));
+                    } else {
+                        startProgrammingPhase();
+                    }
+                }
+            } else {
+                // this should not happen
+                assert false;
+            }
+        } else {
+            // this should not happen
+            assert false;
+        }
+    }
+
     // XXX: V2
+
+    /**
+     *
+     */
+    /*
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
@@ -151,7 +196,7 @@ public class GameController {
             assert false;
         }
     }
-
+*/
     // XXX: V2
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
