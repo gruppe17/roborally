@@ -51,7 +51,6 @@ public class BoardView extends VBox implements ViewObserver {
 
     private Label statusLabel;
 
-    private SpaceEventHandler spaceEventHandler;
 
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
@@ -66,15 +65,12 @@ public class BoardView extends VBox implements ViewObserver {
 
         spaces = new SpaceView[board.width][board.height];
 
-        spaceEventHandler = new SpaceEventHandler(gameController);
-
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
                 Space space = board.getSpace(x, y);
                 SpaceView spaceView = new SpaceView(space);
                 spaces[x][y] = spaceView;
                 mainBoardPane.add(spaceView, x, y);
-                spaceView.setOnMouseClicked(spaceEventHandler);
             }
         }
 
