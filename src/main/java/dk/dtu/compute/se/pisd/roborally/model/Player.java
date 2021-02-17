@@ -30,6 +30,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander
  *
  */
 public class Player extends Subject {
@@ -43,6 +44,7 @@ public class Player extends Subject {
     private String color;
 
     private Space space;
+    private int distanceToPrioritySpace;
     private Heading heading = SOUTH;
 
     private CommandCardField[] program;
@@ -107,7 +109,8 @@ public class Player extends Subject {
             }
             if (space != null) {
                 space.setPlayer(this);
-            }
+                distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
+            } else distanceToPrioritySpace = -1;
             notifyChange();
         }
     }
@@ -124,6 +127,14 @@ public class Player extends Subject {
                 space.playerChanged();
             }
         }
+    }
+
+    /**
+     * <p>Returns the distance to the priority antenna</p>
+     * @return an int representing the distance to the priority antenna
+     */
+    public int getDistanceToPrioritySpace() {
+        return distanceToPrioritySpace;
     }
 
     public CommandCardField getProgramField(int i) {
