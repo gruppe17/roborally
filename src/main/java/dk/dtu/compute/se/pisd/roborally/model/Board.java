@@ -35,6 +35,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander
  *
  */
 public class Board extends Subject {
@@ -65,6 +66,9 @@ public class Board extends Subject {
      */
     private int step = 0;
 
+    /**
+     * <p>Indicates whether the players' programs should be single-stepped through</p>
+     */
     private boolean stepMode;
 
     public Board(int width, int height, @NotNull String boardName) {
@@ -110,6 +114,10 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * <p>Returns the {@link #prioritySpace}</p>
+     * @return A space containing the priority antenna
+     */
     public Space getPrioritySpace(){
         return prioritySpace;
     }
@@ -166,10 +174,14 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Indicates if the players' program is being single-stepped through.
+     * @return a boolean indicating if only the next instruction of the next player should be executed
+     */
     public boolean isStepMode() {
         return stepMode;
     }
-
+    
     public void setStepMode(boolean stepMode) {
         if (stepMode != this.stepMode) {
             this.stepMode = stepMode;
