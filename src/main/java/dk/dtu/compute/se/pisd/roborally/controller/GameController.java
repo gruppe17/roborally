@@ -123,9 +123,11 @@ public class GameController {
     private Player[] prioritySortedPlayers;
     private int prioritySortedPlayersIndex = 0;
     private void executeNextStep() {
-        if (prioritySortedPlayers == null) prioritySortedPlayers = board.getSortedPlayerArray(); //If this whole thing was permanent it should be set in constructor.
-        //Player currentPlayer = board.getCurrentPlayer();
-        Player currentPlayer = prioritySortedPlayers[prioritySortedPlayersIndex];
+        if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
+            prioritySortedPlayers = board.getSortedPlayerArray();
+            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
+        }
+        Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
             if (step >= 0 && step < Player.NO_REGISTERS) {
@@ -134,7 +136,7 @@ public class GameController {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
                 }
-                if (prioritySortedPlayersIndex++ < prioritySortedPlayers.length) {
+                if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) {
                     board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
                 } else {
                     step++;
@@ -143,7 +145,7 @@ public class GameController {
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
                         board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
+                        board.setCurrentPlayer(prioritySortedPlayers[0]);
                     } else {
                         startProgrammingPhase();
                     }
