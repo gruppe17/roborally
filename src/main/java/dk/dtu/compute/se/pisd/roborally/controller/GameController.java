@@ -188,7 +188,7 @@ public class GameController {
      *
      * @param player  The player the command should be applied to
      * @param command The command to execute
-     * @see #executeCommandAndContinue(Command) 
+     * @see #executeCommandAndContinue(Command)
      */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
@@ -222,8 +222,8 @@ public class GameController {
      * <p>This is different from {@link #executeCommand} which simply returns.</p>
      *
      * @param command the command which is to be executed
-     * @see #executeCommand(Player, Command)
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #executeCommand(Player, Command)
      */
     public void executeCommandAndContinue(@NotNull Command command) {
         Player currentPlayer = board.getCurrentPlayer();

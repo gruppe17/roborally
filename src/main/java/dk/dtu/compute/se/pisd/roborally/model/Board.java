@@ -77,7 +77,7 @@ public class Board extends Subject {
         this.height = height;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
             }
@@ -116,9 +116,10 @@ public class Board extends Subject {
 
     /**
      * <p>Returns the {@link #prioritySpace}</p>
+     *
      * @return A space containing the priority antenna
      */
-    public Space getPrioritySpace(){
+    public Space getPrioritySpace() {
         return prioritySpace;
     }
 
@@ -176,6 +177,7 @@ public class Board extends Subject {
 
     /**
      * Indicates if the players' program is being single-stepped through.
+     *
      * @return a boolean indicating if only the next instruction of the next player should be executed
      */
     public boolean isStepMode() {
@@ -203,7 +205,7 @@ public class Board extends Subject {
      * (no walls or obstacles in either of the involved spaces); otherwise,
      * null will be returned.
      *
-     * @param space the space for which the neighbour should be computed
+     * @param space   the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
@@ -241,22 +243,24 @@ public class Board extends Subject {
 
     /**
      * <p>Returns the rectilinear distance between two spaces as an {@code int}. Any obstacles in the way are ignored.</p>
+     *
      * @param from the space from which is measured
-     * @param to the space measured to
+     * @param to   the space measured to
      * @return an int representing the rectilinear distance between the spaces "from" and "to" ignoring any obstacles
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public int getRectilinearDistance(Space from, Space to){
+    public int getRectilinearDistance(Space from, Space to) {
         return Math.abs(to.x - from.x) + Math.abs(to.y - from.y);
     }
 
     /**
      * <p>Returns the rectilinear distance between a {@code Space} and the {@link #prioritySpace} as an {@code int}. Any obstacles in the way are ignored.</p>
      * <p>This is identical to {@link #getRectilinearDistance(Space from, Space prioritySpace)}</p>
+     *
      * @param from the space from which is measured
      * @return an int representing the rectilinear distance between the priority antenna and "from" ignoring any obstacles
-     * @see #getRectilinearDistance(Space, Space)
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #getRectilinearDistance(Space, Space)
      */
     public int getRectilinearDistanceToPrioritySpace(Space from) {
         return getRectilinearDistance(from, prioritySpace);
@@ -265,10 +269,11 @@ public class Board extends Subject {
     /**
      * <p>Returns a new array containing all the players ordered by proximity to the priority antenna.</p>
      * <p>In case of two players equidistant to the priority antenna they are ordered according to their location in the original array.</p>
+     *
      * @return an array of players containing all the players on the board in order of priority
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public Player[] getSortedPlayerArray(){
+    public Player[] getSortedPlayerArray() {
         Player[] sortedPlayers = players.toArray(new Player[0]);
         Arrays.sort(sortedPlayers, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
         return sortedPlayers;
