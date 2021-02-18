@@ -156,10 +156,12 @@ public class GameController {
 
     /**
      * <p>Handles what happens after a player instruction has been executed.</p>
-     * <p>If the last player of the round has been activated then the players are sorted and {@link Board#step} is incremented. If also the entire activation is completed the programming phase is started.</p>
-     * <p>No matter what, the next player is always set.</p>
+     * <p>If the last player of the round has been activated then the players are sorted
+     * and register № is incremented. If also the entire activation is completed the programming phase is started.
+     * No matter what, the next player is always set.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see Board#getStep()
      */
     private void subRoundComplete() {
         if (board.getPhase() != Phase.ACTIVATION) {
