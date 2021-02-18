@@ -24,11 +24,13 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Matcher;
+
 /**
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class GameController {
 
@@ -156,6 +158,8 @@ public class GameController {
      * <p>Handles what happens after a player instruction has been executed.</p>
      * <p>If the last player of the round has been activated then the players are sorted and {@link Board#step} is incremented. If also the entire activation is completed the programming phase is started.</p>
      * <p>No matter what, the next player is always set.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void subRoundComplete() {
         if (board.getPhase() != Phase.ACTIVATION) {
@@ -219,6 +223,14 @@ public class GameController {
     }
 */
     // XXX: V2
+
+    /**
+     * <p>Executes a {@link Command} on a given player</p>
+     *
+     * @param player  The player the command should be applied to
+     * @param command The command to execute
+     * @see #executeCommandAndContinue(Command) 
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
@@ -244,9 +256,32 @@ public class GameController {
         }
     }
 
+
+    /**
+     * <p>Executes a command on the current player and continues
+     * execution of players' programs respecting {@link Board#isStepMode}.</p>
+     * <p>This is different from {@link #executeCommand} which simply returns.</p>
+     *
+     * @param command the command which is to be executed
+     * @see #executeCommand(Player, Command) 
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void executeCommandAndContinue(@NotNull Command command) {
+        Player currentPlayer = board.getCurrentPlayer();
+        if (board.getPhase() != Phase.PLAYER_INTERACTION || currentPlayer == null) {
+            assert false;
+            return;
+        }
+        board.setPhase(Phase.ACTIVATION);
+
+        executeCommand(currentPlayer, command);
+        subRoundComplete();
+        if (!board.isStepMode()) continuePrograms();
+    }
+
     /**
      * <p>Moves the player in the direction of their current heading by the specified distance</p>
-     * <p>The distance wraps around the map</p>
+     * <p>The distance wraps around the map.</p>
      *
      * @param player   The player to move
      * @param distance The amount of spaces to move in the current direction

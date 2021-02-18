@@ -35,7 +35,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- * @author Rasmus Nylander
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class Board extends Subject {
@@ -244,7 +244,7 @@ public class Board extends Subject {
      * @param from the space from which is measured
      * @param to the space measured to
      * @return an int representing the rectilinear distance between the spaces "from" and "to" ignoring any obstacles
-     * @author Rasmus Nylander
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public int getRectilinearDistance(Space from, Space to){
         return Math.abs(to.x - from.x) + Math.abs(to.y - from.y);
@@ -256,7 +256,7 @@ public class Board extends Subject {
      * @param from the space from which is measured
      * @return an int representing the rectilinear distance between the priority antenna and "from" ignoring any obstacles
      * @see #getRectilinearDistance(Space, Space)
-     * @author Rasmus Nylander
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public int getRectilinearDistanceToPrioritySpace(Space from) {
         return getRectilinearDistance(from, prioritySpace);
@@ -266,7 +266,7 @@ public class Board extends Subject {
      * <p>Returns a new array containing all the players ordered by proximity to the priority antenna.</p>
      * <p>In case of two players equidistant to the priority antenna they are ordered according to their location in the original array.</p>
      * @return an array of players containing all the players on the board in order of priority
-     * @author Rasmus Nylander
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public Player[] getSortedPlayerArray(){
         Player[] sortedPlayers = players.toArray(new Player[0]);
