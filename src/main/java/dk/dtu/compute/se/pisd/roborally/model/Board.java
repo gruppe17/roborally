@@ -181,7 +181,7 @@ public class Board extends Subject {
     public boolean isStepMode() {
         return stepMode;
     }
-    
+
     public void setStepMode(boolean stepMode) {
         if (stepMode != this.stepMode) {
             this.stepMode = stepMode;
