@@ -254,7 +254,7 @@ public class Board extends Subject {
      * @author Rasmus Nylander
      */
     public Player[] getSortedPlayerArray(){
-        Player[] sortedPlayers = (Player[]) players.toArray();
+        Player[] sortedPlayers = players.toArray(new Player[0]);
         Arrays.sort(sortedPlayers, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
         return sortedPlayers;
     }
