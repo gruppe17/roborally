@@ -132,7 +132,7 @@ public class PlayerView extends Tab implements ViewObserver {
         }
     }
 
-    
+
     @Override
     public void updateView(Subject subject) {
         if (subject == player.board) {
