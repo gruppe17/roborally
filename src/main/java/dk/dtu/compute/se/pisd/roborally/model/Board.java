@@ -60,6 +60,9 @@ public class Board extends Subject {
 
     private Phase phase = INITIALISATION;
 
+    /**
+     * <p>What step of the players' programs are being executed, i.e. the register №</p>
+     */
     private int step = 0;
 
     private boolean stepMode;
