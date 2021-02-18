@@ -122,6 +122,7 @@ public class GameController {
     //This really should not be here
     private Player[] prioritySortedPlayers;
     private int prioritySortedPlayersIndex = 0;
+
     private void executeNextStep() {
         if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
             prioritySortedPlayers = board.getSortedPlayerArray();
@@ -134,26 +135,13 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
-                    if (command.isInteractive()){
+                    if (command.isInteractive()) {
                         board.setPhase(Phase.PLAYER_INTERACTION);
                         return;
                     }
                     executeCommand(currentPlayer, command);
                 }
-                if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) {
-                    board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
-                } else {
-                    step++;
-                    prioritySortedPlayersIndex = 0;
-                    prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(prioritySortedPlayers[0]);
-                    } else {
-                        startProgrammingPhase();
-                    }
-                }
+                subRoundComplete();
             } else {
                 // this should not happen
                 assert false;
@@ -161,6 +149,33 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    /**
+     * <p>Handles what happens after a player instruction has been executed.</p>
+     * <p>If the last player of the round has been activated then the players are sorted and {@link Board#step} is incremented. If also the entire activation is completed the programming phase is started.</p>
+     * <p>No matter what, the next player is always set.</p>
+     */
+    private void subRoundComplete() {
+        if (board.getPhase() != Phase.ACTIVATION) {
+            assert false;
+            return;
+        }
+
+        if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) { //The round is not over
+            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
+        } else { //The round is over
+            int step = board.getStep() + 1;
+            prioritySortedPlayersIndex = 0;
+            prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
+            board.setCurrentPlayer(prioritySortedPlayers[0]);
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+            } else {
+                startProgrammingPhase();
+            }
         }
     }
 
@@ -232,7 +247,8 @@ public class GameController {
     /**
      * <p>Moves the player in the direction of their current heading by the specified distance</p>
      * <p>The distance wraps around the map</p>
-     * @param player The player to move
+     *
+     * @param player   The player to move
      * @param distance The amount of spaces to move in the current direction
      */
     public void moveForward(@NotNull Player player, int distance) {
@@ -242,10 +258,9 @@ public class GameController {
         if (currentSpace != null) {
             for (int i = 0; i < distance; i++) {
                 Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
-                if (target != null && target.getPlayer() == null){
+                if (target != null && target.getPlayer() == null) {
                     currentSpace = target;
-                }
-                else{
+                } else {
                     break;
                 }
             }
@@ -256,6 +271,7 @@ public class GameController {
     /**
      * <p>Moves the player forward by one</p>
      * <p>Identical to {@code moveForward(player, 1)}</p>
+     *
      * @param player the player to move
      */
     public void moveForward(@NotNull Player player) {
@@ -265,6 +281,7 @@ public class GameController {
     /**
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(player, 2)}</p>
+     *
      * @param player The player to move
      */
     public void fastForward(@NotNull Player player) {
@@ -273,7 +290,8 @@ public class GameController {
 
     /**
      * Turns a player heading by π/4 * {@code numTimes}
-     * @param player Player to turn
+     *
+     * @param player   Player to turn
      * @param numTimes Number of times to turn right
      */
     public void turnRight(@NotNull Player player, int numTimes) {
@@ -286,6 +304,7 @@ public class GameController {
 
     /**
      * <p>Turns player/robot by π/4</p>
+     *
      * @param player The player to move
      */
     public void turnRight(@NotNull Player player) {
@@ -294,11 +313,12 @@ public class GameController {
 
     /**
      * <p>Turns player/robot by -π/4</p>
+     *
      * @param player The player to move
      */
     public void turnLeft(@NotNull Player player) {
         player.setHeading(player.getHeading().prev());
-       //turnRight(player,3);
+        //turnRight(player,3);
     }
 
 
