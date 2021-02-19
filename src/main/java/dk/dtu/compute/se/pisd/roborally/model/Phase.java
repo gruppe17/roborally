@@ -26,7 +26,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
  * <p>Conceptually, represents the current state of the game,
  * and does so most the time, however has come to be used for
  * representing the current state of the program also/instead.</p>
- * 
+ *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
  *
