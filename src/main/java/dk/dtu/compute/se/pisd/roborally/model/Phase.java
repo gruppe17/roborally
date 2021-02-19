@@ -22,11 +22,30 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
- *
+ * <p>Represents the current state of the program.</p>
+ * <p>Conceptually, represents the current state of the game,
+ * and does so most the time, however has come to be used for
+ * representing the current state of the program also/instead.</p>
+ * 
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public enum Phase {
-    INITIALISATION, PROGRAMMING, ACTIVATION, PLAYER_INTERACTION
+    /**
+     * <p>Represents the game being initialised.</p>
+     */
+    INITIALISATION,
+    /**
+     * <p>Represents the programming phase.</p>
+     */
+    PROGRAMMING,
+    /**
+     * <p>Represents the activation phase.</p>
+     */
+    ACTIVATION,
+    /**
+     * <p>Represents the program requiring user interaction.</p>
+     */
+    PLAYER_INTERACTION
 }
