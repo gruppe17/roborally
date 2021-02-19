@@ -101,19 +101,34 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+
+    /**
+     * <p>Runs the entirety of the players' programs.</p>
+     * @see #executeStep()
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * <p>Runs the next instruction of the next player's program.</p>
+     * @see #executePrograms()
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * <p>Continues, or starts, the execution of the players' programs in
+     * accordance with {@link Board#isStepMode()}.</p>
+     *
+     * <p>If {@link Board#isStepMode()} is true {@link #executeStep()} is
+     * called only once. Otherwise, it is called until the activation phase
+     * is over.</p>
+     *
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
@@ -124,7 +139,11 @@ public class GameController {
     //This really should not be here
     private Player[] prioritySortedPlayers;
     private int prioritySortedPlayersIndex = 0;
-
+    /**
+     * <p>Executes the next step of the next player's program.
+     * ...</p>
+     *
+     */
     private void executeNextStep() {
         if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
             prioritySortedPlayers = board.getSortedPlayerArray();
