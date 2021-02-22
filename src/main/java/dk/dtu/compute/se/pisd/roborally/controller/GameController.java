@@ -136,8 +136,12 @@ public class GameController {
     }
 
     /**
-     * <p>Executes the next step of the next player's program.
-     * ...</p>
+     * <p>Executes the next step of the next player's program
+     * and calls {@link #subRoundComplete()} unless the command is
+     * interactive in which case the phase is set to {@link Phase#PLAYER_INTERACTION}
+     * and the method simply returns.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
@@ -329,6 +333,7 @@ public class GameController {
     /**
      * <p>Moves a {@link CommandCard} from one {@link CommandCardField} to another, if it is not already occupied.
      * Returns true if the move was successful, false if it was not.</p>
+     *
      * @param source the command card field which card it to be moved
      * @param target the command card field which is to be moved to
      * @return a boolean indicating if the move was successful
