@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class GameController {
 
@@ -73,7 +73,8 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.playerQueueForceRepopulate();
+        board.setCurrentPlayer(board.nextPlayer());
         board.setStep(0);
     }
 
@@ -99,34 +100,50 @@ public class GameController {
         }
     }
 
-    // XXX: V2
+
+    /**
+     * <p>Runs the entirety of the players' programs.</p>
+     *
+     * @see #executeStep()
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * <p>Runs the next instruction of the next player's program.</p>
+     *
+     * @see #executePrograms()
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX: V2
+    /**
+     * <p>Continues, or starts, the execution of the players' programs in
+     * accordance with {@link Board#isStepMode()}.</p>
+     *
+     * <p>If {@link Board#isStepMode()} is true {@link #executeStep()} is
+     * called only once. Otherwise, it is called until the activation phase
+     * is over.</p>
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    //Todo: please fix
-    //This really should not be here
-    private Player[] prioritySortedPlayers;
-    private int prioritySortedPlayersIndex = 0;
+    /**
+     * <p>Executes the next step of the next player's program
+     * and calls {@link #subRoundComplete()} unless the command is
+     * interactive in which case the phase is set to {@link Phase#PLAYER_INTERACTION}
+     * and the method simply returns.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void executeNextStep() {
-        if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
-            prioritySortedPlayers = board.getSortedPlayerArray();
-            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
-        }
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
@@ -134,22 +151,13 @@ public class GameController {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
                 if (card != null) {
                     Command command = card.command;
+                    if (command.isInteractive()) {
+                        board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
+                    }
                     executeCommand(currentPlayer, command);
                 }
-                if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) {
-                    board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
-                } else {
-                    step++;
-                    prioritySortedPlayersIndex = 0;
-                    prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(prioritySortedPlayers[0]);
-                    } else {
-                        startProgrammingPhase();
-                    }
-                }
+                subRoundComplete();
             } else {
                 // this should not happen
                 assert false;
@@ -159,47 +167,43 @@ public class GameController {
             assert false;
         }
     }
-
-    // XXX: V2
 
     /**
+     * <p>Handles what happens after a player instruction has been executed.</p>
+     * <p>If the last player of the round has been activated then the players are sorted
+     * and register № is incremented. If also the entire activation is completed the programming phase is started.
+     * No matter what, the next player is always set.</p>
      *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see Board#getStep()
      */
-    /*
-    private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
-            if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
-                if (card != null) {
-                    Command command = card.command;
-                    executeCommand(currentPlayer, command);
-                }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    step++;
-                    if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
-                        board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
-                    } else {
-                        startProgrammingPhase();
-                    }
-                }
-            } else {
-                // this should not happen
-                assert false;
-            }
-        } else {
-            // this should not happen
+    private void subRoundComplete() {
+        if (board.getPhase() != Phase.ACTIVATION) {
             assert false;
+            return;
+        }
+        if (!board.isActivationQueueEmpty()) { //The round is not over
+            board.setCurrentPlayer(board.nextPlayer());
+        } else { //The round is over
+            int step = board.getStep() + 1;
+            board.playerQueueForceRepopulate();
+            board.setCurrentPlayer(board.nextPlayer());
+            if (step < Player.NO_REGISTERS) {
+                makeProgramFieldsVisible(step);
+                board.setStep(step);
+            } else {
+                startProgrammingPhase();
+            }
         }
     }
-*/
-    // XXX: V2
+
+    /**
+     * <p>Executes a {@link Command} on a given player</p>
+     *
+     * @param player  The player the command should be applied to
+     * @param command The command to execute
+     * @see #executeCommandAndContinue(Command)
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
@@ -225,10 +229,34 @@ public class GameController {
         }
     }
 
+
+    /**
+     * <p>Executes a command on the current player and continues
+     * execution of players' programs respecting {@link Board#isStepMode}.</p>
+     * <p>This is different from {@link #executeCommand} which simply returns.</p>
+     *
+     * @param command the command which is to be executed
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #executeCommand(Player, Command)
+     */
+    public void executeCommandAndContinue(@NotNull Command command) {
+        Player currentPlayer = board.getCurrentPlayer();
+        if (board.getPhase() != Phase.PLAYER_INTERACTION || currentPlayer == null) {
+            assert false;
+            return;
+        }
+        board.setPhase(Phase.ACTIVATION);
+
+        executeCommand(currentPlayer, command);
+        subRoundComplete();
+        if (!board.isStepMode()) continuePrograms();
+    }
+
     /**
      * <p>Moves the player in the direction of their current heading by the specified distance</p>
-     * <p>The distance wraps around the map</p>
-     * @param player The player to move
+     * <p>The distance wraps around the map.</p>
+     *
+     * @param player   The player to move
      * @param distance The amount of spaces to move in the current direction
      */
     public void moveForward(@NotNull Player player, int distance) {
@@ -238,10 +266,9 @@ public class GameController {
         if (currentSpace != null) {
             for (int i = 0; i < distance; i++) {
                 Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
-                if (target != null && target.getPlayer() == null){
+                if (target != null && target.getPlayer() == null) {
                     currentSpace = target;
-                }
-                else{
+                } else {
                     break;
                 }
             }
@@ -252,6 +279,7 @@ public class GameController {
     /**
      * <p>Moves the player forward by one</p>
      * <p>Identical to {@code moveForward(player, 1)}</p>
+     *
      * @param player the player to move
      */
     public void moveForward(@NotNull Player player) {
@@ -261,6 +289,7 @@ public class GameController {
     /**
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(player, 2)}</p>
+     *
      * @param player The player to move
      */
     public void fastForward(@NotNull Player player) {
@@ -269,7 +298,8 @@ public class GameController {
 
     /**
      * Turns a player heading by π/4 * {@code numTimes}
-     * @param player Player to turn
+     *
+     * @param player   Player to turn
      * @param numTimes Number of times to turn right
      */
     public void turnRight(@NotNull Player player, int numTimes) {
@@ -282,6 +312,7 @@ public class GameController {
 
     /**
      * <p>Turns player/robot by π/4</p>
+     *
      * @param player The player to move
      */
     public void turnRight(@NotNull Player player) {
@@ -290,14 +321,23 @@ public class GameController {
 
     /**
      * <p>Turns player/robot by -π/4</p>
+     *
      * @param player The player to move
      */
     public void turnLeft(@NotNull Player player) {
         player.setHeading(player.getHeading().prev());
-       //turnRight(player,3);
+        //turnRight(player,3);
     }
 
 
+    /**
+     * <p>Moves a {@link CommandCard} from one {@link CommandCardField} to another, if it is not already occupied.
+     * Returns true if the move was successful, false if it was not.</p>
+     *
+     * @param source the command card field which card it to be moved
+     * @param target the command card field which is to be moved to
+     * @return a boolean indicating if the move was successful
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();

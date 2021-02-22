@@ -31,11 +31,18 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
  */
 public class Space extends Subject {
 
+    /**
+     * The board which this space is a part of.
+     */
     public final Board board;
 
     public final int x;
     public final int y;
 
+    /**
+     * <p>Represent the player currently on this space.
+     * If no player is on this space it is null.</p>
+     */
     private Player player;
 
     public Space(Board board, int x, int y) {
@@ -45,11 +52,26 @@ public class Space extends Subject {
         player = null;
     }
 
+    /**
+     * <p>Returns the player currently on this space.
+     * If there is no player on this space returns null.</p>
+     *
+     * @return the player currently on this space
+     */
     public Player getPlayer() {
         return player;
     }
 
-    //TODO: add javadoc comment explaining this method (importantly, it is responsible for setting the old spaces player to null and the players space to this)
+
+    /**
+     * <p>Sets the {@link #player} currently on this space to the argument
+     * and, if the argument is not null, set the space of said player to this.
+     * If a different player already is on this space then the space of the old
+     * player is set to null.</p>
+     *
+     * @param player the player that should be on this space
+     * @see Player#setSpace(Space)
+     */
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
         if (player != oldPlayer &&

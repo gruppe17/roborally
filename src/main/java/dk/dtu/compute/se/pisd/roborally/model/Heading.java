@@ -22,19 +22,67 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 /**
- * ...
+ * A heading along a basis vector.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public enum Heading {
+    /**
+     * <p>Represents the vector</p>
+     * <table cellspacing="0" cellpadding="0"><tbody><tr>
+     *         <td><nobr><font style="font-size:3.1em; font-weight:1" >(</font></nobr></td>
+     *         <td><table><tbody>
+     *             <tr><td align="center">0</td></tr>
+     *             <tr><td align="center">&minus;1</td></tr>
+     *         </tbody></table></td>
+     *     <td><font style="font-size:3.1em">)</font></td>
+     * </tr></tbody></table>
+     *
+     */
+    SOUTH,
+    /**
+     * Represents the vector (-1, 0)
+     */
+    WEST,
+    /**
+     * Represents the vector (0, 1)
+     */
+    NORTH,
+    /**
+     * Represents the vector (1, 0)
+     */
+    EAST;
 
-    SOUTH, WEST, NORTH, EAST;
-
+    /**
+     * <p>Returns the {@link Heading} resulting from a turn of -π/4, i.e. 90° clockwise.</p>
+     * <p><pre>
+     *         NORTH
+     *      ↗         ↘
+     *  WEST           EAST
+     *      ↖         ↙
+     *         SOUTH
+     * </pre></p>
+     *
+     * @return A heading turned -π/4, i.e. 90° clockwise, from this one
+     */
     public Heading next() {
         return values()[(this.ordinal() + 1) % values().length];
     }
 
+    /**
+     * <p>Returns the {@link Heading} resulting from a turn of π/4, i.e. 90° anti-clockwise.</p>
+     * <p><pre>
+     *         NORTH
+     *      ↙         ↖
+     *  WEST           EAST
+     *      ↘         ↗
+     *         SOUTH
+     * </pre></p>
+     *
+     * @return A heading turned π/4, i.e. 90° anti-clockwise, from this one
+     */
     public Heading prev() {
         return values()[(this.ordinal() + values().length - 1) % values().length];
     }

@@ -24,10 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
@@ -35,7 +32,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- * @author Rasmus Nylander
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class Board extends Subject {
@@ -57,6 +54,15 @@ public class Board extends Subject {
 
     private final List<Player> players = new ArrayList<>();
 
+    /**
+     * <p>The current activation queue of the players. The players are queued in order of
+     * proximity to the priority antenna. In case of two players equidistant to the
+     * priority antenna they are ordered arbitrarily.</p>
+     *
+     * @see Player#getDistanceToPrioritySpace()
+     */
+    private final Queue<Player> playerActivationQueue = new PriorityQueue<>(6, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
+
     private Player current;
 
     private Phase phase = INITIALISATION;
@@ -77,7 +83,7 @@ public class Board extends Subject {
         this.height = height;
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
+            for (int y = 0; y < height; y++) {
                 Space space = new Space(this, x, y);
                 spaces[x][y] = space;
             }
@@ -116,9 +122,10 @@ public class Board extends Subject {
 
     /**
      * <p>Returns the {@link #prioritySpace}</p>
+     *
      * @return A space containing the priority antenna
      */
-    public Space getPrioritySpace(){
+    public Space getPrioritySpace() {
         return prioritySpace;
     }
 
@@ -176,12 +183,13 @@ public class Board extends Subject {
 
     /**
      * Indicates if the players' program is being single-stepped through.
+     *
      * @return a boolean indicating if only the next instruction of the next player should be executed
      */
     public boolean isStepMode() {
         return stepMode;
     }
-    
+
     public void setStepMode(boolean stepMode) {
         if (stepMode != this.stepMode) {
             this.stepMode = stepMode;
@@ -203,7 +211,7 @@ public class Board extends Subject {
      * (no walls or obstacles in either of the involved spaces); otherwise,
      * null will be returned.
      *
-     * @param space the space for which the neighbour should be computed
+     * @param space   the space for which the neighbour should be computed
      * @param heading the heading of the neighbour
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
@@ -241,22 +249,24 @@ public class Board extends Subject {
 
     /**
      * <p>Returns the rectilinear distance between two spaces as an {@code int}. Any obstacles in the way are ignored.</p>
+     *
      * @param from the space from which is measured
-     * @param to the space measured to
+     * @param to   the space measured to
      * @return an int representing the rectilinear distance between the spaces "from" and "to" ignoring any obstacles
-     * @author Rasmus Nylander
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public int getRectilinearDistance(Space from, Space to){
+    public int getRectilinearDistance(Space from, Space to) {
         return Math.abs(to.x - from.x) + Math.abs(to.y - from.y);
     }
 
     /**
      * <p>Returns the rectilinear distance between a {@code Space} and the {@link #prioritySpace} as an {@code int}. Any obstacles in the way are ignored.</p>
      * <p>This is identical to {@link #getRectilinearDistance(Space from, Space prioritySpace)}</p>
+     *
      * @param from the space from which is measured
      * @return an int representing the rectilinear distance between the priority antenna and "from" ignoring any obstacles
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #getRectilinearDistance(Space, Space)
-     * @author Rasmus Nylander
      */
     public int getRectilinearDistanceToPrioritySpace(Space from) {
         return getRectilinearDistance(from, prioritySpace);
@@ -265,13 +275,52 @@ public class Board extends Subject {
     /**
      * <p>Returns a new array containing all the players ordered by proximity to the priority antenna.</p>
      * <p>In case of two players equidistant to the priority antenna they are ordered according to their location in the original array.</p>
+     *
      * @return an array of players containing all the players on the board in order of priority
-     * @author Rasmus Nylander
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @deprecated
      */
-    public Player[] getSortedPlayerArray(){
+    public Player[] getSortedPlayerArray() {
         Player[] sortedPlayers = players.toArray(new Player[0]);
         Arrays.sort(sortedPlayers, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
         return sortedPlayers;
+    }
+
+    /**
+     * <p>Returns the next player of the {@link #playerActivationQueue} and
+     * removes them from the queue. If the queue is empty, returns null.</p>
+     *
+     * @return the next player in the queue. If the queue is empty, returns null
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #playerQueueForceRepopulate()
+     */
+    public Player nextPlayer() {
+        if (playerActivationQueue.peek() == null) {
+            return null;
+            //playerQueue.addAll(players);
+        }
+        return playerActivationQueue.remove();
+    }
+
+    /**
+     * <p>Returns a boolean indicating whether {@link #playerActivationQueue}
+     * is empty or the next element is null.</p>
+     *
+     * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public boolean isActivationQueueEmpty() {
+        return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
+    }
+
+    /**
+     * <p>Forces the player queue to be emptied and repopulated.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void playerQueueForceRepopulate() {
+        playerActivationQueue.clear();
+        playerActivationQueue.addAll(players);
     }
 
 }

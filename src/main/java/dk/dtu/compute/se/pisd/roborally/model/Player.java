@@ -30,7 +30,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- * @author Rasmus Nylander
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class Player extends Subject {
@@ -43,11 +43,16 @@ public class Player extends Subject {
     private String name;
     private String color;
 
+    /**
+     * The space the player currently is on.
+     */
     private Space space;
 
     /**
      * The distance to the priority space.
-     * @see Board#prioritySpace
+     *
+     * @see Board#getPrioritySpace()
+     * @see Board#getRectilinearDistanceToPrioritySpace(Space)
      */
     private int distanceToPrioritySpace;
     private Heading heading = SOUTH;
@@ -99,11 +104,25 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * <p>Returns the space the player currently is on.
+     * This can be null, in which case the player is not on the board.</p>
+     *
+     * @return the space the player currently is on
+     */
     public Space getSpace() {
         return space;
     }
 
-    //TODO: add javadoc comment explaining this method (importantly, it is responsible for setting the old spaces player to null)
+    /**
+     * <p>Sets the {@link #space} the player currently is on to the argument
+     * and sets the player on the argument space to this player.
+     * If the player previously was on a space then that space's player
+     * is set to null.</p>
+     *
+     * @param space the space that this player should be on
+     * @see Space#setPlayer(Player)
+     */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space != oldSpace &&
@@ -136,6 +155,7 @@ public class Player extends Subject {
 
     /**
      * <p>Returns the rectilinear distance to the priority antenna</p>
+     *
      * @return an int representing the rectilinear distance to the priority antenna
      * @see #distanceToPrioritySpace
      */

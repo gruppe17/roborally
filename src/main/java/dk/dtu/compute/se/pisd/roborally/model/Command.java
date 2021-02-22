@@ -21,21 +21,37 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * A Command that takes a name and other commands as options
+ * <p>A Command that takes a name and other commands as options.
+ * A lone command, a command with no options, represents an
+ * instruction given to and performed by a robot or board element.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public enum Command {
+    /**
+     * Move forward by one.
+     */
     FORWARD("Fwd"),
+    /**
+     * Turn -π/4, i.e. 90° clockwise.
+     */
     RIGHT("Turn Right"),
+    /**
+     * Turn π/4, ie 90° anti-clockwise.
+     */
     LEFT("Turn Left"),
+    /**
+     * Move forward by two.
+     */
     FAST_FORWARD("Fast Fwd"),
+    /**
+     * Player choice between {@link #LEFT} and {@link #RIGHT}.
+     */
     OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
     /**
@@ -50,8 +66,9 @@ public enum Command {
 
     /**
      * <p>Creates an instance of Command</p>
+     *
      * @param displayName The display name of the command
-     * @param options A list of Command objects representing the possible commands to choose between
+     * @param options     A list of Command objects representing the possible commands to choose between
      */
     Command(String displayName, Command... options) {
         this.displayName = displayName;
@@ -61,6 +78,7 @@ public enum Command {
     /**
      * <p>Returns true if the commands is interactive.</p>
      * <p>An interactive command lets the player select between options.</p>
+     *
      * @return A boolean indicating if the command is interactive
      */
     public boolean isInteractive() {
@@ -69,6 +87,7 @@ public enum Command {
 
     /**
      * <p>Returns the commands that can be selected between</p>
+     *
      * @return A list of possible commands
      */
     public List<Command> getOptions() {
