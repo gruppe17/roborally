@@ -24,8 +24,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-
 /**
  * ...
  *
@@ -75,7 +73,8 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.playerQueueForceRepopulate();
+        board.setCurrentPlayer(board.nextPlayer());
         board.setStep(0);
     }
 
@@ -135,20 +134,12 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    //Todo: please fix
-    //This really should not be here
-    private Player[] prioritySortedPlayers;
-    private int prioritySortedPlayersIndex = 0;
     /**
      * <p>Executes the next step of the next player's program.
      * ...</p>
      *
      */
     private void executeNextStep() {
-        if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
-            prioritySortedPlayers = board.getSortedPlayerArray();
-            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
-        }
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
@@ -187,14 +178,12 @@ public class GameController {
             assert false;
             return;
         }
-
-        if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) { //The round is not over
-            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
+        if (!board.isActivationQueueEmpty()) { //The round is not over
+            board.setCurrentPlayer(board.nextPlayer());
         } else { //The round is over
             int step = board.getStep() + 1;
-            prioritySortedPlayersIndex = 0;
-            prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
-            board.setCurrentPlayer(prioritySortedPlayers[0]);
+            board.playerQueueForceRepopulate();
+            board.setCurrentPlayer(board.nextPlayer());
             if (step < Player.NO_REGISTERS) {
                 makeProgramFieldsVisible(step);
                 board.setStep(step);

@@ -24,10 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
 
@@ -56,6 +53,14 @@ public class Board extends Subject {
     private final Space prioritySpace; //A direct reference is stored as it is needed frequently.
 
     private final List<Player> players = new ArrayList<>();
+
+    /**
+     * <p>The current activation queue of the players. The players are queued in order of
+     * proximity to the priority antenna. In case of two players equidistant to the
+     * priority antenna they are ordered arbitrarily.</p>
+     * @see Player#getDistanceToPrioritySpace()
+     */
+    private final Queue<Player> playerActivationQueue = new PriorityQueue<>(6,  Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 
     private Player current;
 
@@ -272,11 +277,46 @@ public class Board extends Subject {
      *
      * @return an array of players containing all the players on the board in order of priority
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @deprecated
      */
     public Player[] getSortedPlayerArray() {
         Player[] sortedPlayers = players.toArray(new Player[0]);
         Arrays.sort(sortedPlayers, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
         return sortedPlayers;
+    }
+
+    /**
+     * <p>Returns the next player of the {@link #playerActivationQueue} and
+     * removes them from the queue. If the queue is empty, returns null.</p>
+     * @return the next player in the queue. If the queue is empty, returns null
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #playerQueueForceRepopulate()
+     */
+    public Player nextPlayer(){
+        if (playerActivationQueue.peek() == null){
+            return null;
+            //playerQueue.addAll(players);
+        }
+        return playerActivationQueue.remove();
+    }
+
+    /**
+     * <p>Returns a boolean indicating whether {@link #playerActivationQueue}
+     * is empty or the next element is null.</p>
+     * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public boolean isActivationQueueEmpty(){
+        return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
+    }
+
+    /**
+     * <p>Forces the player queue to be emptied and repopulated.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void playerQueueForceRepopulate(){
+        playerActivationQueue.clear();
+        playerActivationQueue.addAll(players);
     }
 
 }
