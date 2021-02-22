@@ -103,6 +103,7 @@ public class GameController {
 
     /**
      * <p>Runs the entirety of the players' programs.</p>
+     *
      * @see #executeStep()
      */
     public void executePrograms() {
@@ -112,6 +113,7 @@ public class GameController {
 
     /**
      * <p>Runs the next instruction of the next player's program.</p>
+     *
      * @see #executePrograms()
      */
     public void executeStep() {
@@ -126,7 +128,6 @@ public class GameController {
      * <p>If {@link Board#isStepMode()} is true {@link #executeStep()} is
      * called only once. Otherwise, it is called until the activation phase
      * is over.</p>
-     *
      */
     private void continuePrograms() {
         do {
@@ -137,7 +138,6 @@ public class GameController {
     /**
      * <p>Executes the next step of the next player's program.
      * ...</p>
-     *
      */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();

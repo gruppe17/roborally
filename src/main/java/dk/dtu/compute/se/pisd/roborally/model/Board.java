@@ -58,9 +58,10 @@ public class Board extends Subject {
      * <p>The current activation queue of the players. The players are queued in order of
      * proximity to the priority antenna. In case of two players equidistant to the
      * priority antenna they are ordered arbitrarily.</p>
+     *
      * @see Player#getDistanceToPrioritySpace()
      */
-    private final Queue<Player> playerActivationQueue = new PriorityQueue<>(6,  Comparator.comparingInt(Player::getDistanceToPrioritySpace));
+    private final Queue<Player> playerActivationQueue = new PriorityQueue<>(6, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 
     private Player current;
 
@@ -288,12 +289,13 @@ public class Board extends Subject {
     /**
      * <p>Returns the next player of the {@link #playerActivationQueue} and
      * removes them from the queue. If the queue is empty, returns null.</p>
+     *
      * @return the next player in the queue. If the queue is empty, returns null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #playerQueueForceRepopulate()
      */
-    public Player nextPlayer(){
-        if (playerActivationQueue.peek() == null){
+    public Player nextPlayer() {
+        if (playerActivationQueue.peek() == null) {
             return null;
             //playerQueue.addAll(players);
         }
@@ -303,18 +305,20 @@ public class Board extends Subject {
     /**
      * <p>Returns a boolean indicating whether {@link #playerActivationQueue}
      * is empty or the next element is null.</p>
+     *
      * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public boolean isActivationQueueEmpty(){
+    public boolean isActivationQueueEmpty() {
         return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
     }
 
     /**
      * <p>Forces the player queue to be emptied and repopulated.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public void playerQueueForceRepopulate(){
+    public void playerQueueForceRepopulate() {
         playerActivationQueue.clear();
         playerActivationQueue.addAll(players);
     }
