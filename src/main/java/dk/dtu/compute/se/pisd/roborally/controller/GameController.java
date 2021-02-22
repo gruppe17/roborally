@@ -337,6 +337,13 @@ public class GameController {
     }
 
 
+    /**
+     * <p>Moves a {@link CommandCard} from one {@link CommandCardField} to another, if it is not already occupied.
+     * Returns true if the move was successful, false if it was not.</p>
+     * @param source the command card field which card it to be moved
+     * @param target the command card field which is to be moved to
+     * @return a boolean indicating if the move was successful
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
