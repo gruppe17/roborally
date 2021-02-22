@@ -24,8 +24,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-
 /**
  * ...
  *
@@ -75,7 +73,8 @@ public class GameController {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
         board.setPhase(Phase.ACTIVATION);
-        board.setCurrentPlayer(board.getPlayer(0));
+        board.playerQueueForceRepopulate();
+        board.setCurrentPlayer(board.nextPlayer());
         board.setStep(0);
     }
 
@@ -104,6 +103,7 @@ public class GameController {
 
     /**
      * <p>Runs the entirety of the players' programs.</p>
+     *
      * @see #executeStep()
      */
     public void executePrograms() {
@@ -113,6 +113,7 @@ public class GameController {
 
     /**
      * <p>Runs the next instruction of the next player's program.</p>
+     *
      * @see #executePrograms()
      */
     public void executeStep() {
@@ -127,7 +128,6 @@ public class GameController {
      * <p>If {@link Board#isStepMode()} is true {@link #executeStep()} is
      * called only once. Otherwise, it is called until the activation phase
      * is over.</p>
-     *
      */
     private void continuePrograms() {
         do {
@@ -135,20 +135,15 @@ public class GameController {
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    //Todo: please fix
-    //This really should not be here
-    private Player[] prioritySortedPlayers;
-    private int prioritySortedPlayersIndex = 0;
     /**
-     * <p>Executes the next step of the next player's program.
-     * ...</p>
+     * <p>Executes the next step of the next player's program
+     * and calls {@link #subRoundComplete()} unless the command is
+     * interactive in which case the phase is set to {@link Phase#PLAYER_INTERACTION}
+     * and the method simply returns.</p>
      *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void executeNextStep() {
-        if (prioritySortedPlayers == null) { //If this whole thing was permanent it should be set in constructor.
-            prioritySortedPlayers = board.getSortedPlayerArray();
-            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
-        }
         Player currentPlayer = board.getCurrentPlayer();
         if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
             int step = board.getStep();
@@ -187,14 +182,12 @@ public class GameController {
             assert false;
             return;
         }
-
-        if (++prioritySortedPlayersIndex < prioritySortedPlayers.length) { //The round is not over
-            board.setCurrentPlayer(prioritySortedPlayers[prioritySortedPlayersIndex]);
+        if (!board.isActivationQueueEmpty()) { //The round is not over
+            board.setCurrentPlayer(board.nextPlayer());
         } else { //The round is over
             int step = board.getStep() + 1;
-            prioritySortedPlayersIndex = 0;
-            prioritySortedPlayers = board.getSortedPlayerArray(); //If it was permanent: It would be better to sort the array directly, rather make a new array.
-            board.setCurrentPlayer(prioritySortedPlayers[0]);
+            board.playerQueueForceRepopulate();
+            board.setCurrentPlayer(board.nextPlayer());
             if (step < Player.NO_REGISTERS) {
                 makeProgramFieldsVisible(step);
                 board.setStep(step);
@@ -340,6 +333,7 @@ public class GameController {
     /**
      * <p>Moves a {@link CommandCard} from one {@link CommandCardField} to another, if it is not already occupied.
      * Returns true if the move was successful, false if it was not.</p>
+     *
      * @param source the command card field which card it to be moved
      * @param target the command card field which is to be moved to
      * @return a boolean indicating if the move was successful
