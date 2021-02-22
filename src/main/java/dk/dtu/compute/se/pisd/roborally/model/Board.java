@@ -25,6 +25,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
@@ -33,6 +35,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander
  *
  */
 public class Board extends Subject {
@@ -47,14 +50,25 @@ public class Board extends Subject {
 
     private final Space[][] spaces;
 
+    /**
+     * <p>The space containing the priority antenna</p>
+     */
+    private final Space prioritySpace; //A direct reference is stored as it is needed frequently.
+
     private final List<Player> players = new ArrayList<>();
 
     private Player current;
 
     private Phase phase = INITIALISATION;
 
+    /**
+     * <p>What step of the players' programs are being executed, i.e. the register №</p>
+     */
     private int step = 0;
 
+    /**
+     * <p>Indicates whether the players' programs should be single-stepped through</p>
+     */
     private boolean stepMode;
 
     public Board(int width, int height, @NotNull String boardName) {
@@ -68,6 +82,8 @@ public class Board extends Subject {
                 spaces[x][y] = space;
             }
         }
+        //TODO: implement this for real
+        prioritySpace = spaces[0][0];
         this.stepMode = false;
     }
 
@@ -96,6 +112,14 @@ public class Board extends Subject {
         } else {
             return null;
         }
+    }
+
+    /**
+     * <p>Returns the {@link #prioritySpace}</p>
+     * @return A space containing the priority antenna
+     */
+    public Space getPrioritySpace(){
+        return prioritySpace;
     }
 
     public int getPlayersNumber() {
@@ -150,10 +174,14 @@ public class Board extends Subject {
         }
     }
 
+    /**
+     * Indicates if the players' program is being single-stepped through.
+     * @return a boolean indicating if only the next instruction of the next player should be executed
+     */
     public boolean isStepMode() {
         return stepMode;
     }
-
+    
     public void setStepMode(boolean stepMode) {
         if (stepMode != this.stepMode) {
             this.stepMode = stepMode;
@@ -211,5 +239,39 @@ public class Board extends Subject {
                 ", Step: " + getStep();
     }
 
+    /**
+     * <p>Returns the rectilinear distance between two spaces as an {@code int}. Any obstacles in the way are ignored.</p>
+     * @param from the space from which is measured
+     * @param to the space measured to
+     * @return an int representing the rectilinear distance between the spaces "from" and "to" ignoring any obstacles
+     * @author Rasmus Nylander
+     */
+    public int getRectilinearDistance(Space from, Space to){
+        return Math.abs(to.x - from.x) + Math.abs(to.y - from.y);
+    }
+
+    /**
+     * <p>Returns the rectilinear distance between a {@code Space} and the {@link #prioritySpace} as an {@code int}. Any obstacles in the way are ignored.</p>
+     * <p>This is identical to {@link #getRectilinearDistance(Space from, Space prioritySpace)}</p>
+     * @param from the space from which is measured
+     * @return an int representing the rectilinear distance between the priority antenna and "from" ignoring any obstacles
+     * @see #getRectilinearDistance(Space, Space)
+     * @author Rasmus Nylander
+     */
+    public int getRectilinearDistanceToPrioritySpace(Space from) {
+        return getRectilinearDistance(from, prioritySpace);
+    }
+
+    /**
+     * <p>Returns a new array containing all the players ordered by proximity to the priority antenna.</p>
+     * <p>In case of two players equidistant to the priority antenna they are ordered according to their location in the original array.</p>
+     * @return an array of players containing all the players on the board in order of priority
+     * @author Rasmus Nylander
+     */
+    public Player[] getSortedPlayerArray(){
+        Player[] sortedPlayers = players.toArray(new Player[0]);
+        Arrays.sort(sortedPlayers, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
+        return sortedPlayers;
+    }
 
 }
