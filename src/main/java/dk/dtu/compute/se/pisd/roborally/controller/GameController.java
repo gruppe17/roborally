@@ -260,6 +260,7 @@ public class GameController {
      * @param player    The player to move
      * @param direction The direction in which to move
      * @param distance  The amount of spaces to move
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #moveForward(Player, int)
      */
     public void move(@NotNull Player player, Heading direction, int distance) {
@@ -270,9 +271,9 @@ public class GameController {
             for (int i = 0; i < distance; i++) {
                 Space target = currentSpace.board.getNeighbour(currentSpace, direction);
                 if (target != null) {
-                    if (target.getPlayer() != null){
-                        move(target.getPlayer(), direction, distance - i );
-                        if (target.getPlayer() != null){
+                    if (target.getPlayer() != null) {
+                        move(target.getPlayer(), direction, distance - i);
+                        if (target.getPlayer() != null) {
                             break;
                         }
                     }
@@ -293,8 +294,8 @@ public class GameController {
      *
      * @param player   The player to move
      * @param distance The amount of spaces to move in the current direction
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #move(Player, Heading, int)
-     *
      */
     public void moveForward(@NotNull Player player, int distance) {
         move(player, player.getHeading(), distance);
