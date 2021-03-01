@@ -27,6 +27,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class Space extends Subject {
@@ -38,6 +39,7 @@ public class Space extends Subject {
 
     public final int x;
     public final int y;
+    public Heading[] walls;
 
     /**
      * Represents the elements on this space.
@@ -51,13 +53,14 @@ public class Space extends Subject {
      */
     private Player player;
 
-    public Space(Board board, int x, int y, BoardElement element) {
+    public Space(Board board, int x, int y, BoardElement element, Heading... walls) {
         this.board = board;
         this.x = x;
         this.y = y;
         player = null;
 
         this.element = element;
+        this.walls = walls;
     }
 
     /**
@@ -94,6 +97,37 @@ public class Space extends Subject {
             }
             notifyChange();
         }
+    }
+
+    /**
+     * <p>Returns a boolean indicating whether <b>this</b> space contains
+     * an obstacle preventing movement in the heading specified by the argument.</p>
+     *
+     * @param heading moving from this space the heading which should be checked
+     * @return A boolean indicating whether this space prevents movement in the specified direction
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #containsObstacleFrom(Heading)
+     */
+    public boolean containsObstacleTo(Heading heading) {
+        for (Heading direction: walls) {
+            if (direction == heading) return true;
+        }
+        return false;
+    }
+
+    /**
+     * <p>Returns a boolean indicating whether <b>this</b> space contains
+     * an obstacle preventing movement moving onto this space from the heading
+     * specified by the argument.</p>
+     *
+     * @param heading moving to this space the heading which should be checked
+     * @return A boolean indicating whether this space prevents
+     * movement onto this space in the specified direction
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #containsObstacleTo(Heading)
+     */
+    public boolean containsObstacleFrom(Heading heading) {
+        return containsObstacleTo(heading.next().next());
     }
 
     void playerChanged() {
