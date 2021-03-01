@@ -40,16 +40,24 @@ public class Space extends Subject {
     public final int y;
 
     /**
+     * Represents the elements on this space.
+     */
+    public final BoardElement element;
+
+
+    /**
      * <p>Represent the player currently on this space.
      * If no player is on this space it is null.</p>
      */
     private Player player;
 
-    public Space(Board board, int x, int y) {
+    public Space(Board board, int x, int y, BoardElement element) {
         this.board = board;
         this.x = x;
         this.y = y;
         player = null;
+
+        this.element = element;
     }
 
     /**

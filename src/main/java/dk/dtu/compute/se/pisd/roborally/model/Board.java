@@ -84,7 +84,7 @@ public class Board extends Subject {
         spaces = new Space[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                Space space = new Space(this, x, y);
+                Space space = new Space(this, x, y, null);
                 spaces[x][y] = space;
             }
         }
