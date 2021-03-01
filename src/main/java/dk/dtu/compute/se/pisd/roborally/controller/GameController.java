@@ -253,19 +253,21 @@ public class GameController {
     }
 
     /**
-     * <p>Moves the player in the direction of their current heading by the specified distance</p>
+     * <p>Moves the player in a certain direction by the specified distance</p>
      * <p>The distance wraps around the map.</p>
      *
-     * @param player   The player to move
-     * @param distance The amount of spaces to move in the current direction
+     * @param player    The player to move
+     * @param direction The direction in which to move
+     * @param distance  The amount of spaces to move in the current direction
+     * @see #moveForward(Player, int)
      */
-    public void moveForward(@NotNull Player player, int distance) {
+    public void move(@NotNull Player player, Heading direction, int distance) {
         if (player == null) return; //This should never happen, but we test for it anyway?
 
         Space currentSpace = player.getSpace();
         if (currentSpace != null) {
             for (int i = 0; i < distance; i++) {
-                Space target = currentSpace.board.getNeighbour(currentSpace, player.getHeading());
+                Space target = currentSpace.board.getNeighbour(currentSpace, direction);
                 if (target != null && target.getPlayer() == null) {
                     currentSpace = target;
                 } else {
@@ -274,6 +276,20 @@ public class GameController {
             }
             player.setSpace(currentSpace); //identical to target.setPlayer(player);
         }
+    }
+
+
+    /**
+     * <p>Moves the player in the direction of their current heading by the specified distance</p>
+     * <p>The distance wraps around the map.</p>
+     *
+     * @param player   The player to move
+     * @param distance The amount of spaces to move in the current direction
+     * @see #move(Player, Heading, int)
+     *
+     */
+    public void moveForward(@NotNull Player player, int distance) {
+        move(player, player.getHeading(), distance);
     }
 
     /**
