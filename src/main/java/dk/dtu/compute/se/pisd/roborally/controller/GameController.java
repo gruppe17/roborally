@@ -268,7 +268,13 @@ public class GameController {
         if (currentSpace != null) {
             for (int i = 0; i < distance; i++) {
                 Space target = currentSpace.board.getNeighbour(currentSpace, direction);
-                if (target != null && target.getPlayer() == null) {
+                if (target != null) {
+                    if (target.getPlayer() != null){
+                        move(target.getPlayer(), direction, distance - i );
+                        if (target.getPlayer() != null){
+                            break;
+                        }
+                    }
                     currentSpace = target;
                 } else {
                     break;
