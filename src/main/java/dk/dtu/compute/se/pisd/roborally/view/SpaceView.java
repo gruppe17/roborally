@@ -55,8 +55,8 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinWidth(SPACE_WIDTH);
         this.setMaxWidth(SPACE_WIDTH);
 
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
+        this.setPrefHeight(SPACE_HEIGHT * 0.8f);
+        this.setMinHeight(SPACE_HEIGHT * 0.8f);
         this.setMaxHeight(SPACE_HEIGHT);
 
         if ((space.x + space.y) % 2 == 0) {
