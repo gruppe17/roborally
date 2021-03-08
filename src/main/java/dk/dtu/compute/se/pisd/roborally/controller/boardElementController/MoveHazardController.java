@@ -18,6 +18,6 @@ public class MoveHazardController implements IBoardElementController {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
         player.playerController.move(model.direction, model.distance);
-        player.playerController.turnRight(model.rotation);
+        player.playerController.turn(model.rotation);
     }
 }

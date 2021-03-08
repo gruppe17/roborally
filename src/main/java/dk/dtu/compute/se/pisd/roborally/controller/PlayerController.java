@@ -3,7 +3,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import org.jetbrains.annotations.NotNull;
 
 public class PlayerController {
     Player player;
@@ -80,20 +79,22 @@ public class PlayerController {
      *
      * @param numTimes Number of times to turn right
      */
-    public void turnRight(int numTimes) {
+    public void turn(int numTimes) {
         numTimes %= 4;
+        if (numTimes < 0) numTimes += 4;
         Heading heading = player.getHeading();
         for (int i = 0; i < numTimes; i++) {
             heading = heading.next();
         }
+
         player.setHeading(heading);
     }
 
     /**
      * <p>Turns player/robot by π/4</p>
      */
-    public void turnRight() {
-        turnRight(1);
+    public void turn() {
+        turn(1);
     }
 
     /**

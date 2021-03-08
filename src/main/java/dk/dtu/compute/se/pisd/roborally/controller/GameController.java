@@ -215,7 +215,7 @@ public class GameController {
                     player.playerController.moveForward();
                     break;
                 case RIGHT:
-                    player.playerController.turnRight();
+                    player.playerController.turn();
                     break;
                 case LEFT:
                     player.playerController.turnLeft();
