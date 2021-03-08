@@ -3,13 +3,12 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class GameControllerTest {
+class PlayerControllerTest {
 
     private final int TEST_WIDTH = 8;
     private final int TEST_HEIGHT = 8;
@@ -101,17 +100,11 @@ class GameControllerTest {
     @Test
     void testTurnRightByN() {
         Player current = gameController.board.getCurrentPlayer();
-        gameController.turnRight(current, 2);
-        Assertions.assertEquals(Heading.NORTH, current.getHeading());
-
-        gameController.turnRight(current, 3);
-        Assertions.assertEquals(Heading.WEST, current.getHeading());
-
-        gameController.turnRight(current, 4);
-        Assertions.assertEquals(Heading.WEST, current.getHeading());
-
-        gameController.turnRight(current, 5);
-        Assertions.assertEquals(Heading.NORTH, current.getHeading());
+        Heading[] headings = {Heading.EAST, Heading.EAST, Heading.SOUTH, Heading.NORTH, Heading.WEST, Heading.WEST, Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.EAST, Heading.SOUTH};
+        for (int i = -5; i < 6; i++) {
+            current.playerController.turn(i);
+            Assertions.assertEquals(headings[i + 5], current.getHeading(), "Turn by " + i + ". Should be " + headings[i + 5] + " but is " + current.getHeading());
+        }
     }
 
     @Test
