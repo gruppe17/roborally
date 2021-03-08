@@ -1,0 +1,104 @@
+package dk.dtu.compute.se.pisd.roborally.controller;
+
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
+import org.jetbrains.annotations.NotNull;
+
+public class PlayerController {
+    Player player;
+
+    public PlayerController(Player player) {
+        this.player = player;
+    }
+
+    /**
+     * <p>Moves the player in a certain direction by the specified distance.
+     * If another player is in the way, they are pushed along by the robot.</p>
+     * <p>The distance wraps around the map.</p>
+     *
+     * @param direction The direction in which to move
+     * @param distance  The amount of spaces to move
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #moveForward(int)
+     */
+    public void move(Heading direction, int distance) {
+        Space currentSpace = player.getSpace();
+        if (currentSpace != null) {
+            for (int i = 0; i < distance; i++) {
+                Space target = currentSpace.board.getNeighbour(currentSpace, direction);
+                if (target != null) {
+                    if (target.getPlayer() != null) {
+                        target.getPlayer().playerController.move(direction, distance - i);
+                        if (target.getPlayer() != null) {
+                            break;
+                        }
+                    }
+                    currentSpace = target;
+                } else {
+                    break;
+                }
+            }
+            player.setSpace(currentSpace); //identical to target.setPlayer(player);
+        }
+    }
+
+    /**
+     * <p>Moves the player in the direction of their current heading by the specified distance.
+     * If another player is in the way, they are pushed along by the robot.</p>
+     * <p>The distance wraps around the map.</p>
+     *
+     * @param distance The amount of spaces to move in the current direction
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #move(Heading, int)
+     */
+    public void moveForward(int distance) {
+        move(player.getHeading(), distance);
+    }
+
+    /**
+     * <p>Moves the player forward by one</p>
+     * <p>Identical to {@code moveForward(1)}</p>
+     */
+    public void moveForward() {
+        moveForward(1);
+    }
+
+    /**
+     * <p>Moves the player forward by two</p>
+     * <p>Identical to {@code moveForward(2)}</p>
+     *
+     * @param player The player to move
+     */
+    public void fastForward() {
+        moveForward(2);
+    }
+
+    /**
+     * Turns the player by π/4 * {@code numTimes}
+     *
+     * @param numTimes Number of times to turn right
+     */
+    public void turnRight(int numTimes) {
+        Heading heading = player.getHeading();
+        for (int i = 0; i < numTimes; i++) {
+            heading = heading.next();
+        }
+        player.setHeading(heading);
+    }
+
+    /**
+     * <p>Turns player/robot by π/4</p>
+     */
+    public void turnRight() {
+        turnRight(1);
+    }
+
+    /**
+     * <p>Turns player/robot by -π/4</p>
+     */
+    public void turnLeft() {
+        player.setHeading(player.getHeading().prev());
+    }
+
+}

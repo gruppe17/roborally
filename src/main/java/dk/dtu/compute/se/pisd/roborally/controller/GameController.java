@@ -212,16 +212,16 @@ public class GameController {
 
             switch (command) {
                 case FORWARD:
-                    this.moveForward(player);
+                    player.playerController.moveForward();
                     break;
                 case RIGHT:
-                    this.turnRight(player);
+                    player.playerController.turnRight();
                     break;
                 case LEFT:
-                    this.turnLeft(player);
+                    player.playerController.turnLeft();
                     break;
                 case FAST_FORWARD:
-                    this.fastForward(player);
+                    player.playerController.fastForward();
                     break;
                 default:
                     // DO NOTHING (for now)
@@ -251,109 +251,6 @@ public class GameController {
         subRoundComplete();
         if (!board.isStepMode()) continuePrograms();
     }
-
-    /**
-     * <p>Moves the player in a certain direction by the specified distance.
-     * If another player is in the way, they are pushed along by the robot.</p>
-     * <p>The distance wraps around the map.</p>
-     *
-     * @param player    The player to move
-     * @param direction The direction in which to move
-     * @param distance  The amount of spaces to move
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     * @see #moveForward(Player, int)
-     */
-    public void move(@NotNull Player player, Heading direction, int distance) {
-        if (player == null) return; //This should never happen, but we test for it anyway?
-
-        Space currentSpace = player.getSpace();
-        if (currentSpace != null) {
-            for (int i = 0; i < distance; i++) {
-                Space target = currentSpace.board.getNeighbour(currentSpace, direction);
-                if (target != null) {
-                    if (target.getPlayer() != null) {
-                        move(target.getPlayer(), direction, distance - i);
-                        if (target.getPlayer() != null) {
-                            break;
-                        }
-                    }
-                    currentSpace = target;
-                } else {
-                    break;
-                }
-            }
-            player.setSpace(currentSpace); //identical to target.setPlayer(player);
-        }
-    }
-
-
-    /**
-     * <p>Moves the player in the direction of their current heading by the specified distance.
-     * If another player is in the way, they are pushed along by the robot.</p>
-     * <p>The distance wraps around the map.</p>
-     *
-     * @param player   The player to move
-     * @param distance The amount of spaces to move in the current direction
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     * @see #move(Player, Heading, int)
-     */
-    public void moveForward(@NotNull Player player, int distance) {
-        move(player, player.getHeading(), distance);
-    }
-
-    /**
-     * <p>Moves the player forward by one</p>
-     * <p>Identical to {@code moveForward(player, 1)}</p>
-     *
-     * @param player the player to move
-     */
-    public void moveForward(@NotNull Player player) {
-        moveForward(player, 1);
-    }
-
-    /**
-     * <p>Moves the player forward by two</p>
-     * <p>Identical to {@code moveForward(player, 2)}</p>
-     *
-     * @param player The player to move
-     */
-    public void fastForward(@NotNull Player player) {
-        moveForward(player, 2);
-    }
-
-    /**
-     * Turns a player heading by π/4 * {@code numTimes}
-     *
-     * @param player   Player to turn
-     * @param numTimes Number of times to turn right
-     */
-    public void turnRight(@NotNull Player player, int numTimes) {
-        Heading heading = player.getHeading();
-        for (int i = 0; i < numTimes; i++) {
-            heading = heading.next();
-        }
-        player.setHeading(heading);
-    }
-
-    /**
-     * <p>Turns player/robot by π/4</p>
-     *
-     * @param player The player to move
-     */
-    public void turnRight(@NotNull Player player) {
-        turnRight(player, 1);
-    }
-
-    /**
-     * <p>Turns player/robot by -π/4</p>
-     *
-     * @param player The player to move
-     */
-    public void turnLeft(@NotNull Player player) {
-        player.setHeading(player.getHeading().prev());
-        //turnRight(player,3);
-    }
-
 
     /**
      * <p>Moves a {@link CommandCard} from one {@link CommandCardField} to another, if it is not already occupied.
