@@ -75,11 +75,13 @@ public class PlayerController {
     }
 
     /**
-     * Turns the player by π/4 * {@code numTimes}
+     * <p>Turns the player by π/4 * {@code numTimes}. If the argument is
+     * negative the player is turned to the left.</p>
      *
      * @param numTimes Number of times to turn right
      */
     public void turnRight(int numTimes) {
+        numTimes %= 4;
         Heading heading = player.getHeading();
         for (int i = 0; i < numTimes; i++) {
             heading = heading.next();
