@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
@@ -12,7 +12,6 @@ public abstract class BoardElement {
         this.passable = passable;
         this.isOpaque = isOpaque;
     }
-
 
     public boolean isPassable(){
         return passable;

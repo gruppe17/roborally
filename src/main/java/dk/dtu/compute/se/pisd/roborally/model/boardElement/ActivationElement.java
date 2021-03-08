@@ -1,4 +1,6 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
  * Represents {@link BoardElement}s that can be activated in the activation phase.

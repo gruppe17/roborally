@@ -1,6 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
-import dk.dtu.compute.se.pisd.roborally.model.MoveHazard;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 /**

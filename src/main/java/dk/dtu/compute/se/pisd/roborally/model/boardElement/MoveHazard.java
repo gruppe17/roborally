@@ -1,6 +1,8 @@
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
-import javafx.scene.shape.MoveTo;
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
  * <p>Represents a {@link ActivationElement} that moves the player.
