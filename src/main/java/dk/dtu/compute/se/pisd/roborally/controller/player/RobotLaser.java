@@ -25,13 +25,16 @@ public class RobotLaser implements ILaser {
     public void fire() {
         Space currentSpace = owner.getSpace();
         Space lastSpace = currentSpace;
+
+        /* Abort if player is not in a space*/
         if(lastSpace == null)
             return;
-        Player playerAtSpace = lastSpace.getPlayer();
-        while(true){
-            lastSpace = owner.board.getNeighbour(lastSpace, owner.getHeading());
 
-            /* remember to add the right elements here */
+        while(true){
+            /* get next space */
+            lastSpace = owner.board.getNeighbour(lastSpace, owner.getHeading());
+            Player playerAtSpace = lastSpace.getPlayer();
+            /* remember to add the right elements to prevent hitting walls and stuff here */
            /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
                 break;
             }*/
@@ -41,10 +44,14 @@ public class RobotLaser implements ILaser {
                 break;
             }
 
+            /* We should add fx to the spaces that are hit*/
+
+            /* If player is hit, then damage it and do stuff. */
             if(playerAtSpace != null && playerAtSpace != owner){
-               //Damage the player.
                 break;
             }
         }
+
+        /*Maybe do some cleanup of fx here?*/
     }
 }
