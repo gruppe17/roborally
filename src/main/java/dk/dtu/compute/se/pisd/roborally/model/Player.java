@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import org.jetbrains.annotations.NotNull;
 
 import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
@@ -32,14 +33,11 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
- *
  */
-public class Player extends Subject {
-    final public PlayerController playerController;
-
+public class Player extends Subject implements ILaser {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
-
+    final public PlayerController playerController;
     final public Board board;
 
     private String name;
@@ -173,6 +171,62 @@ public class Player extends Subject {
 
     public CommandCardField getCardField(int i) {
         return cards[i];
+    }
+
+
+    /**
+     * <p>Fire in the direction the owner
+     * robot is facing. Their range has no
+     * limit. Any robot in the line of sight is
+     * shot. Robot lasers cannot fire through
+     * walls or shoot more than one robot.</p>
+     */
+    @Override
+    public void fire() {
+        Space currentSpace = getSpace();
+        Space lastSpace = currentSpace;
+
+        /* Abort if player is not in a space*/
+        if (lastSpace == null)
+            return;
+
+        while (true) {
+            /* get next space */
+            lastSpace = board.getNeighbour(lastSpace, getHeading());
+            Player playerAtSpace = lastSpace.getPlayer();
+            /* remember to add the right elements to prevent hitting walls and stuff here */
+           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
+                break;
+            }*/
+
+            /* exit if nothing is hit */
+            if (lastSpace == null) {
+                break;
+            }
+
+            lastSpace.element.isOpaque = true;
+            /* We should add fx to the spaces that are hit*/
+
+            /* If player is hit, then damage it and do stuff. */
+            if (playerAtSpace != null && playerAtSpace != this) {
+                break;
+            }
+        }
+
+        currentSpace = getSpace();
+        lastSpace = currentSpace;
+
+        while (true) {
+            /* get next space */
+            lastSpace = board.getNeighbour(lastSpace, getHeading());
+            if (lastSpace == null) {
+                break;
+            }
+
+            lastSpace.element.isOpaque = false;
+
+        }
+        /*Maybe do some cleanup of fx here?*/
     }
 
 }
