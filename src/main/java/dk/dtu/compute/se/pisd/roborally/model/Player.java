@@ -33,6 +33,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
 public class Player extends Subject implements ILaser {
     final public static int NO_REGISTERS = 5;
