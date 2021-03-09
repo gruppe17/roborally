@@ -1,5 +1,6 @@
-package dk.dtu.compute.se.pisd.roborally.interfaces;
+package dk.dtu.compute.se.pisd.roborally.controller.player;
 
+import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
