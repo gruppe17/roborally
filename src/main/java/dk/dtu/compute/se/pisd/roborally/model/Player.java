@@ -35,7 +35,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
-public class Player extends Subject implements ILaser {
+public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
     final public PlayerController playerController;
@@ -175,59 +175,6 @@ public class Player extends Subject implements ILaser {
     }
 
 
-    /**
-     * <p>Fire in the direction the owner
-     * robot is facing. Their range has no
-     * limit. Any robot in the line of sight is
-     * shot. Robot lasers cannot fire through
-     * walls or shoot more than one robot.</p>
-     */
-    @Override
-    public void fire() {
-        Space currentSpace = getSpace();
-        Space lastSpace = currentSpace;
 
-        /* Abort if player is not in a space*/
-        if (lastSpace == null)
-            return;
-
-        while (true) {
-            /* get next space */
-            lastSpace = board.getNeighbour(lastSpace, getHeading());
-            Player playerAtSpace = lastSpace.getPlayer();
-            /* remember to add the right elements to prevent hitting walls and stuff here */
-           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
-                break;
-            }*/
-
-            /* exit if nothing is hit */
-            if (lastSpace == null) {
-                break;
-            }
-
-            lastSpace.element.isOpaque = true;
-            /* We should add fx to the spaces that are hit*/
-
-            /* If player is hit, then damage it and do stuff. */
-            if (playerAtSpace != null && playerAtSpace != this) {
-                break;
-            }
-        }
-
-        currentSpace = getSpace();
-        lastSpace = currentSpace;
-
-        while (true) {
-            /* get next space */
-            lastSpace = board.getNeighbour(lastSpace, getHeading());
-            if (lastSpace == null) {
-                break;
-            }
-
-            lastSpace.element.isOpaque = false;
-
-        }
-        /*Maybe do some cleanup of fx here?*/
-    }
 
 }
