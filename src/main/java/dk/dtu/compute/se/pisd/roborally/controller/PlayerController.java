@@ -177,6 +177,9 @@ public class PlayerController implements ILaser {
 
                 // hit player should take a SPAM damage card.
 
+                // Change this to SPAM Command Card
+                playerAtSpace.playerController.addCard(new CommandCard(Command.FORWARD));
+
                 break;
             }
         }
