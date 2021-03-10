@@ -140,6 +140,9 @@ public class PlayerController implements ILaser {
 
             /* If player is hit, then damage it and do stuff. */
             if (playerAtSpace != null && playerAtSpace != player) {
+
+                // hit player should take a SPAM damage card.
+
                 break;
             }
         }
