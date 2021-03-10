@@ -120,7 +120,7 @@ public class PlayerController {
     private void addCard(CommandCard card){
         CommandCardField emptyCardField = player.getEmptyCardField();
 
-        if(emptyCardField != null){
+        if(emptyCardField != null && card != null){
             emptyCardField.setCard(card);
         }
 
