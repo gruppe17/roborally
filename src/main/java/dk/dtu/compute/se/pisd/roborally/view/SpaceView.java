@@ -22,21 +22,20 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeLineCap;
 import org.jetbrains.annotations.NotNull;
+
 
 /**
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class SpaceView extends StackPane implements ViewObserver {
@@ -44,7 +43,10 @@ public class SpaceView extends StackPane implements ViewObserver {
     final public static int SPACE_HEIGHT = 75; // 60; // 75;
     final public static int SPACE_WIDTH = 75;  // 60; // 75;
 
+    final private static String FACTORY_FLOOR_IMAGE_PATH = "images/cards/FactoryFloor.png";
+
     public final Space space;
+    public final ImageView imageView;
 
 
     public SpaceView(@NotNull Space space) {
@@ -55,15 +57,15 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.setMinWidth(SPACE_WIDTH);
         this.setMaxWidth(SPACE_WIDTH);
 
-        this.setPrefHeight(SPACE_HEIGHT * 0.8f);
-        this.setMinHeight(SPACE_HEIGHT * 0.8f);
+        this.setPrefHeight(SPACE_HEIGHT);
+        this.setMinHeight(SPACE_HEIGHT);
         this.setMaxHeight(SPACE_HEIGHT);
 
-        if ((space.x + space.y) % 2 == 0) {
-            this.setStyle("-fx-background-color: white;");
-        } else {
-            this.setStyle("-fx-background-color: black;");
-        }
+        imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
+        this.getChildren().add(imageView);
+        imageView.fitWidthProperty().bind(this.widthProperty());
+        imageView.fitHeightProperty().bind(this.heightProperty());
+
 
         // updatePlayer();
 
@@ -73,20 +75,23 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     private void updatePlayer() {
+        //When it is established what a player is on the board, then it can simply be checked
+        // if the last element is a player and then only remove that element
         this.getChildren().clear();
+        this.getChildren().add(imageView);
 
         Player player = space.getPlayer();
         if (player != null) {
             Polygon arrow = new Polygon(0.0, 0.0,
                     10.0, 20.0,
-                    20.0, 0.0 );
+                    20.0, 0.0);
             try {
                 arrow.setFill(Color.valueOf(player.getColor()));
             } catch (Exception e) {
                 arrow.setFill(Color.MEDIUMPURPLE);
             }
 
-            arrow.setRotate((90*player.getHeading().ordinal())%360);
+            arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
             this.getChildren().add(arrow);
         }
     }
