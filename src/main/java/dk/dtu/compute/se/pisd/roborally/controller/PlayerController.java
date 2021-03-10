@@ -65,7 +65,7 @@ public class PlayerController {
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(2)}</p>
      *
-     * @param player The player to move
+     *
      */
     public void fastForward() {
         moveForward(2);
