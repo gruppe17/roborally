@@ -1,8 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 
 public class PlayerController {
     Player player;
@@ -103,5 +101,18 @@ public class PlayerController {
     public void turnLeft() {
         player.setHeading(player.getHeading().prev());
     }
+
+    /**
+     * Returns a random CommandCard
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @return
+     */
+    private CommandCard generateRandomCommandCard() {
+        Command[] commands = Command.values();
+        int random = (int) (Math.random() * commands.length);
+        return new CommandCard(commands[random]);
+    }
+
+
 
 }
