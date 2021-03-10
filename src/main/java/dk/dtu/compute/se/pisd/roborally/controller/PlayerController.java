@@ -113,6 +113,30 @@ public class PlayerController {
         return new CommandCard(commands[random]);
     }
 
+    /**
+     * adds a card to an empty card field if possible
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    private void addCard(CommandCard card){
+        CommandCardField emptyCardField = player.getEmptyCardField();
+
+        if(emptyCardField != null){
+            emptyCardField.setCard(card);
+        }
+
+    }
+
+    /**
+     * adds a random card to an empty card field if possible
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    private void drawCard(){
+        CommandCardField emptyCardField = player.getEmptyCardField();
+        if(emptyCardField != null){
+            emptyCardField.setCard(generateRandomCommandCard());
+        }
+
+    }
 
 
 }
