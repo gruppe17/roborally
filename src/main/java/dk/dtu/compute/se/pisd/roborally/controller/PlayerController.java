@@ -1,11 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.*;
 
-public class PlayerController implements ILaser {
+public class PlayerController {
     Player player;
 
     public PlayerController(Player player) {
@@ -68,7 +65,7 @@ public class PlayerController implements ILaser {
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(2)}</p>
      *
-     * @param player The player to move
+     *
      */
     public void fastForward() {
         moveForward(2);
@@ -106,60 +103,40 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * <p>Fire in the direction the owner
-     * robot is facing. Their range has no
-     * limit. Any robot in the line of sight is
-     * shot. Robot lasers cannot fire through
-     * walls or shoot more than one robot.</p>
+     * Returns a random CommandCard
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @return
+     */
+    private CommandCard generateRandomCommandCard() {
+        Command[] commands = Command.values();
+        int random = (int) (Math.random() * commands.length);
+        return new CommandCard(commands[random]);
+    }
+
+    /**
+     * adds a card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
-    @Override
-    public void fire() {
-        Space currentSpace = player.getSpace();
-        Space lastSpace = currentSpace;
+    private void addCard(CommandCard card){
+        CommandCardField emptyCardField = player.getEmptyCardField();
 
-        /* Abort if player is not in a space*/
-        if (lastSpace == null)
-            return;
-
-        while (true) {
-            /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
-            Player playerAtSpace = lastSpace.getPlayer();
-            /* remember to add the right elements to prevent hitting walls and stuff here */
-           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
-                break;
-            }*/
-
-            /* exit if nothing is hit */
-            if (lastSpace == null) {
-                break;
-            }
-
-            /* We should add fx to the spaces that are hit*/
-
-            /* If player is hit, then damage it and do stuff. */
-            if (playerAtSpace != null && playerAtSpace != player) {
-
-                // hit player should take a SPAM damage card.
-
-                break;
-            }
-        }
-
-        /* Reset last space*/
-        currentSpace = player.getSpace();
-        lastSpace = currentSpace;
-
-
-        /*Maybe do some cleanup of fx here?*/
-        while (true) {
-            /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
-            if (lastSpace == null) {
-                break;
-            }
+        if(emptyCardField != null && card != null){
+            emptyCardField.setCard(card);
         }
 
     }
+
+    /**
+     * adds a random card to an empty card field if possible
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    private void drawCard(){
+        CommandCardField emptyCardField = player.getEmptyCardField();
+        if(emptyCardField != null){
+            emptyCardField.setCard(generateRandomCommandCard());
+        }
+
+    }
+
+
 }
