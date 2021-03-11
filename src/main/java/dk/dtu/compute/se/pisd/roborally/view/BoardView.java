@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.scene.control.Label;
@@ -58,6 +59,10 @@ public class BoardView extends VBox implements ViewObserver {
         this.getChildren().add(playersView);
         this.getChildren().add(statusLabel);
 
+        RoboRally.bindSize(mainBoardPane, this, 1, 0.59);
+        RoboRally.bindSize(playersView, this, 1, 0.40);
+        RoboRally.bindSize(statusLabel, this, 1, 0.01);
+
         spaces = new SpaceView[board.width][board.height];
 
         for (int x = 0; x < board.width; x++) {
@@ -66,6 +71,11 @@ public class BoardView extends VBox implements ViewObserver {
                 SpaceView spaceView = new SpaceView(space);
                 spaces[x][y] = spaceView;
                 mainBoardPane.add(spaceView, x, y);
+            }
+        }
+        for (SpaceView[] spaceViews: spaces) {
+            for (SpaceView spaceView: spaceViews) {
+                RoboRally.bindSize(spaceView, mainBoardPane, ((double)(1))/mainBoardPane.getColumnCount(), 1f/mainBoardPane.getRowCount());
             }
         }
 
@@ -80,5 +90,6 @@ public class BoardView extends VBox implements ViewObserver {
             statusLabel.setText(board.getStatusMessage());
         }
     }
+
 
 }
