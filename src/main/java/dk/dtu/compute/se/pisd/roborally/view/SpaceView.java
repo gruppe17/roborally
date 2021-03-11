@@ -53,19 +53,11 @@ public class SpaceView extends StackPane implements ViewObserver {
         this.space = space;
 
         // XXX the following styling should better be done with styles
-        this.setPrefWidth(SPACE_WIDTH);
-        this.setMinWidth(SPACE_WIDTH);
-        this.setMaxWidth(SPACE_WIDTH);
-
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
-        this.setMaxHeight(SPACE_HEIGHT);
-
         imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
         this.getChildren().add(imageView);
+        imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
-
 
         // updatePlayer();
 
