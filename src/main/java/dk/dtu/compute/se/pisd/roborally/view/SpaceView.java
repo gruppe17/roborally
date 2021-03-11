@@ -43,11 +43,10 @@ public class SpaceView extends StackPane implements ViewObserver {
     final public static int SPACE_HEIGHT = 75; // 60; // 75;
     final public static int SPACE_WIDTH = 75;  // 60; // 75;
 
-    final private static String FACTORY_FLOOR_IMAGE_PATH = "images/cards/FactoryFloor.png";
+    final private static String FACTORY_FLOOR_IMAGE_PATH = "images/tiles/factoryFloor.png";
 
     public final Space space;
     public final ImageView imageView;
-
 
     public SpaceView(@NotNull Space space) {
         this.space = space;
