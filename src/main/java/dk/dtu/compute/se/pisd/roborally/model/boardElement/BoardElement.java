@@ -1,16 +1,30 @@
 package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
+
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public abstract class BoardElement {
-    public boolean passable;
-    public boolean isOpaque;
+    /**
+     * <p>Whether this element is passable by robots.</p>
+     */
+    protected boolean passable;
 
-    protected BoardElement(boolean passable, boolean isOpaque){
+    /**
+     * <p>Whether the element is opaque to standard lasers.</p>
+     */
+    protected boolean isOpaque;
+
+    /**
+     * <p>Which way the element is pointing. May be null if the element has no direction.</p>
+     */
+    protected Heading direction;
+
+    /*Getters and setters*/
+    public void setPassable(boolean passable) {
         this.passable = passable;
-        this.isOpaque = isOpaque;
     }
 
     public boolean isPassable(){
@@ -20,4 +34,30 @@ public abstract class BoardElement {
     public boolean isOpaque() {
         return isOpaque;
     }
+
+    public void setOpaque(boolean opaque) {
+        isOpaque = opaque;
+    }
+
+    public Heading getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Heading direction) {
+        this.direction = direction;
+    }
+
+    /*Constructors*/
+    protected BoardElement(boolean passable, boolean isOpaque){
+        this(passable, isOpaque, null);
+    }
+
+    protected BoardElement(boolean passable, boolean isOpaque, Heading direction){
+        this.passable = passable;
+        this.isOpaque = isOpaque;
+        this.direction = direction;
+    }
+
+
+
 }
