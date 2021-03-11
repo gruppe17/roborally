@@ -92,7 +92,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void rotateToRandomDirection(ImageView imageView){
-        imageView.setRotate(random.nextInt(4));
+        imageView.setRotate(random.nextInt(4) * 90);
     }
 
     /**
