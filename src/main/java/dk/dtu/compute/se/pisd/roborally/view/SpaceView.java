@@ -50,7 +50,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     public final Space space;
     public final ImageView imageView;
-    private final BoardElementView boardElementView;
+    private BoardElementView boardElementView;
 
     private Random random = new Random();
 
@@ -63,9 +63,8 @@ public class SpaceView extends StackPane implements ViewObserver {
         setImageSize(imageView);
         rotateToRandomDirection(imageView);
 
-        boardElementView = new BoardElementView(space.element);
-        //this.getChildren().add(boardElementView);
-        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        initBoardElementView();
+
 
         // updatePlayer();
 
@@ -75,8 +74,22 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     /**
+     * <p>Initializes {@link #boardElementView}. Simply returns if the
+     * {@link dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement}
+     * of {@link #space} is {@code null}</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initBoardElementView(){
+        if (space.element == null) return;
+        boardElementView = new BoardElementView(space.element);
+        this.getChildren().add(boardElementView);
+        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+    }
+
+    /**
      * <p>Randomly sets an {@link ImageView}'s rotation to be either 0°, 90°, 180° or 270°.</p>
      * @param imageView the ImageView to rotate
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void rotateToRandomDirection(ImageView imageView){
         imageView.setRotate(random.nextInt(4));
@@ -85,6 +98,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     /**
      * <p>Sets the size of an {@link ImageView}. This is done by binding it the this {@link SpaceView}</p>
      * @param imageView the ImageView to set the size of
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void setImageSize(ImageView imageView){
         imageView.setPreserveRatio(true);
@@ -97,7 +111,10 @@ public class SpaceView extends StackPane implements ViewObserver {
         // if the last element is a player and then only remove that element
         this.getChildren().clear();
         this.getChildren().add(imageView);
-        this.getChildren().add(boardElementView);
+        if (space.element != null){
+            if (boardElementView == null) initBoardElementView();
+            this.getChildren().add(boardElementView);
+        }
 
         Player player = space.getPlayer();
         if (player != null) {
