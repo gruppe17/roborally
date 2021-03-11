@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import javafx.scene.image.ImageView;
@@ -47,6 +48,7 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     public final Space space;
     public final ImageView imageView;
+    private final BoardElementView boardElementView;
 
     public SpaceView(@NotNull Space space) {
         this.space = space;
@@ -57,6 +59,10 @@ public class SpaceView extends StackPane implements ViewObserver {
         imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
+
+        boardElementView = new BoardElementView(space.element);
+        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        this.getChildren().add(boardElementView);
 
         // updatePlayer();
 
@@ -70,6 +76,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         // if the last element is a player and then only remove that element
         this.getChildren().clear();
         this.getChildren().add(imageView);
+        this.getChildren().add(boardElementView);
 
         Player player = space.getPlayer();
         if (player != null) {
