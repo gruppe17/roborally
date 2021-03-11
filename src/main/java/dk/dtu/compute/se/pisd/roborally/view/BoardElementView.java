@@ -20,6 +20,7 @@ public class BoardElementView extends BorderPane implements ViewObserver {
     private ImageView imageView;
 
     public BoardElementView(@NotNull BoardElement boardElement) {
+        imageView = new ImageView();
         initImageView(boardElement);
         this.setCenter(imageView);
 
@@ -34,20 +35,24 @@ public class BoardElementView extends BorderPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void initImageView(BoardElement boardElement) {
-        imageView = new ImageView(new Image(getImagePath(boardElement)));
+        imageView.setImage(new Image(getImagePath(boardElement)));
         fitImageSize();
         updateRotation(boardElement);
     }
 
     /**
      * <p>Determines the correct image for a given {@link BoardElement} and
-     * returns the path to the corresponding image file.</p>
+     * returns the path to the corresponding image file. If the correct image
+     * can not be determined or if the file cannot be found, the returned string
+     * will be empty.</p>
      *
      * @param boardElement the BoardElement for which an image should be determined
-     * @return A string containing the path of an image file relative to the resources directory
+     * @return  A string containing the path of an image file relative to the resources directory, or,
+     *          if the correct image file could not be found, an empty string.
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected String getImagePath(BoardElement boardElement) {
+        if (boardElement == null) return "";
         return BASE_DIRECTORY + "/priorityAntenna.png";
     }
 
