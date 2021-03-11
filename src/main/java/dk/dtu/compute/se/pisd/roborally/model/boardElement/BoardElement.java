@@ -28,7 +28,7 @@ public abstract class BoardElement extends Subject {
         this.passable = passable;
     }
 
-    public boolean isPassable(){
+    public boolean isPassable() {
         return passable;
     }
 
@@ -49,16 +49,14 @@ public abstract class BoardElement extends Subject {
     }
 
     /*Constructors*/
-    protected BoardElement(boolean passable, boolean isOpaque){
+    protected BoardElement(boolean passable, boolean isOpaque) {
         this(passable, isOpaque, null);
     }
 
-    protected BoardElement(boolean passable, boolean isOpaque, Heading direction){
+    protected BoardElement(boolean passable, boolean isOpaque, Heading direction) {
         this.passable = passable;
         this.isOpaque = isOpaque;
         this.direction = direction;
     }
-
-
 
 }
