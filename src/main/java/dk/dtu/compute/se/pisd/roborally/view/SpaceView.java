@@ -61,8 +61,8 @@ public class SpaceView extends StackPane implements ViewObserver {
         imageView.fitHeightProperty().bind(this.heightProperty());
 
         boardElementView = new BoardElementView(space.element);
-        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
         this.getChildren().add(boardElementView);
+        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
 
         // updatePlayer();
 

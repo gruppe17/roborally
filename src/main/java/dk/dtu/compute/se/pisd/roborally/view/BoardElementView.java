@@ -18,7 +18,9 @@ public class BoardElementView extends BorderPane {
     }
 
     protected void fitImageSize(){
-        
+        imageView.fitWidthProperty().bind(this.widthProperty());
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.setPreserveRatio(true);
     }
 
     protected String getImagePath(BoardElement boardElement){
