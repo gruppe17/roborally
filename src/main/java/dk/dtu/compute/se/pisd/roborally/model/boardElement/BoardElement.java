@@ -1,12 +1,13 @@
 package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
+import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public abstract class BoardElement {
+public abstract class BoardElement extends Subject {
     /**
      * <p>Whether this element is passable by robots.</p>
      */
