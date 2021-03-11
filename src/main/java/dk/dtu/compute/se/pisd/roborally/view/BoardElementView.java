@@ -7,14 +7,26 @@ import javafx.scene.layout.BorderPane;
 
 
 public class BoardElementView extends BorderPane {
+    final private static String BASE_DIRECTORY = "images/tiles/boardElements";
+
     private ImageView imageView;
 
     public BoardElementView(BoardElement boardElement){
-        Image img = new Image(getImagePath(boardElement));
-        imageView = new ImageView(img);
+        imageView = createImageView(boardElement);
+        fitImageSize();
+        this.setCenter(imageView);
     }
 
-    private String getImagePath(){
+    protected void fitImageSize(){
+        
+    }
+
+    protected String getImagePath(BoardElement boardElement){
+        return BASE_DIRECTORY + "/priorityAntenna.png";
+    }
+
+    protected ImageView createImageView(BoardElement boardElement){
+        return new ImageView(new Image(getImagePath(boardElement)));
     }
 
 }
