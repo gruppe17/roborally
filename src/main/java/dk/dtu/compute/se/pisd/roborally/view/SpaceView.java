@@ -31,6 +31,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 
 /**
  * ...
@@ -50,18 +52,19 @@ public class SpaceView extends StackPane implements ViewObserver {
     public final ImageView imageView;
     private final BoardElementView boardElementView;
 
+    private Random random = new Random();
+
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
         // XXX the following styling should better be done with styles
         imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
         this.getChildren().add(imageView);
-        imageView.setPreserveRatio(true);
-        imageView.fitWidthProperty().bind(this.widthProperty());
-        imageView.fitHeightProperty().bind(this.heightProperty());
+        setImageSize(imageView);
+        rotateToRandomDirection(imageView);
 
         boardElementView = new BoardElementView(space.element);
-        this.getChildren().add(boardElementView);
+        //this.getChildren().add(boardElementView);
         RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
 
         // updatePlayer();
@@ -69,6 +72,24 @@ public class SpaceView extends StackPane implements ViewObserver {
         // This space view should listen to changes of the space
         space.attach(this);
         update(space);
+    }
+
+    /**
+     * <p>Randomly sets an {@link ImageView}'s rotation to be either 0°, 90°, 180° or 270°.</p>
+     * @param imageView the ImageView to rotate
+     */
+    private void rotateToRandomDirection(ImageView imageView){
+        imageView.setRotate(random.nextInt(4));
+    }
+
+    /**
+     * <p>Sets the size of an {@link ImageView}. This is done by binding it the this {@link SpaceView}</p>
+     * @param imageView the ImageView to set the size of
+     */
+    private void setImageSize(ImageView imageView){
+        imageView.setPreserveRatio(true);
+        imageView.fitWidthProperty().bind(this.widthProperty());
+        imageView.fitHeightProperty().bind(this.heightProperty());
     }
 
     private void updatePlayer() {
