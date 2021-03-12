@@ -327,30 +327,42 @@ public class PlayerView extends Tab implements ViewObserver {
 
     }
 
+
     private void updateRegisters() {
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
             CardFieldView cardFieldView = programCardViews[i];
-            if (cardFieldView != null) {
-                if (player.board.getPhase() == Phase.PROGRAMMING) {
-                    cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                } else {
-                    if (i < player.board.getStep()) {
-                        cardFieldView.setBackground(CardFieldView.BG_DONE);
-                    } else if (i == player.board.getStep()) {
-                        if (player.board.getCurrentPlayer() == player) {
-                            cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-                        } else if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
-                            cardFieldView.setBackground(CardFieldView.BG_DONE);
-                        } else {
-                            cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                        }
-                    } else {
-                        cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                    }
+            if (cardFieldView == null) continue;
+
+            //The programming phase has just started; zero out all the registers.
+            if (player.board.getPhase() == Phase.PROGRAMMING) {
+                cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
+                continue;
+            }
+
+            //This card was executed last round
+            if (i < player.board.getStep()) {
+                cardFieldView.setBackground(CardFieldView.BG_DONE);
+                continue;
+            }
+
+            if (i == player.board.getStep()) {
+                //This card is about to be executed
+                if (player.board.getCurrentPlayer() == player) {
+                    cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
+                    continue;
+                }
+
+                //This card was executed earlier this round
+                if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
+                    cardFieldView.setBackground(CardFieldView.BG_DONE);
+                    continue;
                 }
             }
+            //This card is to be executed in the future
+            cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
         }
     }
+
 
     /**
      * <p>Updates the player interaction panel according to the {@link Command} of
