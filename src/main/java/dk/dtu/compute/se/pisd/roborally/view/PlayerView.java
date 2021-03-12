@@ -197,11 +197,11 @@ public class PlayerView extends Tab implements ViewObserver {
         programView = new VBox();
 
         programLabel = new Label("Program");
-        RoboRally.bindSize(programLabel, programView, 1, 0.01);
+        RoboRally.bindSize(programLabel, programView, 1, 0.1);
         programView.getChildren().add(programLabel);
 
         initProgramPane();
-        RoboRally.bindSize(programPane, programView, 1, 0.99);
+        RoboRally.bindSize(programPane, programView, 1, 0.9);
         programView.getChildren().add(programPane);
     }
 
@@ -217,10 +217,8 @@ public class PlayerView extends Tab implements ViewObserver {
         double hgapPercentageTimeNumCards = 0.01;
 
         programPane.setVgap(2.0);
-        //programPane.setHgap(2.0);
         programPane.hgapProperty().bind(programPane.widthProperty().multiply(hgapPercentageTimeNumCards / Player.NO_REGISTERS));
 
-        //double cardWidthPercent = (1d / Player.NO_REGISTERS) - (1d / (Player.NO_REGISTERS - 1) * hgapPercentage);
         double cardWidthPercent = (1d / Player.NO_REGISTERS) - (hgapPercentageTimeNumCards / (double) (Player.NO_REGISTERS - 1));
         programCardViews = new CardFieldView[Player.NO_REGISTERS];
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
@@ -242,11 +240,11 @@ public class PlayerView extends Tab implements ViewObserver {
         playerHand = new VBox();
 
         playerHandLabel = new Label("Command Cards");
-        RoboRally.bindSize(playerHandLabel, playerHand, 1, 0.01); //todo: make these numbers constants
+        RoboRally.bindSize(playerHandLabel, playerHand, 1, 0.1); //todo: make these numbers constants
         playerHand.getChildren().add(playerHandLabel);
 
         initPlayerHandCardsPane();
-        RoboRally.bindSize(playerHandCardsPane, playerHand, 1, 0.99);
+        RoboRally.bindSize(playerHandCardsPane, playerHand, 1, 0.9);
         playerHand.getChildren().add(playerHandCardsPane);
 
     }
