@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import javafx.geometry.Pos;
@@ -29,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,16 +38,49 @@ import org.jetbrains.annotations.NotNull;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class PlayerView extends Tab implements ViewObserver {
 
+    /**
+     * The player which this is a view for.
+     */
     private Player player;
 
+    /**
+     * <p>The top-level. It contains {@link #interactionTop}.</p>
+     */
     private VBox top;
 
+    //↑ or ↓ should probably be removed.
+
+    /**
+     * <p>The top-level for the interactive part of the view.</p>
+     */
+    private VBox interactionTop;
+
+    /**
+     * <p>The top-half of the {@link #interactionTop}</p>
+     */
+    private GridPane interactionTopTopHalf;
+    /**
+     * <p>The root of the player-program view.</p>
+     */
+    private VBox programView;
+    /**
+     * <p>The label of the player-program.</p>
+     */
     private Label programLabel;
+    /**
+     * <p>The programPane is where the player programs the robot.</p>
+     */
     private GridPane programPane;
+
+    /**
+     * <p>The bottom-half of the {@link #interactionTop}. Contains the {@link #player}'s hand.</p>
+     */
+    private VBox interactionTopBottomHalf;
     private Label cardsLabel;
     private GridPane cardsPane;
 
@@ -54,6 +89,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     private VBox buttonPanel;
 
+    //todo: move to PlayerView
     private Button finishButton;
     private Button executeButton;
     private Button stepButton;
@@ -69,22 +105,13 @@ public class PlayerView extends Tab implements ViewObserver {
         top = new VBox();
         this.setContent(top);
 
+
         this.gameController = gameController;
         this.player = player;
 
         programLabel = new Label("Program");
 
-        programPane = new GridPane();
-        programPane.setVgap(2.0);
-        programPane.setHgap(2.0);
-        programCardViews = new CardFieldView[Player.NO_REGISTERS];
-        for (int i = 0; i < Player.NO_REGISTERS; i++) {
-            CommandCardField cardField = player.getProgramField(i);
-            if (cardField != null) {
-                programCardViews[i] = new CardFieldView(gameController, cardField);
-                programPane.add(programCardViews[i], i, 0);
-            }
-        }
+        initProgramPane(gameController, player);
 
         // XXX  the following buttons should actually not be on the tabs of the individual
         //      players, but on the PlayersView (view for all players). This should be
@@ -129,6 +156,28 @@ public class PlayerView extends Tab implements ViewObserver {
         if (player.board != null) {
             player.board.attach(this);
             update(player.board);
+        }
+    }
+
+    /**
+     * <p>This method is responsible for initializing the {@link #programPane}</p>
+     *
+     * @param gameController
+     * @param player
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initProgramPane(@NotNull GameController gameController, @NotNull Player player) {
+        programPane = new GridPane();
+        programPane.setVgap(2.0);
+        programPane.setHgap(2.0);
+
+        programCardViews = new CardFieldView[Player.NO_REGISTERS];
+        for (int i = 0; i < Player.NO_REGISTERS; i++) {
+            CommandCardField cardField = player.getProgramField(i);
+            if (cardField == null) continue;
+
+            programCardViews[i] = new CardFieldView(gameController, cardField);
+            programPane.add(programCardViews[i], i, 0);
         }
     }
 
