@@ -49,21 +49,15 @@ public class PlayerView extends Tab implements ViewObserver {
     private Player player;
 
     /**
-     * <p>The top-level. It contains {@link #interactionTop}.</p>
+     * <p>The top-level of this view. It contains
+     * {@link #topTopHalf} and {@link #topBottomHalf}.</p>
      */
     private VBox top;
 
-    //↑ or ↓ should probably be removed.
-
     /**
-     * <p>The top-level for the interactive part of the view.</p>
+     * <p>The top-half of the {@link #top}. </p>
      */
-    private VBox interactionTop;
-
-    /**
-     * <p>The top-half of the {@link #interactionTop}</p>
-     */
-    private GridPane interactionTopTopHalf;
+    private GridPane topTopHalf;
     /**
      * <p>The root of the player-program view.</p>
      */
@@ -78,45 +72,217 @@ public class PlayerView extends Tab implements ViewObserver {
     private GridPane programPane;
 
     /**
-     * <p>The bottom-half of the {@link #interactionTop}. Contains the {@link #player}'s hand.</p>
+     * <p>The bottom-half of the {@link #top}. Contains {@link #playerHand}</p>
      */
-    private VBox interactionTopBottomHalf;
-    private Label cardsLabel;
-    private GridPane cardsPane;
+    private Pane topBottomHalf;
 
+    /**
+     * <p>The view of the {@link #player}'s hand. Contains
+     * {@link #playerHandLabel} and {@link #playerHandCardsPane}</p>
+     */
+    private VBox playerHand;
+
+    /**
+     * <p>The label of the {@link #player}'s hand.</p>
+     */
+    private Label playerHandLabel;
+
+    /**
+     * <p>Contains the {@link CardFieldView}s of the {@link #player}'s hand.</p>
+     */
+    private GridPane playerHandCardsPane;
+
+    /**
+     * <p>The views of each card currently in the {@link #player}'s registers.</p>
+     */
     private CardFieldView[] programCardViews;
-    private CardFieldView[] cardViews;
 
-    private VBox buttonPanel;
+    /**
+     * <p>The views of each card currently in the {@link #player}'s hand.</p>
+     */
+    private CardFieldView[] playerHandCardViews;
+
+    /**
+     * <p>Used to select and display possible {@link Command}s from the
+     * a multi-command {@link Command}.</p>
+     */
+    private VBox playerInteractionPanel;
+
+
+    private GameController gameController;
+
 
     //todo: move to PlayerView
+    private VBox buttonPanel;
+
     private Button finishButton;
     private Button executeButton;
     private Button stepButton;
 
-    private VBox playerInteractionPanel;
-
-    private GameController gameController;
 
     public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 
-        top = new VBox();
-        this.setContent(top);
-
-
         this.gameController = gameController;
         this.player = player;
 
-        programLabel = new Label("Program");
-
-        initProgramPane(gameController, player);
+        initTop();
+        this.setContent(top);
 
         // XXX  the following buttons should actually not be on the tabs of the individual
         //      players, but on the PlayersView (view for all players). This should be
         //      refactored.
 
+
+        // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
+        if (player.board != null) {
+            player.board.attach(this);
+            update(player.board);
+        }
+
+    }
+
+    /**
+     * <p>Initializes the {@link #top}. This includes creating its children.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initTop(){
+        top = new VBox();
+        //todo: determine how to determine size
+
+        initTopTopHalf();
+        RoboRally.bindSize(topTopHalf, top, 1, 0.5);
+        top.getChildren().add(topTopHalf);
+
+        initTopBottomHalf();
+        RoboRally.bindSize(topBottomHalf, top, 1, 0.5);
+        top.getChildren().add(topBottomHalf);
+    }
+
+    /**
+     * <p>Initializes the {@link #topTopHalf}. This includes creating its children.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initTopTopHalf() {
+        topTopHalf = new GridPane();
+        double registerViewWidthPercentage = Player.NO_REGISTERS/(double)Player.NO_CARDS;
+        initProgramView();
+        //todo: the size of this should somehow be determined by the size of the cards in cardsPane
+        RoboRally.bindSize(programView, topTopHalf, registerViewWidthPercentage, 1);
+        topTopHalf.add(programView, 0, 0);
+
+        //todo: make sure these are added to children correctly in updates
+        initButtonPanel();
+        RoboRally.bindSize(buttonPanel, topTopHalf, 0.2, 1);
+        initPlayerInteractionPanel();
+        RoboRally.bindSize(playerInteractionPanel, topTopHalf, 0.2, 1);
+    }
+
+    /**
+     * <p>Initializes the {@link #topBottomHalf}. This includes creating its child.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initTopBottomHalf() {
+        topBottomHalf = new Pane();
+
+        initPlayerHand();
+        RoboRally.bindSize(playerHand, topBottomHalf, 1, 1);
+        topBottomHalf.getChildren().add(playerHand);
+    }
+
+    /**
+     * <p>Initializes the {@link #programView}. This includes creating its children.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initProgramView(){
+        //todo: maybe this and cardsPane should be a class of their own as they are very similar
+        programView = new VBox();
+
+        programLabel = new Label("Program");
+        RoboRally.bindSize(programLabel, programView, 1, 0.01);
+        programView.getChildren().add(programLabel);
+
+        initProgramPane();
+        RoboRally.bindSize(programPane, programView, 1, 0.99);
+        programView.getChildren().add(programPane);
+    }
+
+    /**
+     * <p>This method is responsible for initializing the {@link #programPane}.
+     * This includes creating its the views for each non-null card in the
+     * {@link #player}'s registers.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initProgramPane() {
+        programPane = new GridPane();
+        double hgapPercentageTimeNumCards = 0.01;
+
+        programPane.setVgap(2.0);
+        //programPane.setHgap(2.0);
+        programPane.hgapProperty().bind(programPane.widthProperty().multiply(hgapPercentageTimeNumCards/Player.NO_REGISTERS));
+
+        //double cardWidthPercent = (1d / Player.NO_REGISTERS) - (1d / (Player.NO_REGISTERS - 1) * hgapPercentage);
+        double cardWidthPercent = (1d / Player.NO_REGISTERS) - (hgapPercentageTimeNumCards/(double) (Player.NO_REGISTERS - 1));
+        programCardViews = new CardFieldView[Player.NO_REGISTERS];
+        for (int i = 0; i < Player.NO_REGISTERS; i++) {
+            CommandCardField cardField = player.getProgramField(i);
+            if (cardField == null) continue;
+
+            programCardViews[i] = new CardFieldView(gameController, cardField);
+            programPane.add(programCardViews[i], i, 0);
+            RoboRally.bindSize(programCardViews[i], programPane, cardWidthPercent,1);
+        }
+    }
+
+    /**
+     * <p>Initializes the {@link #programView}. This includes creating its children.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initPlayerHand(){
+        playerHand = new VBox();
+
+        playerHandLabel = new Label("Command Cards");
+        RoboRally.bindSize(playerHandLabel, playerHand, 1, 0.01); //todo: make these numbers constants
+        playerHand.getChildren().add(playerHandLabel);
+
+        initPlayerHandCardsPane();
+        RoboRally.bindSize(playerHandCardsPane, playerHand, 1, 0.99);
+        playerHand.getChildren().add(playerHandCardsPane);
+
+    }
+
+    /**
+     * <p>This method is responsible for initializing the {@link #playerHandCardsPane}.
+     * This includes drawing from the {@link #player}'s deck creating its the views for
+     * each non-null card in the {@link #player}'s hand.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initPlayerHandCardsPane() {
+        playerHandCardsPane = new GridPane();
+        playerHandCardsPane.setVgap(2.0);
+        double hgapPercentageTimeNumCards = 0.01;
+        playerHandCardsPane.hgapProperty().bind(playerHandCardsPane.widthProperty().multiply(hgapPercentageTimeNumCards/Player.NO_CARDS));
+
+        double cardWidthPercent = (1d / Player.NO_CARDS) - (hgapPercentageTimeNumCards/(double) (Player.NO_CARDS - 1));
+        playerHandCardViews = new CardFieldView[Player.NO_CARDS];
+        for (int i = 0; i < Player.NO_CARDS; i++) {
+            CommandCardField cardField = player.getCardField(i);
+            if (cardField != null) {
+                playerHandCardViews[i] = new CardFieldView(gameController, cardField);
+                playerHandCardsPane.add(playerHandCardViews[i], i, 0);
+                RoboRally.bindSize(playerHandCardViews[i], playerHandCardsPane, cardWidthPercent,1);
+            }
+        }
+    }
+
+    /**
+     * <p>Initializes the {@link #buttonPanel}. This includes creating its children.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initButtonPanel() {
         finishButton = new Button("Finish Programming");
         finishButton.setOnAction(e -> gameController.finishProgrammingPhase());
 
@@ -128,58 +294,25 @@ public class PlayerView extends Tab implements ViewObserver {
 
         buttonPanel = new VBox(finishButton, executeButton, stepButton);
         buttonPanel.setAlignment(Pos.CENTER_LEFT);
+
+        //todo: Do something dynamic here
         buttonPanel.setSpacing(3.0);
-        // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
-
-        playerInteractionPanel = new VBox();
-        playerInteractionPanel.setAlignment(Pos.CENTER_LEFT);
-        playerInteractionPanel.setSpacing(3.0);
-
-        cardsLabel = new Label("Command Cards");
-        cardsPane = new GridPane();
-        cardsPane.setVgap(2.0);
-        cardsPane.setHgap(2.0);
-        cardViews = new CardFieldView[Player.NO_CARDS];
-        for (int i = 0; i < Player.NO_CARDS; i++) {
-            CommandCardField cardField = player.getCardField(i);
-            if (cardField != null) {
-                cardViews[i] = new CardFieldView(gameController, cardField);
-                cardsPane.add(cardViews[i], i, 0);
-            }
-        }
-
-        top.getChildren().add(programLabel);
-        top.getChildren().add(programPane);
-        top.getChildren().add(cardsLabel);
-        top.getChildren().add(cardsPane);
-
-        if (player.board != null) {
-            player.board.attach(this);
-            update(player.board);
-        }
     }
 
     /**
-     * <p>This method is responsible for initializing the {@link #programPane}</p>
-     *
-     * @param gameController
-     * @param player
+     * <p>Initializes the {@link #playerInteractionPanel}.</p>
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initProgramPane(@NotNull GameController gameController, @NotNull Player player) {
-        programPane = new GridPane();
-        programPane.setVgap(2.0);
-        programPane.setHgap(2.0);
+    private void initPlayerInteractionPanel() {
+        playerInteractionPanel = new VBox();
+        playerInteractionPanel.setAlignment(Pos.CENTER_LEFT);
 
-        programCardViews = new CardFieldView[Player.NO_REGISTERS];
-        for (int i = 0; i < Player.NO_REGISTERS; i++) {
-            CommandCardField cardField = player.getProgramField(i);
-            if (cardField == null) continue;
-
-            programCardViews[i] = new CardFieldView(gameController, cardField);
-            programPane.add(programCardViews[i], i, 0);
-        }
+        //todo: Do something dynamic here
+        playerInteractionPanel.setSpacing(3.0);
     }
+
+
+
 
 
     @Override
@@ -209,9 +342,9 @@ public class PlayerView extends Tab implements ViewObserver {
             }
 
             if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
-                if (!programPane.getChildren().contains(buttonPanel)) {
-                    programPane.getChildren().remove(playerInteractionPanel);
-                    programPane.add(buttonPanel, Player.NO_REGISTERS, 0);
+                if (!topTopHalf.getChildren().contains(buttonPanel)) {
+                    topTopHalf.getChildren().remove(playerInteractionPanel);
+                    topTopHalf.add(buttonPanel, Player.NO_REGISTERS, 0);
                 }
                 switch (player.board.getPhase()) {
                     case INITIALISATION:
@@ -242,9 +375,9 @@ public class PlayerView extends Tab implements ViewObserver {
 
 
             } else {
-                if (!programPane.getChildren().contains(playerInteractionPanel)) {
-                    programPane.getChildren().remove(buttonPanel);
-                    programPane.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
+                if (!topTopHalf.getChildren().contains(playerInteractionPanel)) {
+                    topTopHalf.getChildren().remove(buttonPanel);
+                    topTopHalf.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
                 }
                 playerInteractionPanel.getChildren().clear();
 

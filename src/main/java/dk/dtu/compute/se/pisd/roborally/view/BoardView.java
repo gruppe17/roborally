@@ -59,7 +59,7 @@ public class BoardView extends VBox implements ViewObserver {
         this.getChildren().add(playersView);
         this.getChildren().add(statusLabel);
 
-        RoboRally.bindSize(mainBoardPane, this, 1, 0.59);
+        RoboRally.bindSize(mainBoardPane, this, 1, 0.60);
         RoboRally.bindSize(playersView, this, 1, 0.38);
         RoboRally.bindSize(statusLabel, this, 1, 0.02);
 
