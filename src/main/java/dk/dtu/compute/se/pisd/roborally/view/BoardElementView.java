@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.BoardElementImageFinder;
+import dk.dtu.compute.se.pisd.roborally.imageFinder.BoardElementImageFinder;
 import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
