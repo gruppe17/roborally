@@ -311,7 +311,13 @@ public class PlayerView extends Tab implements ViewObserver {
         playerInteractionPanel.setSpacing(3.0);
     }
 
-
+    /**
+     * <p>Updates the view of {@link #player}'s registers
+     * and the {@link #buttonPanel} or {@link #playerInteractionPanel}.</p>
+     *
+     * @param subject the Subject calling this method.
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject != player.board) return;
@@ -323,11 +329,14 @@ public class PlayerView extends Tab implements ViewObserver {
             return;
         }
         updateButtonPanel();
-
-
     }
 
-
+    /**
+     * <p>Updates the {@link #player}'s registers. This is called
+     * by {@link #updateView(Subject)}</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void updateRegisters() {
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
             CardFieldView cardFieldView = programCardViews[i];
