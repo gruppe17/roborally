@@ -26,7 +26,9 @@ import java.util.List;
 /**
  * <p>A Command that takes a name and other commands as options.
  * A lone command, a command with no options, represents an
- * instruction given to and performed by a robot or board element.</p>
+ * instruction given to and performed by a robot or board element.
+ * A command containing other commands represents the choice of
+ * one of those commands.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
@@ -86,7 +88,7 @@ public enum Command {
     }
 
     /**
-     * <p>Returns the commands that can be selected between</p>
+     * <p>Returns the commands that can be selected between.</p>
      *
      * @return A list of possible commands
      */
