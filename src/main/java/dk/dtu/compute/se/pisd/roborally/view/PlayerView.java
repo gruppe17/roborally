@@ -316,6 +316,18 @@ public class PlayerView extends Tab implements ViewObserver {
     public void updateView(Subject subject) {
         if (subject != player.board) return;
 
+        updateRegisters();
+
+        if (player.board.getPhase() == Phase.PLAYER_INTERACTION) {
+            updatePlayerInteractionPanel();
+            return;
+        }
+        updateButtonPanel();
+
+
+    }
+
+    private void updateRegisters() {
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
             CardFieldView cardFieldView = programCardViews[i];
             if (cardFieldView != null) {
@@ -338,14 +350,6 @@ public class PlayerView extends Tab implements ViewObserver {
                 }
             }
         }
-
-        if (player.board.getPhase() == Phase.PLAYER_INTERACTION) {
-            updatePlayerInteractionPanel();
-            return;
-        }
-        updateButtonPanel();
-
-
     }
 
     /**
