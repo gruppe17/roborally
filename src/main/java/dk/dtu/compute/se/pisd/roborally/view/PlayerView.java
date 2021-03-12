@@ -35,7 +35,8 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * <p>This class represents a players view. I.e. something akin the player mat.
+ * NOTICE: this is not the view for the robot.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
@@ -114,7 +115,6 @@ public class PlayerView extends Tab implements ViewObserver {
 
     //todo: move to PlayerView
     private VBox buttonPanel;
-
     private Button finishButton;
     private Button executeButton;
     private Button stepButton;
@@ -130,24 +130,18 @@ public class PlayerView extends Tab implements ViewObserver {
         initTop();
         this.setContent(top);
 
-        // XXX  the following buttons should actually not be on the tabs of the individual
-        //      players, but on the PlayersView (view for all players). This should be
-        //      refactored.
-
-
-        // programPane.add(buttonPanel, Player.NO_REGISTERS, 0); done in update now
         if (player.board != null) {
             player.board.attach(this);
             update(player.board);
         }
-
     }
 
     /**
      * <p>Initializes the {@link #top}. This includes creating its children.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initTop(){
+    private void initTop() {
         top = new VBox();
         //todo: determine how to determine size
 
@@ -162,11 +156,12 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * <p>Initializes the {@link #topTopHalf}. This includes creating its children.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initTopTopHalf() {
         topTopHalf = new GridPane();
-        double registerViewWidthPercentage = Player.NO_REGISTERS/(double)Player.NO_CARDS;
+        double registerViewWidthPercentage = Player.NO_REGISTERS / (double) Player.NO_CARDS;
         initProgramView();
         //todo: the size of this should somehow be determined by the size of the cards in cardsPane
         RoboRally.bindSize(programView, topTopHalf, registerViewWidthPercentage, 1);
@@ -181,6 +176,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * <p>Initializes the {@link #topBottomHalf}. This includes creating its child.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initTopBottomHalf() {
@@ -193,9 +189,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * <p>Initializes the {@link #programView}. This includes creating its children.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initProgramView(){
+    private void initProgramView() {
         //todo: maybe this and cardsPane should be a class of their own as they are very similar
         programView = new VBox();
 
@@ -221,10 +218,10 @@ public class PlayerView extends Tab implements ViewObserver {
 
         programPane.setVgap(2.0);
         //programPane.setHgap(2.0);
-        programPane.hgapProperty().bind(programPane.widthProperty().multiply(hgapPercentageTimeNumCards/Player.NO_REGISTERS));
+        programPane.hgapProperty().bind(programPane.widthProperty().multiply(hgapPercentageTimeNumCards / Player.NO_REGISTERS));
 
         //double cardWidthPercent = (1d / Player.NO_REGISTERS) - (1d / (Player.NO_REGISTERS - 1) * hgapPercentage);
-        double cardWidthPercent = (1d / Player.NO_REGISTERS) - (hgapPercentageTimeNumCards/(double) (Player.NO_REGISTERS - 1));
+        double cardWidthPercent = (1d / Player.NO_REGISTERS) - (hgapPercentageTimeNumCards / (double) (Player.NO_REGISTERS - 1));
         programCardViews = new CardFieldView[Player.NO_REGISTERS];
         for (int i = 0; i < Player.NO_REGISTERS; i++) {
             CommandCardField cardField = player.getProgramField(i);
@@ -232,15 +229,16 @@ public class PlayerView extends Tab implements ViewObserver {
 
             programCardViews[i] = new CardFieldView(gameController, cardField);
             programPane.add(programCardViews[i], i, 0);
-            RoboRally.bindSize(programCardViews[i], programPane, cardWidthPercent,1);
+            RoboRally.bindSize(programCardViews[i], programPane, cardWidthPercent, 1);
         }
     }
 
     /**
      * <p>Initializes the {@link #programView}. This includes creating its children.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initPlayerHand(){
+    private void initPlayerHand() {
         playerHand = new VBox();
 
         playerHandLabel = new Label("Command Cards");
@@ -264,22 +262,23 @@ public class PlayerView extends Tab implements ViewObserver {
         playerHandCardsPane = new GridPane();
         playerHandCardsPane.setVgap(2.0);
         double hgapPercentageTimeNumCards = 0.01;
-        playerHandCardsPane.hgapProperty().bind(playerHandCardsPane.widthProperty().multiply(hgapPercentageTimeNumCards/Player.NO_CARDS));
+        playerHandCardsPane.hgapProperty().bind(playerHandCardsPane.widthProperty().multiply(hgapPercentageTimeNumCards / Player.NO_CARDS));
 
-        double cardWidthPercent = (1d / Player.NO_CARDS) - (hgapPercentageTimeNumCards/(double) (Player.NO_CARDS - 1));
+        double cardWidthPercent = (1d / Player.NO_CARDS) - (hgapPercentageTimeNumCards / (double) (Player.NO_CARDS - 1));
         playerHandCardViews = new CardFieldView[Player.NO_CARDS];
         for (int i = 0; i < Player.NO_CARDS; i++) {
             CommandCardField cardField = player.getCardField(i);
             if (cardField != null) {
                 playerHandCardViews[i] = new CardFieldView(gameController, cardField);
                 playerHandCardsPane.add(playerHandCardViews[i], i, 0);
-                RoboRally.bindSize(playerHandCardViews[i], playerHandCardsPane, cardWidthPercent,1);
+                RoboRally.bindSize(playerHandCardViews[i], playerHandCardsPane, cardWidthPercent, 1);
             }
         }
     }
 
     /**
      * <p>Initializes the {@link #buttonPanel}. This includes creating its children.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initButtonPanel() {
@@ -301,6 +300,7 @@ public class PlayerView extends Tab implements ViewObserver {
 
     /**
      * <p>Initializes the {@link #playerInteractionPanel}.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initPlayerInteractionPanel() {
@@ -310,9 +310,6 @@ public class PlayerView extends Tab implements ViewObserver {
         //todo: Do something dynamic here
         playerInteractionPanel.setSpacing(3.0);
     }
-
-
-
 
 
     @Override
