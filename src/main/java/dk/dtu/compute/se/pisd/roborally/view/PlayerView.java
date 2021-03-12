@@ -314,83 +314,107 @@ public class PlayerView extends Tab implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == player.board) {
-            for (int i = 0; i < Player.NO_REGISTERS; i++) {
-                CardFieldView cardFieldView = programCardViews[i];
-                if (cardFieldView != null) {
-                    if (player.board.getPhase() == Phase.PROGRAMMING) {
-                        cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                    } else {
-                        if (i < player.board.getStep()) {
+        if (subject != player.board) return;
+
+        for (int i = 0; i < Player.NO_REGISTERS; i++) {
+            CardFieldView cardFieldView = programCardViews[i];
+            if (cardFieldView != null) {
+                if (player.board.getPhase() == Phase.PROGRAMMING) {
+                    cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
+                } else {
+                    if (i < player.board.getStep()) {
+                        cardFieldView.setBackground(CardFieldView.BG_DONE);
+                    } else if (i == player.board.getStep()) {
+                        if (player.board.getCurrentPlayer() == player) {
+                            cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
+                        } else if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
                             cardFieldView.setBackground(CardFieldView.BG_DONE);
-                        } else if (i == player.board.getStep()) {
-                            if (player.board.getCurrentPlayer() == player) {
-                                cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-                            } else if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
-                                cardFieldView.setBackground(CardFieldView.BG_DONE);
-                            } else {
-                                cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
-                            }
                         } else {
                             cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
                         }
+                    } else {
+                        cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
                     }
                 }
             }
+        }
 
-            if (player.board.getPhase() != Phase.PLAYER_INTERACTION) {
-                if (!topTopHalf.getChildren().contains(buttonPanel)) {
-                    topTopHalf.getChildren().remove(playerInteractionPanel);
-                    topTopHalf.add(buttonPanel, Player.NO_REGISTERS, 0);
-                }
-                switch (player.board.getPhase()) {
-                    case INITIALISATION:
-                        finishButton.setDisable(true);
-                        // XXX just to make sure that there is a way for the player to get
-                        //     from the initialization phase to the programming phase somehow!
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(true);
-                        break;
-
-                    case PROGRAMMING:
-                        finishButton.setDisable(false);
-                        executeButton.setDisable(true);
-                        stepButton.setDisable(true);
-                        break;
-
-                    case ACTIVATION:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(false);
-                        stepButton.setDisable(false);
-                        break;
-
-                    default:
-                        finishButton.setDisable(true);
-                        executeButton.setDisable(true);
-                        stepButton.setDisable(true);
-                }
+        if (player.board.getPhase() == Phase.PLAYER_INTERACTION) {
+            updatePlayerInteractionPanel();
+            return;
+        }
+        updateButtonPanel();
 
 
-            } else {
-                if (!topTopHalf.getChildren().contains(playerInteractionPanel)) {
-                    topTopHalf.getChildren().remove(buttonPanel);
-                    topTopHalf.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
-                }
-                playerInteractionPanel.getChildren().clear();
+    }
 
-                if (player.board.getCurrentPlayer() == player) {
-                    int registerNum = player.board.getStep();
-                    Command command = player.getProgramField(registerNum).getCard().command;
-                    if (!command.isInteractive()) assert false;
-                    Button optionBtn;
-                    for (Command option : command.getOptions()) {
-                        optionBtn = new Button(option.displayName);
-                        optionBtn.setOnAction(e -> gameController.executeCommandAndContinue(option));
-                        optionBtn.setDisable(false);
-                        playerInteractionPanel.getChildren().add(optionBtn);
-                    }
-                }
+    /**
+     * <p>Updates the player interaction panel according to the {@link Command} of
+     * the {@link CommandCardField} of the {@link #player}'s current register
+     * and displays it. This is called by {@link #updateView(Subject)}</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void updatePlayerInteractionPanel() {
+        if (player.board.getPhase() == Phase.PLAYER_INTERACTION
+                && !topTopHalf.getChildren().contains(playerInteractionPanel)) {
+            topTopHalf.getChildren().remove(buttonPanel);
+            topTopHalf.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
+        }
+        playerInteractionPanel.getChildren().clear();
+
+        if (player.board.getCurrentPlayer() == player) {
+            int registerNum = player.board.getStep();
+            Command command = player.getProgramField(registerNum).getCard().command;
+            if (!command.isInteractive()) assert false;
+            Button optionBtn;
+            for (Command option : command.getOptions()) {
+                optionBtn = new Button(option.displayName);
+                optionBtn.setOnAction(e -> gameController.executeCommandAndContinue(option));
+                optionBtn.setDisable(false);
+                playerInteractionPanel.getChildren().add(optionBtn);
             }
+        }
+    }
+
+    /**
+     * <p>Updates the button panel according to the current phase
+     * and display the button panel. This is called by {@link #updateView(Subject)}</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void updateButtonPanel() {
+        //If the button panel is already being displayed, remove the
+        // player interaction panel and display this instead
+        if (!topTopHalf.getChildren().contains(buttonPanel)) {
+            topTopHalf.getChildren().remove(playerInteractionPanel);
+            topTopHalf.add(buttonPanel, Player.NO_REGISTERS, 0);
+        }
+        switch (player.board.getPhase()) {
+            case INITIALISATION:
+                finishButton.setDisable(true);
+                // XXX just to make sure that there is a way for the player to get
+                //     from the initialization phase to the programming phase somehow!
+                executeButton.setDisable(false);
+                stepButton.setDisable(true);
+                break;
+
+            case PROGRAMMING:
+                finishButton.setDisable(false);
+                executeButton.setDisable(true);
+                stepButton.setDisable(true);
+                break;
+
+            case ACTIVATION:
+                finishButton.setDisable(true);
+                executeButton.setDisable(false);
+                stepButton.setDisable(false);
+                break;
+
+            default:
+                finishButton.setDisable(true);
+                executeButton.setDisable(true);
+                stepButton.setDisable(true);
         }
     }
 
