@@ -61,6 +61,7 @@ public class Space extends Subject {
         player = null;
 
         this.element = element;
+        this.element.setSpace(this);
         this.walls = walls;
     }
 
