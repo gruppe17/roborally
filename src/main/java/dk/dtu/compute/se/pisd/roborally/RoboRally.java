@@ -26,8 +26,10 @@ import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.view.BoardView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -38,8 +40,8 @@ import javafx.stage.Stage;
  *
  */
 public class RoboRally extends Application {
-
-    private static final int MIN_APP_WIDTH = 600;
+    private static final int MIN_APP_WIDTH = 550;
+    private static final int MIN_APP_HEIGHT = 750;
 
     private Stage stage;
     private BorderPane boardRoot;
@@ -65,7 +67,17 @@ public class RoboRally extends Application {
         boardRoot = new BorderPane();
         VBox vbox = new VBox(menuBar, boardRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
+
+        bindWidth(menuBar, vbox.widthProperty(), 1);
+
+        bindWidth(boardRoot, vbox.widthProperty(), 1);
+        boardRoot.minHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+        boardRoot.maxHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+
         Scene primaryScene = new Scene(vbox);
+        //bindSize(vbox, primaryStage.widthProperty(), primaryStage.heightProperty(), 1, 1);
+        vbox.maxHeightProperty().bind(primaryScene.heightProperty());
+        vbox.maxWidthProperty().bind(primaryScene.widthProperty());
 
         stage.setScene(primaryScene);
         stage.setTitle("RoboRally");
@@ -83,8 +95,10 @@ public class RoboRally extends Application {
         boardRoot.getChildren().clear();
 
         if (gameController != null) {
+            ((VBox)boardRoot.parentProperty().get()).setMinHeight(MIN_APP_HEIGHT);
             // create and add view for new board
             BoardView boardView = new BoardView(gameController);
+            bindSize(boardView, boardRoot, 1, 1);
             boardRoot.setCenter(boardView);
         }
 
@@ -103,6 +117,32 @@ public class RoboRally extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+
+    /**
+     * Temporary method. Binds the size of one region to another. Shouldn't be here (and should probably be done differently).
+     */
+
+    public static void bindSize(Region a, Region b, double widthPercent, double heightPercent){
+        bindSize(a, b.widthProperty(), b.heightProperty(), widthPercent, heightPercent);
+    }
+
+    public static void bindSize(Region a, ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height, double widthPercent, double heightPercent){
+        bindWidth(a, width, widthPercent);
+        bindHeight(a, height, heightPercent);
+    }
+
+    public static void bindWidth(Region a, ReadOnlyDoubleProperty b, double widthPercent){
+        a.prefWidthProperty().bind(b.multiply(widthPercent));
+        a.minWidthProperty().bind(b.multiply(widthPercent));
+        a.maxWidthProperty().bind(b.multiply(widthPercent));
+    }
+
+    public static void bindHeight(Region a, ReadOnlyDoubleProperty b, double heightPercent){
+        a.prefHeightProperty().bind(b.multiply(heightPercent));
+        a.minHeightProperty().bind(b.multiply(heightPercent));
+        a.maxHeightProperty().bind(b.multiply(heightPercent));
     }
 
 }
