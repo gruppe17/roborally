@@ -155,7 +155,6 @@ public class PlayerController implements ILaser {
         /* Abort if player is not in a space*/
         if (lastSpace == null)
             return;
-
         while (true) {
             /* get next space */
             lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
@@ -169,7 +168,6 @@ public class PlayerController implements ILaser {
             if (lastSpace == null) {
                 break;
             }
-
             /* We should add fx to the spaces that are hit*/
 
             /* If player is hit, then damage it and do stuff. */
@@ -188,7 +186,6 @@ public class PlayerController implements ILaser {
         currentSpace = player.getSpace();
         lastSpace = currentSpace;
 
-
         /*Maybe do some cleanup of fx here?*/
         while (true) {
             /* get next space */
@@ -197,8 +194,5 @@ public class PlayerController implements ILaser {
                 break;
             }
         }
-
     }
-
-
 }
