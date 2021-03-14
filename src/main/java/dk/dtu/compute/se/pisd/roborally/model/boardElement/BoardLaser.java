@@ -8,6 +8,7 @@ public class BoardLaser extends ActivationElement {
 
     protected BoardLaser(boolean passable, boolean isOpaque, Space space) {
         super(passable, isOpaque, space);
+        
     }
 
 
