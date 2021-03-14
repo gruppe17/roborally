@@ -51,13 +51,7 @@ public abstract class BoardElement extends Subject {
         this.direction = direction;
     }
 
-    public Space getSpace() {
-        return space;
-    }
 
-    public void setSpace(Space space) {
-        this.space = space;
-    }
 
     /*Constructors*/
     protected BoardElement(boolean passable, boolean isOpaque) {
