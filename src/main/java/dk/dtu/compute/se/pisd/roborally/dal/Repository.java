@@ -21,7 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.dal;
 
-import dk.dtu.compute.se.pisd.roborally.fileaccess.LoadBoard;
+import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 import java.sql.*;
@@ -210,7 +210,7 @@ class Repository implements IRepository {
 				// game = new Board(width,height);
 				// TODO and we should also store the used game board in the database
 				//      for now, we use the default game board
-				game = LoadBoard.loadBoard(null);
+				game = BoardLoader.loadBoard(null);
 				if (game == null) {
 					return null;
 				}

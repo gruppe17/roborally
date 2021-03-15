@@ -27,9 +27,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
-import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 
 import java.io.*;
 
@@ -37,8 +35,9 @@ import java.io.*;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class LoadBoard {
+public class BoardLoader {
 
     private static final String BOARDSFOLDER = "boards";
     private static final String DEFAULTBOARD = "defaultboard";
@@ -49,7 +48,7 @@ public class LoadBoard {
             boardname = DEFAULTBOARD;
         }
 
-        ClassLoader classLoader = LoadBoard.class.getClassLoader();
+        ClassLoader classLoader = BoardLoader.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname + "." + JSON_EXT);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
@@ -114,7 +113,7 @@ public class LoadBoard {
             }
         }
 
-        ClassLoader classLoader = LoadBoard.class.getClassLoader();
+        ClassLoader classLoader = BoardLoader.class.getClassLoader();
         // TODO: this is not very defensive, and will result in a NullPointerException
         //       when the folder "resources" does not exist! But, it does not need
         //       the file "simpleCards.json" to exist!
