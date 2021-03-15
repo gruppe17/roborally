@@ -37,7 +37,7 @@ public class BoardElementView extends BorderPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void initImageView(BoardElement boardElement) {
-        imageView.setImage(new Image(imageFinder.getImagePath(boardElement)));
+        imageView.setImage(imageFinder.getImage(boardElement));
         fitImageSize();
         updateRotation(boardElement);
     }

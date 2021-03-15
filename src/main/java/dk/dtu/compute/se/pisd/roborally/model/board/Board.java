@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -91,6 +92,8 @@ public class Board extends Subject {
                 spaces[x][y] = space;
             }
         }
+        //spaces[1][3].addBoardElement(new wall(Heading.NORTH));
+
         //TODO: implement this for real
         prioritySpace = spaces[0][0];
         this.stepMode = false;
