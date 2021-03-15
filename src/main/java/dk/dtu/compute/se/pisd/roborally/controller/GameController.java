@@ -219,6 +219,7 @@ public class GameController {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void activateElements(){
+        /*
         PriorityQueue<IActivateable> priorityQueue = new PriorityQueue<>(6, Comparator.comparingInt(e -> {
             if (e instanceof ActivationElement) {
                 return ((ActivationElement) e).getPriority();
@@ -230,6 +231,8 @@ public class GameController {
                 priorityQueue.addAll(Arrays.asList(activationElements));
         }
         priorityQueue.forEach(IActivateable::activate);
+         */
+        
     }
 
     /**
