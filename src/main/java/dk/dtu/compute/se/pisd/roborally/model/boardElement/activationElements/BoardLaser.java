@@ -15,4 +15,9 @@ public class BoardLaser extends ActivationElement {
      * <p>{start x, start y, end x, end y}</p>
      */
     int[] endPoints;
+
+    @Override
+    public void activate() {
+
+    }
 }
