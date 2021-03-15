@@ -185,6 +185,7 @@ public class GameController {
         if (!board.isActivationQueueEmpty()) { //The round is not over
             board.setCurrentPlayer(board.nextPlayer());
         } else { //The round is over
+            activateBoardElements();
             int step = board.getStep() + 1;
             board.playerQueueForceRepopulate();
             board.setCurrentPlayer(board.nextPlayer());
@@ -195,6 +196,10 @@ public class GameController {
                 startProgrammingPhase();
             }
         }
+    }
+
+    private void activateBoardElements(){
+
     }
 
     /**
