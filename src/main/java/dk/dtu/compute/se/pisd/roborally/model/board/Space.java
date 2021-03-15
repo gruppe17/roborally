@@ -206,7 +206,7 @@ public class Space extends Subject {
         return containsObstacleTo(heading.next().next());
     }
 
-    void playerChanged() {
+    public void playerChanged() {
         // This is a minor hack; since some views that are registered with the space
         // also need to update when some player attributes change, the player can
         // notify the space of these changes by calling this method.
