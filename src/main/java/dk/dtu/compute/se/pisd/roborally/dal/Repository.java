@@ -23,6 +23,8 @@ package dk.dtu.compute.se.pisd.roborally.dal;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -69,77 +71,77 @@ class Repository implements IRepository {
 
 	@Override
 	public boolean createGameInDB(Board game) {
-		if (game.getGameId() == null) {
-			Connection connection = connector.getConnection();
-			try {
-				connection.setAutoCommit(false);
+		if (game.getGameId() != null) {
+			System.err.println("Game cannot be created in DB, since it has a game id already!");
+			return false;
+		}
 
-				PreparedStatement ps = getInsertGameStatementRGK();
-				// TODO: the name should eventually set by the user
-				//       for the game and should be then used 
-				//       game.getName();
-				ps.setString(1, "Date: " +  new Date()); // instead of name
-				ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
-				ps.setInt(3, game.getPhase().ordinal());
-				ps.setInt(4, game.getStep());
+		Connection connection = connector.getConnection();
+		try {
+			connection.setAutoCommit(false);
 
-				// If you have a foreign key constraint for current players,
-				// the check would need to be temporarily disabled, since
-				// MySQL does not have a per transaction validation, but
-				// validates on a per row basis.
-				// Statement statement = connection.createStatement();
-				// statement.execute("SET foreign_key_checks = 0");
-				
-				int affectedRows = ps.executeUpdate();
-				ResultSet generatedKeys = ps.getGeneratedKeys();
-				if (affectedRows == 1 && generatedKeys.next()) {
-					game.setGameId(generatedKeys.getInt(1));
-				}
-				generatedKeys.close();
-				
-				// Enable foreign key constraint check again:
-				// statement.execute("SET foreign_key_checks = 1");
-				// statement.close();
+			PreparedStatement ps = getInsertGameStatementRGK();
+			// TODO: the name should eventually set by the user
+			//       for the game and should be then used
+			//       game.getName();
+			ps.setString(1, "Date: " + new Date()); // instead of name
+			ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
+			ps.setInt(3, game.getPhase().ordinal());
+			ps.setInt(4, game.getStep());
 
-				createPlayersInDB(game);
+			// If you have a foreign key constraint for current players,
+			// the check would need to be temporarily disabled, since
+			// MySQL does not have a per transaction validation, but
+			// validates on a per row basis.
+			// Statement statement = connection.createStatement();
+			// statement.execute("SET foreign_key_checks = 0");
+
+			int affectedRows = ps.executeUpdate();
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+			if (affectedRows == 1 && generatedKeys.next()) {
+				game.setGameId(generatedKeys.getInt(1));
+			}
+			generatedKeys.close();
+
+			// Enable foreign key constraint check again:
+			// statement.execute("SET foreign_key_checks = 1");
+			// statement.close();
+
+			createPlayersInDB(game);
 				/* TOODO this method needs to be implemented first
 				createCardFieldsInDB(game);
 				 */
 
-				// since current player is a foreign key, it can oly be
-				// inserted after the players are created, since MySQL does
-				// not have a per transaction validation, but validates on
-				// a per row basis.
-				ps = getSelectGameStatementU();
-				ps.setInt(1, game.getGameId());
+			// since current player is a foreign key, it can oly be
+			// inserted after the players are created, since MySQL does
+			// not have a per transaction validation, but validates on
+			// a per row basis.
+			ps = getSelectGameStatementU();
+			ps.setInt(1, game.getGameId());
 
-				ResultSet rs = ps.executeQuery();
-				if (rs.next()) {
-					rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
-					rs.updateRow();
-				} else {
-					// TODO error handling
-				}
-				rs.close();
-
-				connection.commit();
-				connection.setAutoCommit(true);
-				return true;
-			} catch (SQLException e) {
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
+				rs.updateRow();
+			} else {
 				// TODO error handling
-				e.printStackTrace();
-				System.err.println("Some DB error");
-				
-				try {
-					connection.rollback();
-					connection.setAutoCommit(true);
-				} catch (SQLException e1) {
-					// TODO error handling
-					e1.printStackTrace();
-				}
 			}
-		} else {
-			System.err.println("Game cannot be created in DB, since it has a game id already!");
+			rs.close();
+
+			connection.commit();
+			connection.setAutoCommit(true);
+			return true;
+		} catch (SQLException e) {
+			// TODO error handling
+			e.printStackTrace();
+			System.err.println("Some DB error");
+			try {
+				connection.rollback();
+				connection.setAutoCommit(true);
+			} catch (SQLException e1) {
+				// TODO error handling
+				e1.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -167,9 +169,9 @@ class Repository implements IRepository {
 			rs.close();
 
 			updatePlayersInDB(game);
-			/* TOODO this method needs to be implemented first
-			updateCardFieldsInDB(game);
-			*/
+			//TODO this method needs to be implemented
+			//updateCardFieldsInDB(game);
+
 
             connection.commit();
             connection.setAutoCommit(true);
