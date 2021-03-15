@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.ActivationElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -170,34 +171,54 @@ public class GameController {
 
     /**
      * <p>Handles what happens after a player instruction has been executed.</p>
-     * <p>If the last player of the round has been activated then the players are sorted
-     * and register № is incremented. If also the entire activation is completed the programming phase is started.
+     * <p>If the last player of the round has been activated then the {@link ActivationElement}s
+     * are activated, the players are sorted and register № is incremented. If also the entire
+     * activation phase is completed the programming phase is started.
      * No matter what, the next player is always set.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Board#getStep()
+     * @see #activateBoardElements()
      */
     private void subRoundComplete() {
         if (board.getPhase() != Phase.ACTIVATION) {
             assert false;
             return;
         }
-        if (!board.isActivationQueueEmpty()) { //The round is not over
+
+        if (!board.isActivationQueueEmpty()) { //Not all players have been activated yet
             board.setCurrentPlayer(board.nextPlayer());
-        } else { //The round is over
-            activateBoardElements();
-            int step = board.getStep() + 1;
-            board.playerQueueForceRepopulate();
-            board.setCurrentPlayer(board.nextPlayer());
-            if (step < Player.NO_REGISTERS) {
-                makeProgramFieldsVisible(step);
-                board.setStep(step);
-            } else {
-                startProgrammingPhase();
-            }
+            return;
+        }
+
+        activateElements();
+        int step = board.getStep() + 1;
+        board.playerQueueForceRepopulate();
+        board.setCurrentPlayer(board.nextPlayer());
+        if (step < Player.NO_REGISTERS) {
+            makeProgramFieldsVisible(step);
+            board.setStep(step);
+        } else {
+            startProgrammingPhase();
         }
     }
 
+    /**
+     * <p>Handles activation of all {@link ActivationElement}s and robot lasers.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #activateBoardElements()
+     */
+    private void activateElements(){
+        activateBoardElements();
+    }
+
+    /**
+     * <p>Handles activation of all {@link ActivationElement}s and robot lasers.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #activateElements()
+     */
     private void activateBoardElements(){
 
     }
