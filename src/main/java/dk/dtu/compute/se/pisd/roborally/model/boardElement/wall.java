@@ -3,10 +3,10 @@ package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 
 
-public class wallElement extends BoardElement{
+public class wall extends BoardElement{
 
 
-    public wallElement(Heading posistion){
+    public wall(Heading posistion){
         super(northEastSouthWestArray(), northEastSouthWestArray(), posistion);
     }
 
