@@ -9,7 +9,7 @@ import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
  * Represents {@link BoardElement}s that can be activated in the activation phase.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public abstract class ActivationElement extends BoardElement implements IActivateable {
+public abstract class ActivationElement extends BoardElement {
     /**
      * <p>The space this {@link ActivationElement} is occupying</p>
      */
@@ -30,6 +30,4 @@ public abstract class ActivationElement extends BoardElement implements IActivat
     }
 
     public int getPriority() {return priority;}
-
-    public abstract void activate();
 }

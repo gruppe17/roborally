@@ -13,18 +13,6 @@ public class BoardLaserController implements IBoardElementController, ILaser {
         this.model = model;
     }
 
-
-    /**
-     * <p> Fires the laser upon activation </p>
-     */
-    @Override
-    public void activate() {
-        //Player player = model.getSpace().getPlayer();
-        //if (player == null) return;
-        fire();
-    }
-
-
     /**
      * <p>Fire in the direction the owner
      * robot is facing. Their range has no
