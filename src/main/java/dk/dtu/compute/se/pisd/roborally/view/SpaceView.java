@@ -97,9 +97,10 @@ public class SpaceView extends StackPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initBoardElementViews(){
-        if (space.getElements() == null) return;
-        boardElementViews = new ArrayList<>(space.getElements().length);
-        for (BoardElement boardElement: space.getElements()) {
+        BoardElement[] boardElements = space.getElements();
+        if (boardElements == null) return;
+        boardElementViews = new ArrayList<>(boardElements.length);
+        for (BoardElement boardElement: boardElements) {
             BoardElementView boardElementView = new BoardElementView(boardElement);
             boardElementViews.add(boardElementView);
             boardElementViewPane.getChildren().add(boardElementView);

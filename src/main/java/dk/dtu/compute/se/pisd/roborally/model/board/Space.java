@@ -98,6 +98,7 @@ public class Space extends Subject {
      * @return a safe array of all the board elements on this space
      */
     public BoardElement[] getElements() {
+        if (elements == null || elements.size() < 1) return new BoardElement[0];
         return (BoardElement[]) elements.toArray();
     }
 
@@ -116,11 +117,11 @@ public class Space extends Subject {
     }
 
     /**
-     * <p>Removes a {@link BoardElement} to this space</p>
+     * <p>Removes a {@link BoardElement} to this space.</p>
      * @param boardElement the board element to remove
      */
     public void removeBoardElement(BoardElement boardElement){
-        if (boardElement == null) return;
+        if (boardElement == null || elements == null) return;
         elements.remove(boardElement);
         if (boardElement instanceof ActivationElement) activationElements.remove(boardElement);
         notifyChange();
@@ -131,9 +132,10 @@ public class Space extends Subject {
      * space sorted by priority. The returned array is safe; any changes
      * to the array will not be reflected in the {@link #activationElements}
      * of this space.</p>
-     * @return a safe array of all the activation elements on this space sorted by priority
+     * @return a safe array of all the activation elements on this space sorted by priority or null
      */
     public ActivationElement[] getActivationElements(){
+        if (activationElements == null || activationElements.size() < 1) return new ActivationElement[0];
         return (ActivationElement[]) activationElements.toArray();
     }
 
