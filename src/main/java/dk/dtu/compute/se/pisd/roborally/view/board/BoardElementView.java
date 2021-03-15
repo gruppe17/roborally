@@ -1,9 +1,9 @@
-package dk.dtu.compute.se.pisd.roborally.view;
+package dk.dtu.compute.se.pisd.roborally.view.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.imageFinder.BoardElementImageFinder;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import javafx.scene.image.Image;
+import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import org.jetbrains.annotations.NotNull;
