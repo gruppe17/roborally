@@ -2,7 +2,6 @@ package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
@@ -10,38 +9,31 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
  */
 public abstract class BoardElement extends Subject {
     /**
-     * <p>Whether this element is passable by robots.</p>
+     * <p>Whether this element is passable by robots
+     * coming from a certain direction. If a direction is
+     * not contained herein it is considered to be
+     * passable from that direction.</p>
      */
-    protected boolean passable;
+    protected Heading[] impassableFrom;
 
     /**
-     * <p>Whether the element is opaque to standard lasers.</p>
+     * <p>Whether the element is opaque to standard lasers
+     * coming from a certain direction. If a direction is
+     * not contained herein it is considered to not be
+     * opaque from that direction.</p>
      */
-    protected boolean isOpaque;
+    protected Heading[] opaqueFrom;
 
     /**
      * <p>Which way the element is pointing. May be null if the element has no direction.</p>
      */
     protected Heading direction;
 
-    protected Space space;
 
     /*Getters and setters*/
-    public void setPassable(boolean passable) {
-        this.passable = passable;
-    }
+    public Heading[] getImpassableFrom(){ return impassableFrom;}
 
-    public boolean isPassable() {
-        return passable;
-    }
-
-    public boolean isOpaque() {
-        return isOpaque;
-    }
-
-    public void setOpaque(boolean opaque) {
-        isOpaque = opaque;
-    }
+    public Heading[] getOpaqueFrom() {return opaqueFrom;}
 
     public Heading getDirection() {
         return direction;
@@ -52,15 +44,18 @@ public abstract class BoardElement extends Subject {
     }
 
 
-
-    /*Constructors*/
-    protected BoardElement(boolean passable, boolean isOpaque) {
-        this(passable, isOpaque, null);
+    protected BoardElement() {
+        this(null, null);
     }
 
-    protected BoardElement(boolean passable, boolean isOpaque, Heading direction) {
-        this.passable = passable;
-        this.isOpaque = isOpaque;
+    /*Constructors*/
+    protected BoardElement(Heading[] impassableFrom, Heading[] opaqueFrom) {
+        this(impassableFrom, opaqueFrom, null);
+    }
+
+    protected BoardElement(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction) {
+        this.impassableFrom = impassableFrom;
+        this.opaqueFrom = opaqueFrom;
         this.direction = direction;
     }
 }
