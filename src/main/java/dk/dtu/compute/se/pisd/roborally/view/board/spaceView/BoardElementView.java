@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.view.board;
+package dk.dtu.compute.se.pisd.roborally.view.board.spaceView;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.imageFinder.BoardElementImageFinder;
