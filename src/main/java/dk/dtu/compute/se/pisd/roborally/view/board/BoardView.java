@@ -29,7 +29,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.view.PlayerMatsView;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
-import dk.dtu.compute.se.pisd.roborally.view.board.spaceView.SpaceView;
+import dk.dtu.compute.se.pisd.roborally.view.board.space.SpaceView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;

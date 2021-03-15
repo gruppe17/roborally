@@ -32,10 +32,11 @@ public class BoardElementImageFinder {
         //TODO: this should be done correctly rather than a bunch of if statements
 
         if (boardElement instanceof Wall){
-            if (((Wall)boardElement).getPosition() == Heading.NORTH) return BASE_DIRECTORY + WALLS + "wallShadeEast";
+            Heading position = ((Wall) boardElement).getPosition();
+            if (position == Heading.NORTH || position == Heading.SOUTH) return BASE_DIRECTORY + WALLS + "wallShadeEast";
+            return BASE_DIRECTORY + WALLS + "wallShadeNorth";
         }
 
-        return BASE_DIRECTORY + "/priorityAntenna.png";
     }
 
     /**
