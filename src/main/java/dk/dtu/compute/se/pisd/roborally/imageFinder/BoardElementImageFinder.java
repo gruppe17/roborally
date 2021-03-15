@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.wall;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.scene.image.Image;
 
@@ -31,8 +31,8 @@ public class BoardElementImageFinder {
 
         //TODO: this should be done correctly rather than a bunch of if statements
 
-        if (boardElement instanceof wall){
-            if (((wall)boardElement).getPosition() == Heading.NORTH) return BASE_DIRECTORY + WALLS + "wallShadeEast";
+        if (boardElement instanceof Wall){
+            if (((Wall)boardElement).getPosition() == Heading.NORTH) return BASE_DIRECTORY + WALLS + "wallShadeEast";
         }
 
         return BASE_DIRECTORY + "/priorityAntenna.png";

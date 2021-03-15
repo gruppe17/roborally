@@ -3,10 +3,10 @@ package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
 
-public class wall extends BoardElement{
+public class Wall extends BoardElement{
 
 
-    public wall(Heading position){
+    public Wall(Heading position){
         super(northEastSouthWestArray(), northEastSouthWestArray(), position);
     }
 
