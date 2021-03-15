@@ -1,6 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.imageFinder;
 
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 
 /**
  * <p>This class is responsible for determining and finding

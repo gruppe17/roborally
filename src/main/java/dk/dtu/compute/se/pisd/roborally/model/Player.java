@@ -23,9 +23,12 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
 /**
  * ...

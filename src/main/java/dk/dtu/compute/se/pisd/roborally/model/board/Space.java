@@ -19,11 +19,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements.ActivationElement;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 
 import java.util.*;
 

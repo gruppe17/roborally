@@ -2,6 +2,9 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
 public class PlayerController implements ILaser {
     Player player;

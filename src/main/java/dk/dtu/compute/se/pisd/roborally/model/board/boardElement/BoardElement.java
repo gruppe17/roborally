@@ -1,7 +1,7 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.

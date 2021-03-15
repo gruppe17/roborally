@@ -1,9 +1,8 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
-import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 
 /**
  * Represents {@link BoardElement}s that can be activated in the activation phase.

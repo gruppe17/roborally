@@ -1,8 +1,8 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 
 /**
  * <p>Represents a {@link ActivationElement} that moves the player.

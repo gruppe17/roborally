@@ -1,13 +1,13 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
 
 public class wall extends BoardElement{
 
 
-    public wall(Heading posistion){
-        super(northEastSouthWestArray(), northEastSouthWestArray(), posistion);
+    public wall(Heading position){
+        super(northEastSouthWestArray(), northEastSouthWestArray(), position);
     }
 
     public Heading getPosition(){
@@ -23,8 +23,8 @@ public class wall extends BoardElement{
      */
     private static Heading[] northEastSouthWestArray(){
         return new Heading[] {
-            dk.dtu.compute.se.pisd.roborally.model.Heading.NORTH, dk.dtu.compute.se.pisd.roborally.model.Heading.EAST,
-                    dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH, dk.dtu.compute.se.pisd.roborally.model.Heading.WEST
+            Heading.NORTH, Heading.EAST,
+                    Heading.SOUTH, Heading.WEST
         };
     }
 }
