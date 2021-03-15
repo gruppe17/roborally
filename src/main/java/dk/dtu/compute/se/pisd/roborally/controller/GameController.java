@@ -21,9 +21,14 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements.ActivationElement;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * ...
@@ -209,20 +214,19 @@ public class GameController {
      * <p>Handles activation of all {@link ActivationElement}s and robot lasers.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
-     * @see #activateBoardElements()
      */
     private void activateElements(){
-        activateBoardElements();
-    }
-
-    /**
-     * <p>Handles activation of all {@link ActivationElement}s and robot lasers.</p>
-     *
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     * @see #activateElements()
-     */
-    private void activateBoardElements(){
-
+        PriorityQueue<IActivateable> priorityQueue = new PriorityQueue<>(6, Comparator.comparingInt(e -> {
+            if (e instanceof ActivationElement) {
+                return ((ActivationElement) e).getPriority();
+            } else return 6;//if (e instanceof RobotLaser){return RobotLaser.getPriority();}
+        }));
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            ActivationElement[] activationElements = board.getPlayer(i).getSpace().getActivationElements();
+            if (activationElements != null && activationElements.length > 0)
+                priorityQueue.addAll(Arrays.asList(activationElements));
+        }
+        priorityQueue.forEach(IActivateable::activate);
     }
 
     /**
