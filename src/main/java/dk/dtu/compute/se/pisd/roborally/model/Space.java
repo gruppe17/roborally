@@ -22,7 +22,10 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
+
+import java.util.*;
 
 /**
  * ...
@@ -34,18 +37,31 @@ import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
 public class Space extends Subject {
 
     /**
-     * The board which this space is a part of.
+     * <p>The board which this space is a part of.</p>
      */
     public final Board board;
 
+    /**
+     * <p>The x coordinate of the space.</p>
+     */
     public final int x;
+    /**
+     * <p>The y coordinate of the space.</p>
+     */
     public final int y;
-    public Heading[] walls;
 
     /**
-     * Represents the elements on this space.
+     * <p>Represents the elements on this space.</p>
      */
-    public final BoardElement element;
+    private final ArrayList<BoardElement> elements;
+
+    /**
+     * <p>A list of only the {@link ActivationElement}s on this space
+     * sorted by priority.</p>
+     * @see #elements
+     * @see ActivationElement#getPriority()
+     */
+    private final ArrayList<ActivationElement> activationElements;
 
 
     /**
@@ -54,14 +70,67 @@ public class Space extends Subject {
      */
     private Player player;
 
-    public Space(Board board, int x, int y, BoardElement element, Heading... walls) {
+    public Space(Board board, int x, int y, BoardElement... elements) {
         this.board = board;
         this.x = x;
         this.y = y;
         player = null;
 
-        this.element = element;
-        this.walls = walls;
+        this.elements = new ArrayList<>();
+        Collections.addAll(this.elements, elements);
+
+        activationElements = new ArrayList<>();
+        for (BoardElement element: elements) {
+            if (element instanceof ActivationElement) activationElements.add((ActivationElement) element);
+        }
+        activationElements.sort(Comparator.comparingInt(ActivationElement::getPriority));
+    }
+
+    /**
+     * <p>Returns an array of all {@link BoardElement}s on this
+     * space. The returned array is safe; any changes to the
+     * array will not be reflected in the {@link #elements}
+     * of this space.</p>
+     * @return a safe array of all the board elements on this space
+     */
+    public BoardElement[] getElements() {
+        return (BoardElement[]) elements.toArray();
+    }
+
+    /**
+     * <p>Adds a {@link BoardElement} to this space.</p>
+     * @param boardElement the board element to add
+     */
+    public void addBoardElement(BoardElement boardElement){
+        if (boardElement == null) return;
+        elements.add(boardElement);
+        if (boardElement instanceof ActivationElement){
+            activationElements.add((ActivationElement) boardElement);
+            activationElements.sort(Comparator.comparingInt(ActivationElement::getPriority));
+        }
+        notifyChange();
+    }
+
+    /**
+     * <p>Removes a {@link BoardElement} to this space</p>
+     * @param boardElement the board element to remove
+     */
+    public void removeBoardElement(BoardElement boardElement){
+        if (boardElement == null) return;
+        elements.remove(boardElement);
+        if (boardElement instanceof ActivationElement) activationElements.remove(boardElement);
+        notifyChange();
+    }
+
+    /**
+     * <p>Returns an array of all {@link ActivationElement}s on this
+     * space sorted by priority. The returned array is safe; any changes
+     * to the array will not be reflected in the {@link #activationElements}
+     * of this space.</p>
+     * @return a safe array of all the activation elements on this space sorted by priority
+     */
+    public ActivationElement[] getActivationElements(){
+        return (ActivationElement[]) activationElements.toArray();
     }
 
     /**
@@ -100,6 +169,8 @@ public class Space extends Subject {
         }
     }
 
+
+
     /**
      * <p>Returns a boolean indicating whether <b>this</b> space contains
      * an obstacle preventing movement in the heading specified by the argument.</p>
@@ -110,10 +181,7 @@ public class Space extends Subject {
      * @see #containsObstacleFrom(Heading)
      */
     public boolean containsObstacleTo(Heading heading) {
-        for (Heading direction: walls) {
-            if (direction == heading) return true;
-        }
-        return false;
+        return containsObstacleFrom(heading.next().next());
     }
 
     /**
@@ -128,6 +196,11 @@ public class Space extends Subject {
      * @see #containsObstacleTo(Heading)
      */
     public boolean containsObstacleFrom(Heading heading) {
+        for (BoardElement boardElement: elements) {
+            for (Heading direction: boardElement.getImpassableFrom()) {
+                if (direction == heading) return true;
+            }
+        }
         return containsObstacleTo(heading.next().next());
     }
 

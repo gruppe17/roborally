@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -11,10 +11,6 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
  */
 public class MoveHazard extends ActivationElement {
     /**
-     * <p>The direction this {@link MoveHazard} moves a {@link Player} in. May be null.</p>
-     */
-    public Heading direction;
-    /**
      * <p>The number of clockwise turns. May be negative.</p>
      */
     public int rotation;
@@ -23,8 +19,11 @@ public class MoveHazard extends ActivationElement {
      */
     public int distance;
 
-    protected MoveHazard(boolean passable, boolean isOpaque, Space space){
-        super(passable, isOpaque, space);
+
+    protected MoveHazard(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority, int rotation, int distance){
+        super(impassableFrom, opaqueFrom, direction, space, priority);
+        this.rotation = rotation;
+        this.distance = distance;
     }
 
 }
