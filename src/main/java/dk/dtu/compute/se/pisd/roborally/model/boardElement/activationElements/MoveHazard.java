@@ -26,4 +26,9 @@ public class MoveHazard extends ActivationElement {
         this.distance = distance;
     }
 
+    @Override
+    public void activate() {
+        space.getPlayer().playerController.move(direction, distance);
+        space.getPlayer().playerController.turn(rotation);
+    }
 }
