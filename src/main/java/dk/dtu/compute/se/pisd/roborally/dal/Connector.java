@@ -30,16 +30,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * ...
+ *
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
 class Connector {
-	
-    private static final String HOST     = "localhost";
+    //private static final String HOST     = "localhost";
+	private static final String HOST     = "tobiasmaneschijn.com";
     private static final int    PORT     = 3306;
-    private static final String DATABASE = "pisu";
+    private static final String DATABASE = "VPROBORALLY";
     private static final String USERNAME = "user";
     private static final String PASSWORD = "";
 
