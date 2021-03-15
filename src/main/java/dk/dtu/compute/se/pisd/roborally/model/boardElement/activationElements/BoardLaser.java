@@ -9,7 +9,7 @@ public class BoardLaser extends ActivationElement {
         super(impassableFrom, opaqueFrom, direction, space, priority);
 
     }
-    
+
     /**
      * <p>Represents the start and end points of the laser.</p>
      * <p>{start x, start y, end x, end y}</p>
