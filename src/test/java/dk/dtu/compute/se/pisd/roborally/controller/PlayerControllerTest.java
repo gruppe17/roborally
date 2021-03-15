@@ -1,15 +1,14 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class GameControllerTest {
+class PlayerControllerTest {
 
     private final int TEST_WIDTH = 8;
     private final int TEST_HEIGHT = 8;
@@ -39,7 +38,7 @@ class GameControllerTest {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
 
-        gameController.moveForward(current);
+        current.playerController.moveForward();
 
         Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
@@ -51,7 +50,7 @@ class GameControllerTest {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
 
-        gameController.fastForward(current);
+        current.playerController.fastForward();
 
         Assertions.assertEquals(current, board.getSpace(0, 2).getPlayer(), "Player " + current.getName() + " should beSpace (0,2)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
@@ -63,17 +62,17 @@ class GameControllerTest {
         Board board = gameController.board;
         Player current = board.getCurrentPlayer();
 
-        gameController.moveForward(current, 3);
+        current.playerController.moveForward(3);
         Assertions.assertEquals(current, board.getSpace(0, 3).getPlayer(), "Player " + current.getName() + " should beSpace (0,3)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
         Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
 
-        gameController.moveForward(current, 4);
+        current.playerController.moveForward( 4);
         Assertions.assertEquals(current, board.getSpace(0, 7).getPlayer(), "Player " + current.getName() + " should beSpace (0,7)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
         Assertions.assertNull(board.getSpace(0, 3).getPlayer(), "Space (0,3) should be empty!");
 
-        gameController.moveForward(current, 2);
+        current.playerController.moveForward(2);
         Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
         Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
         Assertions.assertNull(board.getSpace(0, 7).getPlayer(), "Space (0,7) should be empty!");
@@ -101,30 +100,24 @@ class GameControllerTest {
     @Test
     void testTurnRightByN() {
         Player current = gameController.board.getCurrentPlayer();
-        gameController.turnRight(current, 2);
-        Assertions.assertEquals(Heading.NORTH, current.getHeading());
-
-        gameController.turnRight(current, 3);
-        Assertions.assertEquals(Heading.WEST, current.getHeading());
-
-        gameController.turnRight(current, 4);
-        Assertions.assertEquals(Heading.WEST, current.getHeading());
-
-        gameController.turnRight(current, 5);
-        Assertions.assertEquals(Heading.NORTH, current.getHeading());
+        Heading[] headings = {Heading.EAST, Heading.EAST, Heading.SOUTH, Heading.NORTH, Heading.WEST, Heading.WEST, Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.EAST, Heading.SOUTH};
+        for (int i = -5; i < 6; i++) {
+            current.playerController.turn(i);
+            Assertions.assertEquals(headings[i + 5], current.getHeading(), "Turn by " + i + ". Should be " + headings[i + 5] + " but is " + current.getHeading());
+        }
     }
 
     @Test
     void testTurnRight() {
         Player current = gameController.board.getCurrentPlayer();
-        gameController.turnRight(current);
+        current.playerController.turn();
         Assertions.assertEquals(Heading.WEST, current.getHeading());
     }
 
     @Test
     void testTurnLeft() {
         Player current = gameController.board.getCurrentPlayer();
-        gameController.turnLeft(current);
+        current.playerController.turnLeft();
         Assertions.assertEquals(Heading.EAST, current.getHeading());
     }
 }

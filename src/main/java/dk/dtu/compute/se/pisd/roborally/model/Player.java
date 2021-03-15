@@ -22,22 +22,24 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
 /**
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
- *
  */
 public class Player extends Subject {
-
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
-
+    final public PlayerController playerController;
     final public Board board;
 
     private String name;
@@ -61,6 +63,8 @@ public class Player extends Subject {
     private CommandCardField[] cards;
 
     public Player(@NotNull Board board, String color, @NotNull String name) {
+        playerController = new PlayerController(this);
+
         this.board = board;
         this.name = name;
         this.color = color;
@@ -171,4 +175,17 @@ public class Player extends Subject {
         return cards[i];
     }
 
+    /**
+     * Get an empty CommandCardField in players deck.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @return first empty card field or null if there isn't any.
+     */
+    public CommandCardField getEmptyCardField() {
+        for (CommandCardField cardField : cards) {
+            if (cardField.getCard() == null) {
+                return cardField;
+            }
+        }
+        return null;
+    }
 }

@@ -19,14 +19,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Phase.INITIALISATION;
 
 /**
  * ...
@@ -309,7 +312,7 @@ public class Board extends Subject {
      * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public boolean isActivationQueueEmpty() {
+    public boolean isPlayerActivationQueueEmpty() {
         return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
     }
 
