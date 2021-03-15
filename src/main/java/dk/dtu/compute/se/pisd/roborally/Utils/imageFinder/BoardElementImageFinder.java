@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.imageFinder;
+package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
