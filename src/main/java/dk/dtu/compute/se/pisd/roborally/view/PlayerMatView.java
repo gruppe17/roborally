@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
-public class PlayerView extends Tab implements ViewObserver {
+public class PlayerMatView extends Tab implements ViewObserver {
 
     /**
      * The player which this is a view for.
@@ -122,7 +122,7 @@ public class PlayerView extends Tab implements ViewObserver {
     private Button stepButton;
 
 
-    public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
+    public PlayerMatView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 

@@ -45,7 +45,7 @@ public class BoardView extends VBox implements ViewObserver {
     private GridPane mainBoardPane;
     private SpaceView[][] spaces;
 
-    private PlayersView playersView;
+    private PlayerMatsView playerMatsView;
 
     private Label statusLabel;
 
@@ -54,15 +54,15 @@ public class BoardView extends VBox implements ViewObserver {
         board = gameController.board;
 
         mainBoardPane = new GridPane();
-        playersView = new PlayersView(gameController);
+        playerMatsView = new PlayerMatsView(gameController);
         statusLabel = new Label("<no status>");
 
         this.getChildren().add(mainBoardPane);
-        this.getChildren().add(playersView);
+        this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
 
         RoboRally.bindSize(mainBoardPane, this, 1, 0.6);
-        RoboRally.bindSize(playersView, this, 1, 0.38);
+        RoboRally.bindSize(playerMatsView, this, 1, 0.38);
         RoboRally.bindSize(statusLabel, this, 1, 0.02);
 
         spaces = new SpaceView[board.width][board.height];

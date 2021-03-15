@@ -232,7 +232,7 @@ public class GameController {
         }
         priorityQueue.forEach(IActivateable::activate);
          */
-        
+
     }
 
     /**
