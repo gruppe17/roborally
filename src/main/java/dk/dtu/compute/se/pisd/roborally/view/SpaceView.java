@@ -25,12 +25,14 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -42,15 +44,20 @@ import java.util.Random;
  *
  */
 public class SpaceView extends StackPane implements ViewObserver {
-
-    final public static int SPACE_HEIGHT = 75; // 60; // 75;
-    final public static int SPACE_WIDTH = 75;  // 60; // 75;
-
     final private static String FACTORY_FLOOR_IMAGE_PATH = "images/tiles/factoryFloor.png";
 
     public final Space space;
     public final ImageView imageView;
-    private BoardElementView boardElementView;
+
+    /**
+     * <p>Contains all the {@link #boardElementViews}</p>
+     */
+    private StackPane boardElementViewPane;
+
+    /**
+     * <p>A list of all the {@link BoardElementView}s of this space.</p>
+     */
+    private ArrayList<BoardElementView> boardElementViews;
 
     private Random random = new Random();
 
@@ -59,31 +66,45 @@ public class SpaceView extends StackPane implements ViewObserver {
 
         // XXX the following styling should better be done with styles
         imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
-        this.getChildren().add(imageView);
         setImageSize(imageView);
         rotateToRandomDirection(imageView);
 
-        initBoardElementView();
+        initBoardElementViewPane();
 
 
-        // updatePlayer();
+        addBackChildren();
 
         // This space view should listen to changes of the space
         space.attach(this);
         update(space);
     }
 
+
     /**
-     * <p>Initializes {@link #boardElementView}. Simply returns if the
-     * {@link dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement}
-     * of {@link #space} is {@code null}</p>
+     * <p>Initializes {@link #boardElementViewPane}. This includes
+     * creating its children.</p>
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initBoardElementView(){
-        if (space.element == null) return;
-        boardElementView = new BoardElementView(space.element);
-        this.getChildren().add(boardElementView);
-        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+    private void initBoardElementViewPane(){
+        boardElementViewPane = new StackPane();
+        RoboRally.bindSize(boardElementViewPane, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        initBoardElementViews();
+    }
+
+    /**
+     * <p>Initializes {@link #boardElementViews}. Simply returns if the
+     * {@link BoardElement}s of {@link #space} is {@code null}</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void initBoardElementViews(){
+        if (space.getElements() == null) return;
+        boardElementViews = new ArrayList<>(space.getElements().length);
+        for (BoardElement boardElement: space.getElements()) {
+            BoardElementView boardElementView = new BoardElementView(boardElement);
+            boardElementViews.add(boardElementView);
+            boardElementViewPane.getChildren().add(boardElementView);
+            RoboRally.bindSize(boardElementView, boardElementViewPane, 1, 1);
+        }
     }
 
     /**
@@ -106,15 +127,25 @@ public class SpaceView extends StackPane implements ViewObserver {
         imageView.fitHeightProperty().bind(this.heightProperty());
     }
 
+    /**
+     * <p>Updates the {@link BoardElementView}s of the space</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void updateBoardElements(){
+        //This should be done more intelligently in the future.
+        boardElementViewPane.getChildren().clear();
+        boardElementViews.clear();
+        initBoardElementViews();
+    }
+
+    /**
+     * <p>Draws or removes the player where needed.</p>
+     */
     private void updatePlayer() {
         //When it is established what a player is on the board, then it can simply be checked
         // if the last element is a player and then only remove that element
         this.getChildren().clear();
-        this.getChildren().add(imageView);
-        if (space.element != null){
-            if (boardElementView == null) initBoardElementView();
-            this.getChildren().add(boardElementView);
-        }
+        addBackChildren();
 
         Player player = space.getPlayer();
         if (player != null) {
@@ -130,11 +161,21 @@ public class SpaceView extends StackPane implements ViewObserver {
             arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
             this.getChildren().add(arrow);
         }
+
+    }
+
+    /**
+     * <p>Adds the children of this space excluding a potential player.</p>
+     */
+    private void addBackChildren(){
+        this.getChildren().add(imageView);
+        this.getChildren().add(boardElementViewPane);
     }
 
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
+            updateBoardElements();
             updatePlayer();
         }
     }
