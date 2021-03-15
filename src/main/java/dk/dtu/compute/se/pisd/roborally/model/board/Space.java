@@ -79,9 +79,11 @@ public class Space extends Subject {
         player = null;
 
         this.elements = new ArrayList<>();
+        activationElements = new ArrayList<>();
+
+        if (elements == null) return;
         Collections.addAll(this.elements, elements);
 
-        activationElements = new ArrayList<>();
         for (BoardElement element: elements) {
             if (element instanceof ActivationElement) activationElements.add((ActivationElement) element);
         }
