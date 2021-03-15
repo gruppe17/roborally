@@ -7,5 +7,8 @@ import dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements.Ac
  */
 public interface IActivateable{
 
+    /**
+     * <p>Activates the activateable object.</p>
+     */
     public void activate();
 }
