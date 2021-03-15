@@ -309,7 +309,7 @@ public class Board extends Subject {
      * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public boolean isActivationQueueEmpty() {
+    public boolean isPlayerActivationQueueEmpty() {
         return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
     }
 

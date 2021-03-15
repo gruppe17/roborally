@@ -186,7 +186,7 @@ public class GameController {
             return;
         }
 
-        if (!board.isActivationQueueEmpty()) { //Not all players have been activated yet
+        if (!board.isPlayerActivationQueueEmpty()) { //Not all players have been activated yet
             board.setCurrentPlayer(board.nextPlayer());
             return;
         }

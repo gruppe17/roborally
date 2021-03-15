@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BoardElementView extends BorderPane implements ViewObserver {
 
-
     private BoardElementImageFinder imageFinder;
     private ImageView imageView;
 
