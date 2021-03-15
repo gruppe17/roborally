@@ -195,12 +195,14 @@ public class GameController {
         int step = board.getStep() + 1;
         board.playerQueueForceRepopulate();
         board.setCurrentPlayer(board.nextPlayer());
-        if (step < Player.NO_REGISTERS) {
+
+        if (step < Player.NO_REGISTERS) { //The activation phase is not complete
             makeProgramFieldsVisible(step);
             board.setStep(step);
-        } else {
-            startProgrammingPhase();
+            return;
         }
+
+        startProgrammingPhase();
     }
 
     /**
