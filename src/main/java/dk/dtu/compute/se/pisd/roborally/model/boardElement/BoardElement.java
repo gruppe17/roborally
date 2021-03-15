@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.model.boardElement;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
@@ -22,6 +23,8 @@ public abstract class BoardElement extends Subject {
      * <p>Which way the element is pointing. May be null if the element has no direction.</p>
      */
     protected Heading direction;
+
+    protected Space space;
 
     /*Getters and setters*/
     public void setPassable(boolean passable) {
@@ -48,6 +51,8 @@ public abstract class BoardElement extends Subject {
         this.direction = direction;
     }
 
+
+
     /*Constructors*/
     protected BoardElement(boolean passable, boolean isOpaque) {
         this(passable, isOpaque, null);
@@ -58,5 +63,4 @@ public abstract class BoardElement extends Subject {
         this.isOpaque = isOpaque;
         this.direction = direction;
     }
-
 }
