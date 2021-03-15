@@ -1,6 +1,5 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
 
-import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 
 public class BoardLaser extends ActivationElement {

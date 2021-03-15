@@ -22,7 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
 
 import java.util.*;

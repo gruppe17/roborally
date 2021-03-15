@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
 
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;

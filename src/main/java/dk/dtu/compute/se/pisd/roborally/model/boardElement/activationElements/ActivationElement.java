@@ -1,6 +1,8 @@
-package dk.dtu.compute.se.pisd.roborally.model.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.boardElement.activationElements;
 
+import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
 
 /**
  * Represents {@link BoardElement}s that can be activated in the activation phase.
@@ -16,8 +18,8 @@ public abstract class ActivationElement extends BoardElement{
      */
     protected int priority;
 
-    protected ActivationElement(boolean passable, boolean isOpaque, Space space, int priority){
-        super(passable, isOpaque);
+    protected ActivationElement(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
+        super(impassableFrom, opaqueFrom, direction);
         this.space = space;
         this.priority = priority;
     }
