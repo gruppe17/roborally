@@ -31,9 +31,9 @@ public abstract class BoardElement extends Subject {
 
 
     /*Getters and setters*/
-    public Heading[] getImpassableFrom(){ return impassableFrom;}
+    public Heading[] getImpassableFrom(){ return impassableFrom.clone();}
 
-    public Heading[] getOpaqueFrom() {return opaqueFrom;}
+    public Heading[] getOpaqueFrom() {return opaqueFrom.clone();}
 
     public Heading getDirection() {
         return direction;
@@ -41,6 +41,7 @@ public abstract class BoardElement extends Subject {
 
     public void setDirection(Heading direction) {
         this.direction = direction;
+        notifyChange();
     }
 
 
