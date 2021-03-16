@@ -6,6 +6,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class BoardElementView extends BorderPane implements ViewObserver {
+public class BoardElementView extends Pane implements ViewObserver {
 
     private BoardElementImageFinder imageFinder;
     private ImageView imageView;
@@ -24,7 +25,7 @@ public class BoardElementView extends BorderPane implements ViewObserver {
 
         imageView = new ImageView();
         initImageView(boardElement);
-        this.setCenter(imageView);
+        this.getChildren().add(imageView);
 
         //Should listen for changes to the board element.
         boardElement.attach(this);
