@@ -1,17 +1,25 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import org.jetbrains.annotations.NotNull;
 
 
 public class Wall extends BoardElement{
 
+    Heading position;
 
     public Wall(Heading position){
-        super(northEastSouthWestArray(), northEastSouthWestArray(), position);
+        super(northEastSouthWestArray(), northEastSouthWestArray(), positionToDirection(position));
+        this.position = position;
+    }
+
+    private static Heading positionToDirection(@NotNull Heading position){
+        if (position.ordinal() % 2 == 0) return Heading.NORTH;
+        return Heading.EAST;
     }
 
     public Heading getPosition(){
-        return direction;
+        return position;
     }
 
     /**
