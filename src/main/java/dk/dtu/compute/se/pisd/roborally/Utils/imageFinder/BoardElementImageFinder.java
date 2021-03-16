@@ -12,8 +12,8 @@ import javafx.scene.image.Image;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class BoardElementImageFinder {
-    final private static String BASE_DIRECTORY = "images/tiles/boardElements";
-    final private static String WALLS = "/walls";
+    final private static String BASE_DIRECTORY = "images/tiles/boardElements/";
+    final private static String WALLS = "walls/";
 
     /**
      * <p>Determines the correct image for a given {@link BoardElement} and
@@ -32,10 +32,12 @@ public class BoardElementImageFinder {
         //TODO: this should be done correctly rather than a bunch of if statements
 
         if (boardElement instanceof Wall){
-            Heading position = ((Wall) boardElement).getPosition();
-            if (position == Heading.NORTH || position == Heading.SOUTH) return BASE_DIRECTORY + WALLS + "wallShadeEast";
-            return BASE_DIRECTORY + WALLS + "wallShadeNorth";
+            Heading direction = boardElement.getDirection();
+            if (direction == Heading.NORTH) return BASE_DIRECTORY + WALLS + "wallShadeEast.png";
+            return BASE_DIRECTORY + WALLS + "wallShadeNorth.png";
         }
+
+        return "";
 
     }
 
