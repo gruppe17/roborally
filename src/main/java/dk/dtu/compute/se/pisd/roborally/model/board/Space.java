@@ -99,7 +99,7 @@ public class Space extends Subject {
      */
     public BoardElement[] getElements() {
         if (elements == null || elements.size() < 1) return new BoardElement[0];
-        return (BoardElement[]) elements.toArray();
+        return elements.toArray(new BoardElement[0]);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Space extends Subject {
      */
     public ActivationElement[] getActivationElements(){
         if (activationElements == null || activationElements.size() < 1) return new ActivationElement[0];
-        return (ActivationElement[]) activationElements.toArray();
+        return activationElements.toArray(new ActivationElement[0]);
     }
 
     /**
