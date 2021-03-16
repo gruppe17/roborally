@@ -28,6 +28,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -51,14 +52,15 @@ public class SpaceView extends StackPane implements ViewObserver {
     public final ImageView imageView;
 
     /**
-     * <p>Contains all the {@link #boardElementViews}</p>
+     * <p>The view of all the {@link BoardElement}s</p>
      */
-    private StackPane boardElementViewPane;
+    private SpaceBoardElementsView boardElementsView;
 
     /**
-     * <p>A list of all the {@link BoardElementView}s of this space.</p>
+     * <p>On this panel, a robot on the space is displayed.</p>
      */
-    private ArrayList<BoardElementView> boardElementViews;
+    private Pane robotPane;
+
 
     private Random random = new Random();
 
@@ -70,8 +72,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         setImageSize(imageView);
         rotateToRandomDirection(imageView);
 
-        initBoardElementViewPane();
-
+        initBoardElementsView();
 
         addBackChildren();
 
@@ -80,34 +81,15 @@ public class SpaceView extends StackPane implements ViewObserver {
         update(space);
     }
 
-
     /**
-     * <p>Initializes {@link #boardElementViewPane}. This includes
-     * creating its children.</p>
+     * <p>Initializes {@link #boardElementsView}.</p>
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initBoardElementViewPane(){
-        boardElementViewPane = new StackPane();
-        RoboRally.bindSize(boardElementViewPane, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
-        initBoardElementViews();
+    private void initBoardElementsView(){
+        boardElementsView = new SpaceBoardElementsView(space);
+        RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
     }
 
-    /**
-     * <p>Initializes {@link #boardElementViews}. Simply returns if the
-     * {@link BoardElement}s of {@link #space} is {@code null}</p>
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private void initBoardElementViews(){
-        BoardElement[] boardElements = space.getElements();
-        if (boardElements == null || boardElements.length < 1) return;
-        boardElementViews = new ArrayList<>(boardElements.length);
-        for (BoardElement boardElement: boardElements) {
-            BoardElementView boardElementView = new BoardElementView(boardElement);
-            boardElementViews.add(boardElementView);
-            boardElementViewPane.getChildren().add(boardElementView);
-            RoboRally.bindSize(boardElementView, boardElementViewPane, 1, 1);
-        }
-    }
 
     /**
      * <p>Randomly sets an {@link ImageView}'s rotation to be either 0°, 90°, 180° or 270°.</p>
@@ -129,16 +111,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         imageView.fitHeightProperty().bind(this.heightProperty());
     }
 
-    /**
-     * <p>Updates the {@link BoardElementView}s of the space</p>
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private void updateBoardElements(){
-        //This should be done more intelligently in the future.
-        boardElementViewPane.getChildren().clear();
-        boardElementViews.clear();
-        initBoardElementViews();
-    }
+
 
     /**
      * <p>Draws or removes the player where needed.</p>
@@ -171,13 +144,12 @@ public class SpaceView extends StackPane implements ViewObserver {
      */
     private void addBackChildren(){
         this.getChildren().add(imageView);
-        this.getChildren().add(boardElementViewPane);
+        this.getChildren().add(boardElementsView);
     }
 
     @Override
     public void updateView(Subject subject) {
         if (subject == this.space) {
-            updateBoardElements();
             updatePlayer();
         }
     }
