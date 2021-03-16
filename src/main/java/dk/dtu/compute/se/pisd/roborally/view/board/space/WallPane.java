@@ -1,12 +1,10 @@
 package dk.dtu.compute.se.pisd.roborally.view.board.space;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.Utils.imageFinder.BoardElementImageFinder;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
