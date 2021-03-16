@@ -186,7 +186,7 @@ public class GameController {
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Board#getStep()
-     * @see #activateBoardElements()
+     * @see #activateElements()
      */
     private void subRoundComplete() {
         if (board.getPhase() != Phase.ACTIVATION) {
