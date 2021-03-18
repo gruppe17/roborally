@@ -4,6 +4,7 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.scene.layout.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -101,7 +102,7 @@ public class WallPane extends StackPane {
      * @param wall the wall object to be added
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public void addWall(Wall wall) {
+    public void addWall(@NotNull Wall wall) {
         BoardElementView wallElementView = new BoardElementView(wall);
 
         Pane wallPane = wallPanes[wall.getPosition().ordinal()];
