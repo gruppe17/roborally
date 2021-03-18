@@ -22,16 +22,23 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      * This is used to ensure that the subject
      * calling {@link #updateView(Subject)} is
      * the actual space of this view.</p>
-     *
-     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private final Space space;
 
+    /**
+     * <p>The view of the {@link Wall}s.</p>
+     *
+     * @see #nonWallPane
+     */
     private WallPane wallPane;
 
+    /**
+     * <p>A container for the views of all other
+     * {@link BoardElement}s than {@link Wall}s.</p>
+     *
+     * @see #wallPane
+     */
     private StackPane nonWallPane;
-
-    //private final BorderPane wallPane;
 
     /**
      * <p>A list of all the {@link BoardElementView}s.</p>
