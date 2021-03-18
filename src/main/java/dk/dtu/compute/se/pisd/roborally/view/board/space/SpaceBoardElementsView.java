@@ -110,10 +110,8 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == this.space) {
-            updateBoardElements();
-        }
+        if (subject != this.space) return;
+        updateBoardElements();
     }
-
 
 }
