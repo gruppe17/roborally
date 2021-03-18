@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -49,10 +50,9 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      * <p>Creates a new view for the {@link BoardElement}s of the
      * specified {@link Space}.</p>
      * @param space the space for which a view of its board elements is desired
-     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public SpaceBoardElementsView(Space space){
+    public SpaceBoardElementsView(Space space) {
         this.space = space;
         initWallView();
         this.getChildren().add(wallPane);
@@ -65,9 +65,10 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
 
     /**
      * <p>Instantiates {@link #wallPane} and bind its size to the size of this.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initWallView(){
+    private void initWallView() {
         wallPane = new WallPane();
         RoboRally.bindSize(wallPane, this, 1, 1);
     }
@@ -76,42 +77,44 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
     /**
      * <p>Initializes {@link #boardElementViews}. This includes creating the
      * the {@link BoardElementView}s./p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initBoardElementViews(){
+    private void initBoardElementViews() {
         if (boardElementViews == null) boardElementViews = new ArrayList<>();
 
         BoardElement[] boardElements = space.getElements();
         if (boardElements == null || boardElements.length < 1) return;
-        for (BoardElement boardElement: boardElements) {
+        for (BoardElement boardElement : boardElements) {
             addElement(boardElement);
         }
     }
 
+    //todo: explain further
     /**
-     *
-     * @param boardElement
+     * <p>Adds the specified {@link BoardElement} to the view.</p>
+     * @param boardElement the board element to be added
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void addElement(BoardElement boardElement){
-        if (boardElement == null) return;
+    private void addElement(@NotNull BoardElement boardElement) {
 
-        if (boardElement instanceof Wall){
+        if (boardElement instanceof Wall) {
             wallPane.addWall((Wall) boardElement);
             return;
         }
-
         addThis(boardElement);
-
     }
 
     /**
-     *
-     * @param boardElement
+     * <p>Adds the specified {@link BoardElement} directly to this view.
+     * <b>Should not be called directly!</b></p>
+     * @param boardElement the board element to be added directly to this
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #addElement(BoardElement)
      */
-    private void addThis(BoardElement boardElement){
+    private void addThis(@NotNull BoardElement boardElement) {
         BoardElementView boardElementView = new BoardElementView(boardElement);
+
         boardElementViews.add(boardElementView);
         this.getChildren().add(boardElementView);
         RoboRally.bindSize(boardElementView, this, 1, 1);
