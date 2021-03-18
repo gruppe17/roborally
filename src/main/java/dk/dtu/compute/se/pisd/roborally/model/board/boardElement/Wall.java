@@ -9,6 +9,7 @@ public class Wall extends BoardElement{
     Heading position;
 
     public Wall(Heading position){
+        //Should be impassable and opaque from position and position.next.next
         super(northEastSouthWestArray(), northEastSouthWestArray(), positionToDirection(position));
         this.position = position;
     }
