@@ -19,6 +19,7 @@ public class BoardElementView extends Pane implements ViewObserver {
 
     private BoardElementImageFinder imageFinder;
     private ImageView imageView;
+    private int rotation = 0;
 
     public BoardElementView(@NotNull BoardElement boardElement) {
         imageFinder = new BoardElementImageFinder();
@@ -39,8 +40,8 @@ public class BoardElementView extends Pane implements ViewObserver {
      */
     protected void initImageView(BoardElement boardElement) {
         imageView.setImage(imageFinder.getImage(boardElement));
-        fitImageSize();
         updateRotation(boardElement);
+        fitImageSize();
     }
 
     /**
@@ -49,9 +50,9 @@ public class BoardElementView extends Pane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void fitImageSize() {
+        //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.setPreserveRatio(true);
     }
 
     /**
@@ -63,9 +64,8 @@ public class BoardElementView extends Pane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void updateRotation(BoardElement boardElement) {
-        int direction = 0;
-        if (boardElement.getDirection() != null) direction = boardElement.getDirection().ordinal();
-        imageView.setRotate(direction * 90);
+        if (boardElement.getDirection() != null) rotation = boardElement.getDirection().ordinal();
+        //imageView.setRotate(rotation * 90);
     }
 
 
