@@ -132,10 +132,14 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
     }
 
     /**
+     *  <p>Clear the view. This means clearing all the
+     *  children of this view, clearing all the children
+     *  of the {@link #wallPane} and then adding back the
+     *  {@link #wallPane}} as a child of this view.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void clearView(){
+    private void clearView() {
         this.getChildren().clear();
         wallPane.clearWalls();
         this.getChildren().add(wallPane);
