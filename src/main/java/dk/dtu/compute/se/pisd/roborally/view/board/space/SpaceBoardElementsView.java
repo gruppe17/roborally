@@ -45,6 +45,13 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      */
     private ArrayList<BoardElementView> boardElementViews;
 
+    /**
+     * <p>Creates a new view for the {@link BoardElement}s of the
+     * specified {@link Space}.</p>
+     * @param space the space for which a view of its board elements is desired
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public SpaceBoardElementsView(Space space){
         this.space = space;
         initWallView();
@@ -56,6 +63,10 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
         update(space);
     }
 
+    /**
+     * <p>Instantiates {@link #wallPane} and bind its size to the size of this.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void initWallView(){
         wallPane = new WallPane();
         RoboRally.bindSize(wallPane, this, 1, 1);
@@ -77,6 +88,11 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
         }
     }
 
+    /**
+     *
+     * @param boardElement
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void addElement(BoardElement boardElement){
         if (boardElement == null) return;
 
@@ -89,6 +105,11 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
 
     }
 
+    /**
+     *
+     * @param boardElement
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void addThis(BoardElement boardElement){
         BoardElementView boardElementView = new BoardElementView(boardElement);
         boardElementViews.add(boardElementView);
@@ -108,6 +129,10 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
 
     }
 
+    /**
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void clearView(){
         this.getChildren().clear();
         wallPane.clearWalls();
@@ -115,6 +140,11 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
     }
 
 
+    /**
+     *
+     * @param subject
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     @Override
     public void updateView(Subject subject) {
         if (subject != this.space) return;
