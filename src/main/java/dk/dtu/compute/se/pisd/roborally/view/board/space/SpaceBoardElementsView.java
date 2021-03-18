@@ -10,7 +10,21 @@ import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 
+/**
+ * <p>The view of the {@link BoardElement}s of a {@link SpaceView}.</p>
+ *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
 public class SpaceBoardElementsView extends StackPane implements ViewObserver {
+    /**
+     * <p>A reference to the {@link Space} whose
+     * {@link BoardElement}s this is a view of.
+     * This is used to ensure that the subject
+     * calling {@link #updateView(Subject)} is
+     * the actual space of this view.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private final Space space;
 
     private WallPane wallPane;
@@ -28,6 +42,7 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
         this.space = space;
         initWallView();
         this.getChildren().add(wallPane);
+
 
         initBoardElementViews();
         space.attach(this);
