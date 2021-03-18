@@ -66,7 +66,7 @@ public class WallPane extends StackPane {
             wallPanes[heading.ordinal()] = new StackPane();
             RoboRally.bindSize(wallPanes[heading.ordinal()], this, WALL_LENGTH_PERCENT, WALL_DEPTH_PERCENT);
             //If it is a western or eastern wall, then it is rotated.
-            wallPanes[heading.ordinal()].setRotate(90 * (heading.ordinal() % Heading.NORTH.ordinal() != 0 ? 0 : 1));
+            wallPanes[heading.ordinal()].setRotate(90 * (heading.ordinal() % Heading.NORTH.ordinal() == 0 ? 0 : 1));
 
             heading = heading.next();
         } while (heading != Heading.NORTH);
