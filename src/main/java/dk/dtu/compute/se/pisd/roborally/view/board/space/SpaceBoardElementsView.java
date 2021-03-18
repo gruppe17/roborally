@@ -147,8 +147,10 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
 
 
     /**
-     *
-     * @param subject
+     * <p>Update the view. If the specified {@link Subject} calling this
+     * method is not identical to the {@link #space} of this view, then
+     * the method will simply return.</p>
+     * @param subject the subject calling this method
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     @Override
