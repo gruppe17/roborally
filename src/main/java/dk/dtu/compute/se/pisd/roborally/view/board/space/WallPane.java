@@ -10,6 +10,8 @@ import java.util.ArrayList;
 /**
  * <p>A container for the walls of a {@link SpaceBoardElementsView}.
  * I.e. a view of the walls of a {@link SpaceView}.</p>
+ * <p><i>Note that this class should not be used directly;
+ * <u>This class should only be used by {@link SpaceBoardElementsView}.</u></i></p>
  *
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
