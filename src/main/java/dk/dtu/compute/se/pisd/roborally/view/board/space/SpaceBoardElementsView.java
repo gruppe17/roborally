@@ -125,11 +125,10 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      * <p>Updates the {@link BoardElementView}s of the space.</p>
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void updateBoardElements(){
+    private void updateBoardElements() {
         //This should be done more intelligently in the future.
-
+        clearView();
         initBoardElementViews();
-
     }
 
     /**
