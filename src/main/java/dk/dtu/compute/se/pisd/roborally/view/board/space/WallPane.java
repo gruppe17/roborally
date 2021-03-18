@@ -99,7 +99,7 @@ public class WallPane extends StackPane {
      * the same position already is contained in the {@link WallPane} the
      * specified {@link Wall} is still added, and will be the one to be displayed.</p>
      *
-     * @param wall the wall object to be added
+     * @param wall the wall object to be added, may not be null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void addWall(@NotNull Wall wall) {
