@@ -100,8 +100,6 @@ public class BoardView extends VBox implements ViewObserver {
         this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
 
-
-        RoboRally.bindSize(boardAreaPane, this, 1, BOARD_AREA_HEIGHT_PERCENT);
         RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
         RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
@@ -118,6 +116,7 @@ public class BoardView extends VBox implements ViewObserver {
      */
     private void initBoardAreaPane(){
         boardAreaPane = new StackPane();
+        RoboRally.bindSize(boardAreaPane, this, 1, BOARD_AREA_HEIGHT_PERCENT);
 
         mainBoardPane = new GridPane();
         boardAreaPane.getChildren().add(mainBoardPane);
