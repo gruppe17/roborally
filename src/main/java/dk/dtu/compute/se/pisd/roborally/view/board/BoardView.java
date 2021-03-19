@@ -102,20 +102,26 @@ public class BoardView extends VBox implements ViewObserver {
     private static final double STATUS_HEIGHT_PERCENT = 0.03;
 
 
+    /**
+     * <p>Create a new view for a game.</p>
+     * @param gameController the game controller of the game that is to be displayed
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
         initBoardAreaPane();
 
         playerMatsView = new PlayerMatsView(gameController);
+        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
+        
         statusLabel = new Label("<no status>");
+        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
         this.getChildren().add(boardAreaPane);
         this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
 
-        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
-        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
         board.attach(this);
         update(board);
