@@ -76,7 +76,7 @@ public class SpaceView extends StackPane implements ViewObserver {
         initBoardElementsView();
 
         robotPane = new StackPane();
-        RoboRally.bindSize(robotPane, this, 1,1);
+        RoboRally.bindSize(robotPane, this, 1, 1);
 
         addBackChildren();
 
@@ -87,9 +87,10 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     /**
      * <p>Initializes {@link #boardElementsView}.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initBoardElementsView(){
+    private void initBoardElementsView() {
         boardElementsView = new SpaceBoardElementsView(space);
         RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
         //RoboRally.bindSize(boardElementsView, this, 1, 1);
@@ -98,28 +99,31 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     /**
      * <p>Randomly sets an {@link ImageView}'s rotation to be either 0°, 90°, 180° or 270°.</p>
+     *
      * @param imageView the ImageView to rotate
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void rotateToRandomDirection(ImageView imageView){
+    private void rotateToRandomDirection(ImageView imageView) {
         imageView.setRotate(random.nextInt(4) * 90);
     }
 
     /**
      * <p>Sets the size of an {@link ImageView}. This is done by binding it the this {@link SpaceView}</p>
+     *
      * @param imageView the ImageView to set the size of
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void setImageSize(ImageView imageView){
+    private void setImageSize(ImageView imageView) {
         //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
     }
 
 
-
     /**
      * <p>Draws or removes the player where needed.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void updatePlayer() {
         robotPane.getChildren().clear();
@@ -143,8 +147,11 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     /**
      * <p>Adds the children of this space excluding a potential player.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @deprecated
      */
-    private void addBackChildren(){
+    private void addBackChildren() {
         this.getChildren().add(imageView);
         this.getChildren().add(boardElementsView);
         this.getChildren().add(robotPane);
