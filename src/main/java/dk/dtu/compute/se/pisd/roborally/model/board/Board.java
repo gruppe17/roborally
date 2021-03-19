@@ -247,19 +247,6 @@ public class Board extends Subject {
         return getSpace(x, y);
     }
 
-    public String getStatusMessage() {
-        //Todo: move this to boardview
-
-        // this is actually a view aspect, but for making assignment V1 easy for
-        // the students, this method gives a string representation of the current
-        // status of the game
-
-        // XXX: V2 changed the status so that it shows the phase, the player and the step
-        return "Phase: " + getPhase().name() +
-                ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
-    }
-
     /**
      * <p>Returns the rectilinear distance between two spaces as an {@code int}. Any obstacles in the way are ignored.</p>
      *

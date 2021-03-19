@@ -204,6 +204,17 @@ public class BoardView extends VBox implements ViewObserver {
     public void updateView(Subject subject) {
         if (subject != board) return;
         Phase phase = board.getPhase();
-        statusLabel.setText(board.getStatusMessage());
+        statusLabel.setText(getStatusMessage());
+    }
+
+    /**
+     * <p>Returns a string describing the status of the
+     * game.</p>
+     * @return a string describing the status of the game
+     */
+    private String getStatusMessage() {
+        return "Phase: " + board.getPhase().name() +
+                ", Player = " + board.getCurrentPlayer().getName() +
+                ", Step: " + board.getStep();
     }
 }
