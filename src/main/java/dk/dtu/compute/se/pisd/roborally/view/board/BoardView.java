@@ -83,8 +83,22 @@ public class BoardView extends VBox implements ViewObserver {
      */
     private Label statusLabel;
 
+    /**
+     * <p>The height of the board area relative to the
+     * whole view. Note that the size of the {@link #mainBoardPane},
+     * the actual view of the board itself, may be smaller
+     * than this.</p>
+     */
     private static final double BOARD_AREA_HEIGHT_PERCENT = 0.59;
+    /**
+     * <p>The height of the {@link #playerMatsView} relative
+     * to the height of the whole view.</p>
+     */
     private static final double PLAYER_MATS_HEIGHT_PERCENT = 0.38;
+    /**
+     * <p>The height of the {@link #statusLabel} relative
+     * to the height of the whole view.</p>
+     */
     private static final double STATUS_HEIGHT_PERCENT = 0.38;
 
 
