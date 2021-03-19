@@ -103,9 +103,6 @@ public class BoardView extends VBox implements ViewObserver {
         RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
         RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
-
-
-
         board.attach(this);
         update(board);
     }
