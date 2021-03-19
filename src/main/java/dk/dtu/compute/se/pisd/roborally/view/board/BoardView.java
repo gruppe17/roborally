@@ -82,12 +82,13 @@ public class BoardView extends VBox implements ViewObserver {
      * Should probably be in a different class.</p>
      */
     private Label statusLabel;
-
+    
 
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
-        boardAreaPane = new StackPane();
+        initBoardAreaPane();
+
         playerMatsView = new PlayerMatsView(gameController);
         statusLabel = new Label("<no status>");
 
@@ -100,6 +101,19 @@ public class BoardView extends VBox implements ViewObserver {
         RoboRally.bindSize(playerMatsView, this, 1, 0.38);
         RoboRally.bindSize(statusLabel, this, 1, 0.03);
 
+
+
+
+        board.attach(this);
+        update(board);
+    }
+
+    /**
+     * <p>Initializes the {@link #boardAreaPane}. This
+     * includes creating its children.</p>
+     */
+    private void initBoardAreaPane(){
+        boardAreaPane = new StackPane();
 
         mainBoardPane = new GridPane();
         boardAreaPane.getChildren().add(mainBoardPane);
@@ -130,10 +144,8 @@ public class BoardView extends VBox implements ViewObserver {
         boardAreaPane.heightProperty().addListener((obs, oldWidth, newWidth) -> {
             setMainBoardPaneSize();
         });
-
-        board.attach(this);
-        update(board);
     }
+
 
     private void setMainBoardPaneSize() {
         //todo: handle the number of spaces in each dimension being different
