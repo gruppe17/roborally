@@ -82,7 +82,11 @@ public class BoardView extends VBox implements ViewObserver {
      * Should probably be in a different class.</p>
      */
     private Label statusLabel;
-    
+
+    private static final double BOARD_AREA_HEIGHT_PERCENT = 0.59;
+    private static final double PLAYER_MATS_HEIGHT_PERCENT = 0.38;
+    private static final double STATUS_HEIGHT_PERCENT = 0.38;
+
 
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
@@ -97,9 +101,9 @@ public class BoardView extends VBox implements ViewObserver {
         this.getChildren().add(statusLabel);
 
 
-        RoboRally.bindSize(boardAreaPane, this, 1, 0.59);
-        RoboRally.bindSize(playerMatsView, this, 1, 0.38);
-        RoboRally.bindSize(statusLabel, this, 1, 0.03);
+        RoboRally.bindSize(boardAreaPane, this, 1, BOARD_AREA_HEIGHT_PERCENT);
+        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
+        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
 
 
