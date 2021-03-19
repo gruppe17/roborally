@@ -114,8 +114,7 @@ public class BoardView extends VBox implements ViewObserver {
 
         initPlayerMatsView(gameController);
 
-        statusLabel = new Label("<no status>");
-        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
+        initStatusLabel();
 
         this.getChildren().add(boardAreaPane);
         this.getChildren().add(playerMatsView);
@@ -124,6 +123,14 @@ public class BoardView extends VBox implements ViewObserver {
 
         board.attach(this);
         update(board);
+    }
+
+    /**
+     * <p>Initializes the {@link #statusLabel}.</p>
+     */
+    private void initStatusLabel() {
+        statusLabel = new Label("<no status>");
+        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
     }
 
     /**
