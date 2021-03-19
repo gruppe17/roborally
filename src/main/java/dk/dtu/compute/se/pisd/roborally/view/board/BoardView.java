@@ -45,16 +45,42 @@ import org.jetbrains.annotations.NotNull;
  *
  */
 public class BoardView extends VBox implements ViewObserver {
-    
+
+    /**
+     * <p>Reference to the {@link Board} which the
+     * view is a view for.</p>
+     */
     private Board board;
-
+    /**
+     * <p>The area which contains the board view
+     * itself. Should probably be the entire class.</p>
+     *
+     * @see #mainBoardPane
+     */
     private StackPane boardAreaPane;
-
+    /**
+     * <p>Container for the views of the spaces.</p>
+     *
+     * @see #spaces
+     */
     private GridPane mainBoardPane;
+    /**
+     * <p>The {@link SpaceView}s of this board's spaces.</p>
+     *
+     * @see #mainBoardPane
+     */
     private SpaceView[][] spaces;
 
+    /**
+     * <p>The view of the player mats. Should probably be
+     * in a different class.</p>
+     */
     private PlayerMatsView playerMatsView;
 
+    /**
+     * <p>Displays the current status of the game.
+     * Should probably be in a different class.</p>
+     */
     private Label statusLabel;
 
 
