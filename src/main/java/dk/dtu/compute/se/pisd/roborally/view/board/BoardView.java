@@ -168,6 +168,10 @@ public class BoardView extends VBox implements ViewObserver {
     }
 
 
+    /**
+     * <p>Sets the size of {@link #mainBoardPane} taking
+     * into account the height and width of the board area.</p>
+     */
     private void setMainBoardPaneSize() {
         //todo: handle the number of spaces in each dimension being different
         //todo: write this better and more compactly
