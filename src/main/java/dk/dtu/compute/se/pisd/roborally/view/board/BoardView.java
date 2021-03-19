@@ -99,7 +99,7 @@ public class BoardView extends VBox implements ViewObserver {
      * <p>The height of the {@link #statusLabel} relative
      * to the height of the whole view.</p>
      */
-    private static final double STATUS_HEIGHT_PERCENT = 0.38;
+    private static final double STATUS_HEIGHT_PERCENT = 0.03;
 
 
     public BoardView(@NotNull GameController gameController) {
