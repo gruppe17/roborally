@@ -118,13 +118,20 @@ public class BoardView extends VBox implements ViewObserver {
         boardAreaPane = new StackPane();
         RoboRally.bindSize(boardAreaPane, this, 1, BOARD_AREA_HEIGHT_PERCENT);
 
-        mainBoardPane = new GridPane();
+        initMainBoardPane();
         boardAreaPane.getChildren().add(mainBoardPane);
+    }
+
+    /**
+     * <p>Initializes the {@link #mainBoardPane} and
+     * {@link #spaces}.</p>
+     */
+    private void initMainBoardPane() {
+        mainBoardPane = new GridPane();
         mainBoardPane.setHgap(0);
         mainBoardPane.setVgap(0);
 
         spaces = new SpaceView[board.width][board.height];
-
         for (int x = 0; x < board.width; x++) {
             for (int y = 0; y < board.height; y++) {
                 Space space = board.getSpace(x, y);
