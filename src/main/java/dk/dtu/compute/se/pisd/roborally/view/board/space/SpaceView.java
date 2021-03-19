@@ -28,28 +28,37 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 
 /**
- * ...
+ * <p>The view of a {@link Space}.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class SpaceView extends StackPane implements ViewObserver {
+    /**
+     * <p>The path of the image used for all spaces
+     * relative to the resources directory.</p>
+     */
     final private static String FACTORY_FLOOR_IMAGE_PATH = "images/tiles/factoryFloor.png";
 
+    /**
+     * <p>The {@link Space} this is a view of.</p>
+     */
     public final Space space;
+
+    /**
+     * <p>The {@link ImageView} on which the image of
+     * the {@link #space} is drawn.</p>
+     */
     public final ImageView imageView;
 
     /**
@@ -65,10 +74,14 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     private Random random = new Random();
 
+    /**
+     * <p>Create a new view of the specified {@link Space}.</p>
+     * @param space the {@link Space} for which a new view is to be made
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
-        // XXX the following styling should better be done with styles
         imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
         setImageSize(imageView);
         rotateToRandomDirection(imageView);
@@ -86,14 +99,15 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     /**
-     * <p>Initializes {@link #boardElementsView}.</p>
+     * <p>Initializes {@link #boardElementsView} to a
+     * new {@link SpaceBoardElementsView}.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void initBoardElementsView() {
         boardElementsView = new SpaceBoardElementsView(space);
-        RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
-        //RoboRally.bindSize(boardElementsView, this, 1, 1);
+        //RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        RoboRally.bindSize(boardElementsView, this, 1, 1);
     }
 
 
@@ -103,7 +117,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      * @param imageView the ImageView to rotate
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void rotateToRandomDirection(ImageView imageView) {
+    private void rotateToRandomDirection(@NotNull ImageView imageView) {
         imageView.setRotate(random.nextInt(4) * 90);
     }
 
@@ -113,7 +127,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      * @param imageView the ImageView to set the size of
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void setImageSize(ImageView imageView) {
+    private void setImageSize(@NotNull ImageView imageView) {
         //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
