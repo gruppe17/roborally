@@ -125,7 +125,7 @@ public class BoardView extends VBox implements ViewObserver {
      * <p>Initializes the {@link #boardAreaPane}. This
      * includes creating its children.</p>
      */
-    private void initBoardAreaPane(){
+    private void initBoardAreaPane() {
         boardAreaPane = new StackPane();
         RoboRally.bindSize(boardAreaPane, this, 1, BOARD_AREA_HEIGHT_PERCENT);
 
@@ -202,11 +202,8 @@ public class BoardView extends VBox implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == board) {
-            Phase phase = board.getPhase();
-            statusLabel.setText(board.getStatusMessage());
-        }
+        if (subject != board) return;
+        Phase phase = board.getPhase();
+        statusLabel.setText(board.getStatusMessage());
     }
-
-
 }
