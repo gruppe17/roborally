@@ -112,9 +112,8 @@ public class BoardView extends VBox implements ViewObserver {
 
         initBoardAreaPane();
 
-        playerMatsView = new PlayerMatsView(gameController);
-        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
-        
+        initPlayerMatsView(gameController);
+
         statusLabel = new Label("<no status>");
         RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
@@ -125,6 +124,15 @@ public class BoardView extends VBox implements ViewObserver {
 
         board.attach(this);
         update(board);
+    }
+
+    /**
+     * <p>Initializes the {@link #playerMatsView}.</p>
+     * @param gameController the controller of the game the player mats belongs to
+     */
+    private void initPlayerMatsView(@NotNull GameController gameController) {
+        playerMatsView = new PlayerMatsView(gameController);
+        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
     }
 
     /**
