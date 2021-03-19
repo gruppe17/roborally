@@ -28,6 +28,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -59,7 +60,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     /**
      * <p>On this panel, a robot on the space is displayed.</p>
      */
-    private Pane robotPane;
+    private StackPane robotPane;
 
 
     private Random random = new Random();
@@ -73,6 +74,9 @@ public class SpaceView extends StackPane implements ViewObserver {
         rotateToRandomDirection(imageView);
 
         initBoardElementsView();
+
+        robotPane = new StackPane();
+        RoboRally.bindSize(robotPane, this, 1,1);
 
         addBackChildren();
 
@@ -88,6 +92,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     private void initBoardElementsView(){
         boardElementsView = new SpaceBoardElementsView(space);
         RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        //RoboRally.bindSize(boardElementsView, this, 1, 1);
     }
 
 
@@ -106,7 +111,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void setImageSize(ImageView imageView){
-        imageView.setPreserveRatio(true);
+        //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
     }
@@ -117,10 +122,7 @@ public class SpaceView extends StackPane implements ViewObserver {
      * <p>Draws or removes the player where needed.</p>
      */
     private void updatePlayer() {
-        //When it is established what a player is on the board, then it can simply be checked
-        // if the last element is a player and then only remove that element
-        this.getChildren().clear();
-        addBackChildren();
+        robotPane.getChildren().clear();
 
         Player player = space.getPlayer();
         if (player != null) {
@@ -134,7 +136,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             }
 
             arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
-            this.getChildren().add(arrow);
+            robotPane.getChildren().add(arrow);
         }
 
     }
@@ -145,6 +147,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     private void addBackChildren(){
         this.getChildren().add(imageView);
         this.getChildren().add(boardElementsView);
+        this.getChildren().add(robotPane);
     }
 
     @Override
