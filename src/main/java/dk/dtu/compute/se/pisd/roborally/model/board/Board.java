@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -91,10 +92,15 @@ public class Board extends Subject {
                 spaces[x][y] = space;
             }
         }
-        //spaces[1][3].addBoardElement(new wall(Heading.NORTH));
+
+        spaces[0][0].addBoardElement(new Wall(Heading.NORTH));
+        spaces[5][5].addBoardElement(new Wall(Heading.EAST));
+        spaces[3][1].addBoardElement(new Wall(Heading.EAST));
+        spaces[7][0].addBoardElement(new Wall(Heading.WEST));
+        spaces[1][2].addBoardElement(new Wall(Heading.SOUTH));
 
         //TODO: implement this for real
-        prioritySpace = spaces[0][0];
+        prioritySpace = spaces[1][1];
         this.stepMode = false;
     }
 
@@ -242,6 +248,8 @@ public class Board extends Subject {
     }
 
     public String getStatusMessage() {
+        //Todo: move this to boardview
+
         // this is actually a view aspect, but for making assignment V1 easy for
         // the students, this method gives a string representation of the current
         // status of the game
