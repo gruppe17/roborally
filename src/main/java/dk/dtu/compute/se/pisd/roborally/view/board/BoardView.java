@@ -31,19 +31,24 @@ import dk.dtu.compute.se.pisd.roborally.view.PlayerMatsView;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import dk.dtu.compute.se.pisd.roborally.view.board.space.SpaceView;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * <p>The view for a {@link Board}. And the Player Mats. And the statusLabel.
+ * Maybe it should be renamed to GameView. Or maybe split into to separate
+ * classes: GameView and BoardView. This would equally apply to the {@link Board}
+ * class though.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class BoardView extends VBox implements ViewObserver {
-
+    
     private Board board;
+
+    private StackPane boardAreaPane;
 
     private GridPane mainBoardPane;
     private SpaceView[][] spaces;
@@ -56,17 +61,24 @@ public class BoardView extends VBox implements ViewObserver {
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
-        mainBoardPane = new GridPane();
+        boardAreaPane = new StackPane();
         playerMatsView = new PlayerMatsView(gameController);
         statusLabel = new Label("<no status>");
 
-        this.getChildren().add(mainBoardPane);
+        this.getChildren().add(boardAreaPane);
         this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
 
-        RoboRally.bindSize(mainBoardPane, this, 1, 0.6);
+
+        RoboRally.bindSize(boardAreaPane, this, 1, 0.59);
         RoboRally.bindSize(playerMatsView, this, 1, 0.38);
-        RoboRally.bindSize(statusLabel, this, 1, 0.02);
+        RoboRally.bindSize(statusLabel, this, 1, 0.03);
+
+
+        mainBoardPane = new GridPane();
+        boardAreaPane.getChildren().add(mainBoardPane);
+        mainBoardPane.setHgap(0);
+        mainBoardPane.setVgap(0);
 
         spaces = new SpaceView[board.width][board.height];
 
@@ -78,14 +90,51 @@ public class BoardView extends VBox implements ViewObserver {
                 mainBoardPane.add(spaceView, x, y);
             }
         }
-        for (SpaceView[] spaceViews: spaces) {
-            for (SpaceView spaceView: spaceViews) {
-                RoboRally.bindSize(spaceView, mainBoardPane, ((double)(1))/mainBoardPane.getColumnCount(), 1f/mainBoardPane.getRowCount());
+
+        for (SpaceView[] spaceViews : spaces) {
+            for (SpaceView spaceView : spaceViews) {
+                RoboRally.bindSize(spaceView, mainBoardPane, ((double) (1)) / mainBoardPane.getColumnCount(), 1f / mainBoardPane.getRowCount());
             }
         }
 
+        boardAreaPane.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            setMainBoardPaneSize();
+        });
+
+        boardAreaPane.heightProperty().addListener((obs, oldWidth, newWidth) -> {
+            setMainBoardPaneSize();
+        });
+
         board.attach(this);
         update(board);
+    }
+
+    private void setMainBoardPaneSize() {
+        //todo: handle the number of spaces in each dimension being different
+        //todo: write this better and more compactly
+        //assume width/height = height/width = 1
+        double desiredWidthToHeight = (mainBoardPane.getColumnCount() / ((double) mainBoardPane.getRowCount()));
+        double desireHeightToWidth = (((double) mainBoardPane.getRowCount()) / mainBoardPane.getColumnCount());
+
+        if (boardAreaPane.getWidth() <= boardAreaPane.getHeight()) {
+            mainBoardPane.setMaxWidth(boardAreaPane.getWidth());
+            mainBoardPane.setPrefWidth(boardAreaPane.getWidth());
+            mainBoardPane.setMinWidth(boardAreaPane.getWidth());
+        } else {
+            mainBoardPane.setMaxWidth(boardAreaPane.getHeight());
+            mainBoardPane.setPrefWidth(boardAreaPane.getHeight());
+            mainBoardPane.setMinWidth(boardAreaPane.getHeight());
+        }
+
+        if (boardAreaPane.getHeight() <= boardAreaPane.getWidth()) {
+            mainBoardPane.setMaxHeight(boardAreaPane.getHeight());
+            mainBoardPane.setPrefHeight(boardAreaPane.getHeight());
+            mainBoardPane.setMinHeight(boardAreaPane.getHeight());
+        } else {
+            mainBoardPane.setMaxHeight(boardAreaPane.getWidth());
+            mainBoardPane.setPrefHeight(boardAreaPane.getWidth());
+            mainBoardPane.setMinHeight(boardAreaPane.getWidth());
+        }
     }
 
     @Override
