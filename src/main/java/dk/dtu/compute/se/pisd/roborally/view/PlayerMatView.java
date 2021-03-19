@@ -36,6 +36,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+//Todo: while it's all related this class does a lot of things.
+// Maybe it would be more readable if it was split into multiple classes?
+
 /**
  * <p>This class represents a players view. I.e. something akin the player mat.
  * NOTICE: this is not the view for the robot.</p>
@@ -115,7 +118,7 @@ public class PlayerMatView extends Tab implements ViewObserver {
     private GameController gameController;
 
 
-    //todo: move to PlayerView
+    //todo: move to PlayerMatsView
     private VBox buttonPanel;
     private Button finishButton;
     private Button executeButton;
