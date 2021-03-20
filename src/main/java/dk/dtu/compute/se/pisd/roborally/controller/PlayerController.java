@@ -7,6 +7,12 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>The controller for a {@link Player}.</p>
+ *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
+ */
 public class PlayerController implements ILaser {
     Player player;
 
@@ -130,6 +136,16 @@ public class PlayerController implements ILaser {
     }
 
     /**
+     * <p>Adds a {@link CommandCard} to the player's deck</p>
+     * @param card the card to be added to the player's deck
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void addCardToDeck(CommandCard card) {
+        //Todo: Should be moved to different class.
+        // maybe like a deck class or something.
+    }
+
+    /**
      * adds a random card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
@@ -138,6 +154,13 @@ public class PlayerController implements ILaser {
         if(emptyCardField == null) return;
 
         emptyCardField.setCard(generateRandomCommandCard());
+    }
+
+    /**
+     * 
+     */
+    private void discardHand(){
+
     }
 
     /**
