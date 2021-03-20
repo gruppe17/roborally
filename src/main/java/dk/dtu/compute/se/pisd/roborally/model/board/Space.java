@@ -60,6 +60,7 @@ public class Space extends Subject {
     /**
      * <p>A list of only the {@link ActivationElement}s on this space
      * sorted by priority.</p>
+     *
      * @see #elements
      * @see ActivationElement#getPriority()
      */
@@ -84,7 +85,7 @@ public class Space extends Subject {
         if (elements == null) return;
         Collections.addAll(this.elements, elements);
 
-        for (BoardElement element: elements) {
+        for (BoardElement element : elements) {
             if (element instanceof ActivationElement) activationElements.add((ActivationElement) element);
         }
         activationElements.sort(Comparator.comparingInt(ActivationElement::getPriority));
@@ -95,6 +96,7 @@ public class Space extends Subject {
      * space. The returned array is safe; any changes to the
      * array will not be reflected in the {@link #elements}
      * of this space.</p>
+     *
      * @return a safe array of all the board elements on this space
      */
     public BoardElement[] getElements() {
@@ -104,12 +106,13 @@ public class Space extends Subject {
 
     /**
      * <p>Adds a {@link BoardElement} to this space.</p>
+     *
      * @param boardElement the board element to add
      */
-    public void addBoardElement(BoardElement boardElement){
+    public void addBoardElement(BoardElement boardElement) {
         if (boardElement == null) return;
         elements.add(boardElement);
-        if (boardElement instanceof ActivationElement){
+        if (boardElement instanceof ActivationElement) {
             activationElements.add((ActivationElement) boardElement);
             activationElements.sort(Comparator.comparingInt(ActivationElement::getPriority));
         }
@@ -118,9 +121,10 @@ public class Space extends Subject {
 
     /**
      * <p>Removes a {@link BoardElement} to this space.</p>
+     *
      * @param boardElement the board element to remove
      */
-    public void removeBoardElement(BoardElement boardElement){
+    public void removeBoardElement(BoardElement boardElement) {
         if (boardElement == null || elements == null) return;
         elements.remove(boardElement);
         if (boardElement instanceof ActivationElement) activationElements.remove(boardElement);
@@ -132,9 +136,10 @@ public class Space extends Subject {
      * space sorted by priority. The returned array is safe; any changes
      * to the array will not be reflected in the {@link #activationElements}
      * of this space.</p>
+     *
      * @return a safe array of all the activation elements on this space sorted by priority or null
      */
-    public ActivationElement[] getActivationElements(){
+    public ActivationElement[] getActivationElements() {
         if (activationElements == null || activationElements.size() < 1) return new ActivationElement[0];
         return activationElements.toArray(new ActivationElement[0]);
     }
@@ -157,24 +162,24 @@ public class Space extends Subject {
      * player is set to null.</p>
      *
      * @param player the player that should be on this space
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Player#setSpace(Space)
      */
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
-        if (player != oldPlayer &&
-                (player == null || board == player.board)) {
-            this.player = player;
-            if (oldPlayer != null) {
-                // this should actually not happen
-                oldPlayer.setSpace(null);
-            }
-            if (player != null) {
-                player.setSpace(this);
-            }
-            notifyChange();
-        }
-    }
+        if (player == oldPlayer) return;
+        if (player != null && player.board != board) return;
 
+        this.player = player;
+        if (oldPlayer != null) {
+            // this should actually not happen
+            oldPlayer.setSpace(null);
+        }
+        if (player != null) {
+            player.setSpace(this);
+        }
+        notifyChange();
+    }
 
 
     /**
@@ -202,8 +207,8 @@ public class Space extends Subject {
      * @see #containsObstacleTo(Heading)
      */
     public boolean containsObstacleFrom(Heading heading) {
-        for (BoardElement boardElement: elements) {
-            for (Heading direction: boardElement.getImpassableFrom()) {
+        for (BoardElement boardElement : elements) {
+            for (Heading direction : boardElement.getImpassableFrom()) {
                 if (direction == heading) return true;
             }
         }
@@ -216,5 +221,4 @@ public class Space extends Subject {
         // notify the space of these changes by calling this method.
         notifyChange();
     }
-
 }

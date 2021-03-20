@@ -119,28 +119,29 @@ public class Player extends Subject {
     }
 
     /**
-     * <p>Sets the {@link #space} the player currently is on to the argument
-     * and sets the player on the argument space to this player.
-     * If the player previously was on a space then that space's player
+     * <p>Sets the {@link #space} the player currently is on to the specified
+     * {@link Space} and sets the player on the specified {@link Space} to this
+     * player. If the player previously was on a space then that space's player
      * is set to null.</p>
      *
      * @param space the space that this player should be on
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Space#setPlayer(Player)
      */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
-        if (space != oldSpace &&
-                (space == null || space.board == this.board)) {
-            this.space = space;
-            if (oldSpace != null) {
-                oldSpace.setPlayer(null);
-            }
-            if (space != null) {
-                space.setPlayer(this);
-                distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
-            } else distanceToPrioritySpace = -1;
-            notifyChange();
+        if (space == oldSpace) return;
+        if (space != null && space.board != this.board) return;
+
+        this.space = space;
+        if (oldSpace != null) {
+            oldSpace.setPlayer(null);
         }
+        if (space != null) {
+            space.setPlayer(this);
+            distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
+        } else distanceToPrioritySpace = -1;
+        notifyChange();
     }
 
     public Heading getHeading() {
@@ -177,8 +178,9 @@ public class Player extends Subject {
 
     /**
      * Get an empty CommandCardField in players deck.
-     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     *
      * @return first empty card field or null if there isn't any.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     public CommandCardField getEmptyCardField() {
         for (CommandCardField cardField : cards) {
