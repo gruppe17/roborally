@@ -21,8 +21,17 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * ...
@@ -170,31 +179,60 @@ public class GameController {
 
     /**
      * <p>Handles what happens after a player instruction has been executed.</p>
-     * <p>If the last player of the round has been activated then the players are sorted
-     * and register № is incremented. If also the entire activation is completed the programming phase is started.
+     * <p>If the last player of the round has been activated then the {@link ActivationElement}s
+     * are activated, the players are sorted and register № is incremented. If also the entire
+     * activation phase is completed the programming phase is started.
      * No matter what, the next player is always set.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Board#getStep()
+     * @see #activateElements()
      */
     private void subRoundComplete() {
         if (board.getPhase() != Phase.ACTIVATION) {
             assert false;
             return;
         }
-        if (!board.isActivationQueueEmpty()) { //The round is not over
+
+        if (!board.isPlayerActivationQueueEmpty()) { //Not all players have been activated yet
             board.setCurrentPlayer(board.nextPlayer());
-        } else { //The round is over
-            int step = board.getStep() + 1;
-            board.playerQueueForceRepopulate();
-            board.setCurrentPlayer(board.nextPlayer());
-            if (step < Player.NO_REGISTERS) {
-                makeProgramFieldsVisible(step);
-                board.setStep(step);
-            } else {
-                startProgrammingPhase();
-            }
+            return;
         }
+
+        activateElements();
+        int step = board.getStep() + 1;
+        board.playerQueueForceRepopulate();
+        board.setCurrentPlayer(board.nextPlayer());
+
+        if (step < Player.NO_REGISTERS) { //The activation phase is not complete
+            makeProgramFieldsVisible(step);
+            board.setStep(step);
+            return;
+        }
+
+        startProgrammingPhase();
+    }
+
+    /**
+     * <p>Handles activation of all {@link ActivationElement}s and robot lasers.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void activateElements(){
+        /*
+        PriorityQueue<IActivateable> priorityQueue = new PriorityQueue<>(6, Comparator.comparingInt(e -> {
+            if (e instanceof ActivationElement) {
+                return ((ActivationElement) e).getPriority();
+            } else return 6;//if (e instanceof RobotLaser){return RobotLaser.getPriority();}
+        }));
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            ActivationElement[] activationElements = board.getPlayer(i).getSpace().getActivationElements();
+            if (activationElements != null && activationElements.length > 0)
+                priorityQueue.addAll(Arrays.asList(activationElements));
+        }
+        priorityQueue.forEach(IActivateable::activate);
+         */
+
     }
 
     /**

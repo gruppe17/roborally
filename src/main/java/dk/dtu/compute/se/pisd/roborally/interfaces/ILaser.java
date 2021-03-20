@@ -1,8 +1,15 @@
 package dk.dtu.compute.se.pisd.roborally.interfaces;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
+public interface ILaser extends IActivateable{
 
-public interface ILaser {
+    /**
+     * <p>Fires the laser upon activation.</p>
+     */
+    @Override
+    default void activate(){
+        fire();
+    }
+
     /**
      * <p>Fires a laser according to it's implementation.</p>
      */

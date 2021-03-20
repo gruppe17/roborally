@@ -1,30 +1,17 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
-import dk.dtu.compute.se.pisd.roborally.model.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardLaser;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.MoveHazard;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 
 public class BoardLaserController implements IBoardElementController, ILaser {
     private BoardLaser model;
     public BoardLaserController(BoardLaser model){
         this.model = model;
     }
-
-
-    /**
-     * <p> Fires the laser upon activation </p>
-     */
-    @Override
-    public void activate() {
-        //Player player = model.getSpace().getPlayer();
-        //if (player == null) return;
-        fire();
-    }
-
 
     /**
      * <p>Fire in the direction the owner

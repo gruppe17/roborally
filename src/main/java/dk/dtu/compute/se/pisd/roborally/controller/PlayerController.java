@@ -2,6 +2,9 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerController implements ILaser {
@@ -55,6 +58,8 @@ public class PlayerController implements ILaser {
     /**
      * <p>Moves the player forward by one</p>
      * <p>Identical to {@code moveForward(1)}</p>
+     *
+     * @see #moveForward(int) 
      */
     public void moveForward() {
         moveForward(1);
@@ -64,7 +69,8 @@ public class PlayerController implements ILaser {
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(2)}</p>
      *
-     *
+     * @deprecated 
+     * @see #moveForward(int) 
      */
     public void fastForward() {
         moveForward(2);

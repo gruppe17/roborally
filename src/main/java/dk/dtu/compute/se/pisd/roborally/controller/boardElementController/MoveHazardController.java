@@ -1,6 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.MoveHazard;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 /**
@@ -17,7 +17,7 @@ public class MoveHazardController implements IBoardElementController {
     public void activate() {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
-        player.playerController.move(model.direction, model.distance);
+        player.playerController.move(model.getDirection(), model.distance);
         player.playerController.turn(model.rotation);
     }
 }
