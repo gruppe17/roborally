@@ -74,7 +74,7 @@ public class GameController {
 
     // XXX: V2
     public void finishProgrammingPhase() {
-        makeProgramFieldsInvisible();
+        setProgramFieldsVisibility(false);
         makeProgramFieldVisible(0);
         board.setPhase(Phase.ACTIVATION);
         board.playerQueueForceRepopulate();
@@ -98,14 +98,11 @@ public class GameController {
     /**
      * <p>Makes all the program fields invisible.</p>
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @see #setProgramFieldsVisibility(boolean)
+     * @deprecated 
      */
     private void makeProgramFieldsInvisible() {
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
-            for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                player.getProgramField(j).setVisible(false);
-            }
-        }
+        setProgramFieldsVisibility(false);
     }
 
     /**
@@ -113,7 +110,7 @@ public class GameController {
      * @param visible true if the program fields should be visible
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void setProgramFieldsVisibility(boolean visible){
+    private void setProgramFieldsVisibility(boolean visible) {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             for (int j = 0; j < Player.NO_REGISTERS; j++) {
