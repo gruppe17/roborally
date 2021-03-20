@@ -5,7 +5,6 @@ import dk.dtu.compute.se.pisd.roborally.Utils.imageFinder.BoardElementImageFinde
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +64,7 @@ public class BoardElementView extends Pane implements ViewObserver {
      */
     protected void updateRotation(BoardElement boardElement) {
         if (boardElement.getDirection() != null) rotation = boardElement.getDirection().ordinal();
-        //imageView.setRotate(rotation * 90);
+        imageView.setRotate(rotation * 90);
     }
 
 
