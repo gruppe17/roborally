@@ -58,6 +58,8 @@ public class PlayerController implements ILaser {
     /**
      * <p>Moves the player forward by one</p>
      * <p>Identical to {@code moveForward(1)}</p>
+     *
+     * @see #moveForward(int) 
      */
     public void moveForward() {
         moveForward(1);
@@ -67,7 +69,8 @@ public class PlayerController implements ILaser {
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(2)}</p>
      *
-     *
+     * @deprecated 
+     * @see #moveForward(int) 
      */
     public void fastForward() {
         moveForward(2);

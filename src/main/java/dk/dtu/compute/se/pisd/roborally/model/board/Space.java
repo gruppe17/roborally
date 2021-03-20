@@ -192,6 +192,10 @@ public class Space extends Subject {
      * @see #containsObstacleFrom(Heading)
      */
     public boolean containsObstacleTo(Heading heading) {
+        //This should probably be done differently. Imagine that a board
+        //element is a cliff. Not being able to scale the cliff does not mean
+        //that you cannot jump down from it (given that you are a robot without
+        // any hands)
         return containsObstacleFrom(heading.next().next());
     }
 
@@ -212,7 +216,7 @@ public class Space extends Subject {
                 if (direction == heading) return true;
             }
         }
-        return containsObstacleTo(heading.next().next());
+        return false;
     }
 
     public void playerChanged() {
