@@ -1,5 +1,6 @@
-package dk.dtu.compute.se.pisd.roborally.controller;
+package dk.dtu.compute.se.pisd.roborally.controller.PlayerControllerTests;
 
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
@@ -11,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 class PlayerControllerTest {
 
-    private final int TEST_WIDTH = 8;
-    private final int TEST_HEIGHT = 8;
+    private final int TEST_WIDTH = 16;
+    private final int TEST_HEIGHT = 16;
 
     private GameController gameController;
 
@@ -64,33 +65,14 @@ class PlayerControllerTest {
         Board board = gameController.game.getBoard();
         Player current = gameController.game.getCurrentPlayer();
 
-        current.playerController.moveForward(3);
-        Assertions.assertEquals(current, board.getSpace(0, 3).getPlayer(), "Player " + current.getName() + " should beSpace (0,3)!");
-        Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
-        Assertions.assertNull(board.getSpace(0, 0).getPlayer(), "Space (0,0) should be empty!");
-
-        current.playerController.moveForward( 4);
-        Assertions.assertEquals(current, board.getSpace(0, 7).getPlayer(), "Player " + current.getName() + " should beSpace (0,7)!");
-        Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
-        Assertions.assertNull(board.getSpace(0, 3).getPlayer(), "Space (0,3) should be empty!");
-
-        current.playerController.moveForward(2);
-        Assertions.assertEquals(current, board.getSpace(0, 1).getPlayer(), "Player " + current.getName() + " should beSpace (0,1)!");
-        Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
-        Assertions.assertNull(board.getSpace(0, 7).getPlayer(), "Space (0,7) should be empty!");
-
-
-/*
         int totalMoved = 0;
-        for (int i = 3; i < 6; i++) {
-            gameController.moveForward(current, i);
+        for (int i = 1; i < 5; i++) {
+            current.playerController.moveForward(i);
             totalMoved += i;
-            if (totalMoved >= TEST_HEIGHT) totalMoved = TEST_HEIGHT;
-            Assertions.assertEquals(current, board.getSpace(0, totalMoved - 1).getPlayer(), "Player " + current.getName() + " should beSpace (0," + totalMoved + ")!");
+            Assertions.assertEquals(current, board.getSpace(0, totalMoved).getPlayer(), "Player " + current.getName() + " should beSpace (0," + totalMoved + ")!");
             Assertions.assertEquals(Heading.SOUTH, current.getHeading(), "Player 0 should be heading SOUTH!");
             Assertions.assertNull(board.getSpace(0, totalMoved - i).getPlayer(), "Space (0," + (totalMoved - i) + ") should be empty!");
         }
-        */
     }
 
     /*
@@ -100,7 +82,7 @@ class PlayerControllerTest {
         0         1         2         3
      */
     @Test
-    void testTurnRightByN() {
+    void testTurn() {
         Player current = gameController.game.getCurrentPlayer();
         Heading[] headings = {Heading.EAST, Heading.EAST, Heading.SOUTH, Heading.NORTH, Heading.WEST, Heading.WEST, Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.EAST, Heading.SOUTH};
         for (int i = -5; i < 6; i++) {
@@ -121,5 +103,36 @@ class PlayerControllerTest {
         Player current = gameController.game.getCurrentPlayer();
         current.playerController.turnLeft();
         Assertions.assertEquals(Heading.EAST, current.getHeading());
+    }
+
+    @Test
+    void walkIntoWall(){
+        //todo: walkIntoWall test
+    }
+
+    @Test
+    void pushRobot(){
+        //todo: pushRobot test
+    }
+
+
+    @Test
+    void pushMultipleDiscontinuousRobots(){
+        //todo: pushMultipleDiscontinuousRobots test
+        // OOOOOOO00000
+        // OXOXXOXXX0X0
+        // OOOOOOO00000
+    }
+
+    @Test
+    void pushRobotIntoWall(){
+        //todo: pushRobotIntoWall test
+
+    }
+
+    @Test
+    void pushRobotsIntoWall(){
+        //todo: pushRobotsIntoWall test
+
     }
 }
