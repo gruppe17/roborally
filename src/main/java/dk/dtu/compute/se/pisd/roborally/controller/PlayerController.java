@@ -127,8 +127,10 @@ public class PlayerController implements ILaser {
     /**
      * adds a card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @deprecated
      */
     public void addCard(CommandCard card) {
+        //Seems identical to drawCard? I assume it was just partially renamed, but not done automatically?
         CommandCardField emptyCardField = player.getEmptyCardField();
 
         if (emptyCardField == null || card == null) return;
@@ -157,7 +159,7 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * 
+     *
      */
     private void discardHand(){
 
