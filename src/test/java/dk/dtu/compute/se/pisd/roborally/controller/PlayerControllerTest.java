@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -18,14 +19,15 @@ class PlayerControllerTest {
     @BeforeEach
     void setUp() {
         Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
-        gameController = new GameController(board);
+        Game game = new Game(board);
+        gameController = new GameController(game);
         for (int i = 0; i < 6; i++) {
-            Player player = new Player(board, null,"Player " + i);
-            board.addPlayer(player);
+            Player player = new Player(game, null,"Player " + i);
+            game.addPlayer(player);
             player.setSpace(board.getSpace(i, i));
             player.setHeading(Heading.values()[i % Heading.values().length]);
         }
-        board.setCurrentPlayer(board.getPlayer(0));
+        game.setCurrentPlayer(game.getPlayer(0));
     }
 
     @AfterEach
@@ -35,8 +37,8 @@ class PlayerControllerTest {
 
     @Test
     void moveForward() {
-        Board board = gameController.board;
-        Player current = board.getCurrentPlayer();
+        Board board = gameController.game.getBoard();
+        Player current = gameController.game.getCurrentPlayer();
 
         current.playerController.moveForward();
 
@@ -47,8 +49,8 @@ class PlayerControllerTest {
 
     @Test
     void testFastForward() {
-        Board board = gameController.board;
-        Player current = board.getCurrentPlayer();
+        Board board = gameController.game.getBoard();
+        Player current = gameController.game.getCurrentPlayer();
 
         current.playerController.fastForward();
 
@@ -59,8 +61,8 @@ class PlayerControllerTest {
 
     @Test
     void testMoveForwardByN() {
-        Board board = gameController.board;
-        Player current = board.getCurrentPlayer();
+        Board board = gameController.game.getBoard();
+        Player current = gameController.game.getCurrentPlayer();
 
         current.playerController.moveForward(3);
         Assertions.assertEquals(current, board.getSpace(0, 3).getPlayer(), "Player " + current.getName() + " should beSpace (0,3)!");
@@ -99,7 +101,7 @@ class PlayerControllerTest {
      */
     @Test
     void testTurnRightByN() {
-        Player current = gameController.board.getCurrentPlayer();
+        Player current = gameController.game.getCurrentPlayer();
         Heading[] headings = {Heading.EAST, Heading.EAST, Heading.SOUTH, Heading.NORTH, Heading.WEST, Heading.WEST, Heading.NORTH, Heading.SOUTH, Heading.EAST, Heading.EAST, Heading.SOUTH};
         for (int i = -5; i < 6; i++) {
             current.playerController.turn(i);
@@ -109,14 +111,14 @@ class PlayerControllerTest {
 
     @Test
     void testTurnRight() {
-        Player current = gameController.board.getCurrentPlayer();
+        Player current = gameController.game.getCurrentPlayer();
         current.playerController.turn();
         Assertions.assertEquals(Heading.WEST, current.getHeading());
     }
 
     @Test
     void testTurnLeft() {
-        Player current = gameController.board.getCurrentPlayer();
+        Player current = gameController.game.getCurrentPlayer();
         current.playerController.turnLeft();
         Assertions.assertEquals(Heading.EAST, current.getHeading());
     }

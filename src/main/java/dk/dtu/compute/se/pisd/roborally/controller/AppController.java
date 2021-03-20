@@ -91,7 +91,7 @@ public class AppController implements Observer {
             // board.setCurrentPlayer(board.getPlayer(0));
             gameController.startProgrammingPhase();
 
-            roboRally.createBoardView(gameController);
+            roboRally.createGameView(gameController);
         }
     }
 
@@ -123,7 +123,7 @@ public class AppController implements Observer {
             saveGame();
 
             gameController = null;
-            roboRally.createBoardView(null);
+            roboRally.createGameView(null);
             return true;
         }
         return false;
