@@ -29,7 +29,7 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * <p>The controller for a {@link Game}.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk

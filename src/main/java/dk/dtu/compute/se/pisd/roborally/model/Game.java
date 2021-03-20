@@ -10,6 +10,11 @@ import java.util.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.enums.Phase.INITIALISATION;
 
+/**
+ * <p>...</p>
+ *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
 public class Game extends Subject {
 
     private Integer gameId;

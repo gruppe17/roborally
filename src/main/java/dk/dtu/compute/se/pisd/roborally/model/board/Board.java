@@ -21,16 +21,10 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
-import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-
-import static dk.dtu.compute.se.pisd.roborally.model.enums.Phase.INITIALISATION;
 
 /**
  * ...
