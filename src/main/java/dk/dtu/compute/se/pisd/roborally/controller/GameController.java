@@ -21,17 +21,12 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 /**
  * ...
@@ -80,34 +75,39 @@ public class GameController {
     // XXX: V2
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
-        makeProgramFieldsVisible(0);
+        makeProgramFieldVisible(0);
         board.setPhase(Phase.ACTIVATION);
         board.playerQueueForceRepopulate();
         board.setCurrentPlayer(board.nextPlayer());
         board.setStep(0);
     }
 
-    // XXX: V2
-    private void makeProgramFieldsVisible(int register) {
-        if (register >= 0 && register < Player.NO_REGISTERS) {
-            for (int i = 0; i < board.getPlayersNumber(); i++) {
-                Player player = board.getPlayer(i);
-                CommandCardField field = player.getProgramField(register);
-                field.setVisible(true);
-            }
+    /**
+     * <p>Makes the specified program field visible.</p>
+     * @param register the index of the program field to make visible
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void makeProgramFieldVisible(int register) {
+        if (register < 0 || register >= Player.NO_REGISTERS) return;
+
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            board.getPlayer(i).getProgramField(register).setVisible(true);
         }
     }
 
-    // XXX: V2
+    /**
+     * <p>Makes all the program fields invisible.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                CommandCardField field = player.getProgramField(j);
-                field.setVisible(false);
+                player.getProgramField(j).setVisible(false);
             }
         }
     }
+
 
 
     /**
@@ -207,7 +207,7 @@ public class GameController {
         board.setCurrentPlayer(board.nextPlayer());
 
         if (step < Player.NO_REGISTERS) { //The activation phase is not complete
-            makeProgramFieldsVisible(step);
+            makeProgramFieldVisible(step);
             board.setStep(step);
             return;
         }
