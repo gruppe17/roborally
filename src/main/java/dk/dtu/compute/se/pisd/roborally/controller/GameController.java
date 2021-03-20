@@ -51,25 +51,11 @@ public class GameController {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
             if (player == null) continue;
-
-            for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                CommandCardField field = player.getProgramField(j);
-                field.setCard(null);
-                field.setVisible(true);
-            }
-            for (int j = 0; j < Player.NO_CARDS; j++) {
-                CommandCardField field = player.getHandField(j);
-                field.setCard(generateRandomCommandCard());
-                field.setVisible(true);
-            }
+            player.playerController.discardHand(); //Shouldn't actually change anything, but it's good to be safe.
+            player.playerController.fillHand();
         }
-    }
-
-    // XXX: V2
-    private CommandCard generateRandomCommandCard() {
-        Command[] commands = Command.values();
-        int random = (int) (Math.random() * commands.length);
-        return new CommandCard(commands[random]);
+        setProgramFieldsVisibility(true);
+        setHandFieldsVisibility(true);
     }
 
     // XXX: V2
@@ -113,8 +99,24 @@ public class GameController {
     private void setProgramFieldsVisibility(boolean visible) {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
+            if (player == null) continue;
             for (int j = 0; j < Player.NO_REGISTERS; j++) {
                 player.getProgramField(j).setVisible(visible);
+            }
+        }
+    }
+
+    /**
+     * <p>Sets the visibility of all the players' hands.</p>
+     * @param visible true if the hand fields should be visible
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void setHandFieldsVisibility(boolean visible){
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
+            Player player = board.getPlayer(i);
+            if (player == null) continue;
+            for (CommandCardField cCField: player.getHand()) {
+                cCField.setVisible(visible);
             }
         }
     }
