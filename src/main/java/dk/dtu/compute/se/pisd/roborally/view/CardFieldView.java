@@ -111,7 +111,7 @@ public class CardFieldView extends GridPane implements ViewObserver {
             }
 
             for (int i = 0; i < Player.NO_CARDS; i++) {
-                CommandCardField other = cardField.player.getCardField(i);
+                CommandCardField other = cardField.player.getHandField(i);
                 if (other == cardField) {
                     return "C," + i;
                 }
@@ -132,7 +132,7 @@ public class CardFieldView extends GridPane implements ViewObserver {
                     }
                 } else if ("C".equals(strings[0])) {
                     if (i < Player.NO_CARDS) {
-                        return field.player.getCardField(i);
+                        return field.player.getHandField(i);
                     }
                 }
             }

@@ -270,7 +270,7 @@ public class PlayerMatView extends Tab implements ViewObserver {
         double cardWidthPercent = (1d / Player.NO_CARDS) - (hgapPercentageTimeNumCards / (double) (Player.NO_CARDS - 1));
         playerHandCardViews = new CardFieldView[Player.NO_CARDS];
         for (int i = 0; i < Player.NO_CARDS; i++) {
-            CommandCardField cardField = player.getCardField(i);
+            CommandCardField cardField = player.getHandField(i);
             if (cardField != null) {
                 playerHandCardViews[i] = new CardFieldView(gameController, cardField);
                 playerHandCardsPane.add(playerHandCardViews[i], i, 0);

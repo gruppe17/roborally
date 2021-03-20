@@ -151,7 +151,7 @@ public class PlayerController implements ILaser {
      * adds a random card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
-    private void drawCard(){
+    public void drawCard(){
         CommandCardField emptyCardField = player.getEmptyCardField();
         if(emptyCardField == null) return;
 
@@ -159,10 +159,24 @@ public class PlayerController implements ILaser {
     }
 
     /**
+     * <p>Draws cards until the player's hand is full.</p>
+     */
+    public void fillHand(){
+        //todo: The player should probably keep track of their hand.
+        //      If this is called while the player is programming their robot
+        //      the cards in the registers are not counted.
+        while (player.getEmptyCardField() != null){
+            drawCard();
+        }
+    }
+
+    /**
      *
      */
-    private void discardHand(){
-
+    public void discardHand(){
+        for (CommandCardField cCField: player.getHand()) {
+            cCField.setCard(null);
+        }
     }
 
     /**

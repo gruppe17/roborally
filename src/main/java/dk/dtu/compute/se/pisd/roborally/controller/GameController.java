@@ -58,7 +58,7 @@ public class GameController {
                 field.setVisible(true);
             }
             for (int j = 0; j < Player.NO_CARDS; j++) {
-                CommandCardField field = player.getCardField(j);
+                CommandCardField field = player.getHandField(j);
                 field.setCard(generateRandomCommandCard());
                 field.setVisible(true);
             }

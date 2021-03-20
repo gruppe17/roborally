@@ -60,7 +60,7 @@ public class Player extends Subject {
     private Heading heading = SOUTH;
 
     private CommandCardField[] program;
-    private CommandCardField[] cards;
+    private CommandCardField[] hand;
 
     public Player(@NotNull Board board, String color, @NotNull String name) {
         playerController = new PlayerController(this);
@@ -76,9 +76,9 @@ public class Player extends Subject {
             program[i] = new CommandCardField(this);
         }
 
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        hand = new CommandCardField[NO_CARDS];
+        for (int i = 0; i < hand.length; i++) {
+            hand[i] = new CommandCardField(this);
         }
     }
 
@@ -176,18 +176,34 @@ public class Player extends Subject {
         return program[i];
     }
 
-    public CommandCardField getCardField(int i) {
-        return cards[i];
+    /**
+     * <p>Returns the player's current program.</p>
+     * @return a CommandCardField array containing the player's current program
+     */
+    public CommandCardField[] getProgram(){
+        return program;
+    }
+
+    public CommandCardField getHandField(int i) {
+        return hand[i];
     }
 
     /**
-     * Get an empty CommandCardField in players deck.
+     * <p>Returns the player's current hand.</p>
+     * @return a CommandCardField array containing the player's current hand
+     */
+    public CommandCardField[] getHand(){
+        return hand;
+    }
+
+    /**
+     * <p>Get an empty CommandCardField in players deck.</p>
      *
      * @return first empty card field or null if there isn't any.
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     public CommandCardField getEmptyCardField() {
-        for (CommandCardField cardField : cards) {
+        for (CommandCardField cardField : hand) {
             if (cardField.getCard() == null) {
                 return cardField;
             }
