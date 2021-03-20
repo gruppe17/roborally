@@ -22,23 +22,20 @@ public class PlayerController implements ILaser {
      */
     public void move(Heading direction, int distance) {
         Space currentSpace = player.getSpace();
-        if (currentSpace != null) {
-            for (int i = 0; i < distance; i++) {
-                Space target = currentSpace.board.getNeighbour(currentSpace, direction);
-                if (target != null) {
-                    if (target.getPlayer() != null) {
-                        target.getPlayer().playerController.move(direction, distance - i);
-                        if (target.getPlayer() != null) {
-                            break;
-                        }
-                    }
-                    currentSpace = target;
-                } else {
+        if (currentSpace == null) return;
+        for (int i = 0; i < distance; i++) {
+            Space target = currentSpace.board.getNeighbour(currentSpace, direction);
+            if (target == null) break;
+            if (target.getPlayer() != null) {
+                target.getPlayer().playerController.move(direction, distance - i);
+                if (target.getPlayer() != null) {
                     break;
                 }
             }
-            player.setSpace(currentSpace); //identical to target.setPlayer(player);
+            currentSpace = target;
         }
+        player.setSpace(currentSpace); //identical to target.setPlayer(player);
+
     }
 
     /**
