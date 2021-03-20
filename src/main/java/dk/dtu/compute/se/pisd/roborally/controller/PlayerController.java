@@ -148,7 +148,7 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * adds a random card to an empty card field if possible
+     * Adds a random card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     public void drawCard(){
@@ -160,6 +160,7 @@ public class PlayerController implements ILaser {
 
     /**
      * <p>Draws cards until the player's hand is full.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void fillHand(){
         //todo: The player should probably keep track of their hand.
@@ -171,10 +172,23 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     *
+     * <p>Discards the player's current hand.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void discardHand(){
         for (CommandCardField cCField: player.getHand()) {
+            cCField.setCard(null);
+        }
+    }
+
+    /**
+     * <p>Discards the player's current program.
+     * That is, discards the cards currently in
+     * the player's registers.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void discardProgram(){
+        for (CommandCardField cCField: player.getProgram()) {
             cCField.setCard(null);
         }
     }
