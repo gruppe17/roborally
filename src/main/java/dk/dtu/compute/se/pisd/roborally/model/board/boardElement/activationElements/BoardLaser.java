@@ -5,9 +5,13 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
 public class BoardLaser extends ActivationElement {
 
+    public BoardLaser(Heading direction, Space space, int priority){
+        this(new Heading[0], new Heading[0], direction, space, priority);
+
+    }
 
     protected BoardLaser(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
-        super(impassableFrom, opaqueFrom, direction, space, priority);
+        super(new Heading[0], impassableFrom, opaqueFrom, direction, space, priority);
 
     }
 

@@ -105,7 +105,7 @@ public class WallPane extends StackPane {
     public void addWall(@NotNull Wall wall) {
         BoardElementView wallElementView = new BoardElementView(wall);
 
-        Pane wallPane = wallPanes[wall.getPosition().ordinal()];
+        Pane wallPane = wallPanes[wall.getPosition()[0].ordinal()];
         wallPane.getChildren().add(wallElementView);
         RoboRally.bindSize(wallElementView, wallPane, 1, 1);
 

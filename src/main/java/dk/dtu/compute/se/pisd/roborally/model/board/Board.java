@@ -227,6 +227,8 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        //todo: Maybe a space should know its own neighbours?
+        if (space.containsObstacleTo(heading)) return null;
         int x = space.x;
         int y = space.y;
         switch (heading) {
@@ -244,7 +246,9 @@ public class Board extends Subject {
                 break;
         }
 
-        return getSpace(x, y);
+        Space neighbor = getSpace(x, y);
+        if (neighbor.containsObstacleFrom(heading.prev().prev())) return null;
+        return neighbor;
     }
 
     /**

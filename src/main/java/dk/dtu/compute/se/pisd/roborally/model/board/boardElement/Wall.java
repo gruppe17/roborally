@@ -11,19 +11,13 @@ import org.jetbrains.annotations.NotNull;
 public class Wall extends BoardElement {
 
     /**
-     * <p>The position of the wall on the space.</p>
-     */
-    protected Heading position;
-
-    /**
      * <p>Creates a new wall with a given position.</p>
      *
      * @param position the position of the wall on the space
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public Wall(Heading position) {
-        super(getBlockingArray(position), getBlockingArray(position), positionToDirection(position));
-        this.position = position;
+        super(new Heading[] {position} , getBlockingArray(position), getBlockingArray(position), positionToDirection(position));
     }
 
     /**
@@ -38,9 +32,6 @@ public class Wall extends BoardElement {
         return Heading.EAST;
     }
 
-    public Heading getPosition() {
-        return position;
-    }
 
     /**
      * <p>Returns an array of {@link Heading}s containing the
@@ -54,20 +45,5 @@ public class Wall extends BoardElement {
         return new Heading[]{position, position.next().next()};
     }
 
-    /**
-     * <p>Returns a new {@link Heading} array containing
-     * {{@link Heading#NORTH}, {@link Heading#EAST},{@link Heading#SOUTH},
-     * {@link Heading#WEST}}. This is done, because there seems to be a
-     * problem with importing, resulting in ridiculously long names.</p>
-     * <p>The problem seems to have fixed itself. But the method will stay for now.</p>
-     *
-     * @return A new Heading array containing the four cardinal directions
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private static Heading[] northEastSouthWestArray() {
-        return new Heading[]{
-                Heading.NORTH, Heading.EAST,
-                Heading.SOUTH, Heading.WEST
-        };
-    }
+
 }

@@ -192,11 +192,12 @@ public class Space extends Subject {
      * @see #containsObstacleFrom(Heading)
      */
     public boolean containsObstacleTo(Heading heading) {
-        //This should probably be done differently. Imagine that a board
-        //element is a cliff. Not being able to scale the cliff does not mean
-        //that you cannot jump down from it (given that you are a robot without
-        // any hands)
-        return containsObstacleFrom(heading.next().next());
+        //todo: this and containsObstacleFrom should probably be consolidated.
+        for (BoardElement boardElement : elements) {
+            if (!boardElement.isAtPosition(heading)) continue;
+            if (boardElement.isImpassableFrom(heading.next().next())) return true;
+        }
+        return false;
     }
 
     /**
@@ -212,9 +213,8 @@ public class Space extends Subject {
      */
     public boolean containsObstacleFrom(Heading heading) {
         for (BoardElement boardElement : elements) {
-            for (Heading direction : boardElement.getImpassableFrom()) {
-                if (direction == heading) return true;
-            }
+            if (!boardElement.isAtPosition(heading)) continue;
+            if (boardElement.isImpassableFrom(heading)) return true;
         }
         return false;
     }
