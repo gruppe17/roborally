@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerController implements ILaser {
     Player player;
@@ -20,15 +21,15 @@ public class PlayerController implements ILaser {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #moveForward(int)
      */
-    public void move(Heading direction, int distance) {
+    public void move(@NotNull Heading direction, int distance) {
         Space currentSpace = player.getSpace();
         if (currentSpace == null) return;
         for (int i = 0; i < distance; i++) {
             Space target = currentSpace.board.getNeighbour(currentSpace, direction);
             if (target == null) break;
-            if (target.getPlayer() != null) {
+            if (target.getPlayer() != null) { //If there's a player on the target, try to move them.
                 target.getPlayer().playerController.move(direction, distance - i);
-                if (target.getPlayer() != null) {
+                if (target.getPlayer() != null) {//If they are still there, break
                     break;
                 }
             }
@@ -115,13 +116,11 @@ public class PlayerController implements ILaser {
      * adds a card to an empty card field if possible
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
-    public void addCard(CommandCard card){
+    public void addCard(CommandCard card) {
         CommandCardField emptyCardField = player.getEmptyCardField();
 
-        if(emptyCardField != null && card != null){
-            emptyCardField.setCard(card);
-        }
-
+        if (emptyCardField == null || card == null) return;
+        emptyCardField.setCard(card);
     }
 
     /**
@@ -130,10 +129,9 @@ public class PlayerController implements ILaser {
      */
     private void drawCard(){
         CommandCardField emptyCardField = player.getEmptyCardField();
-        if(emptyCardField != null){
-            emptyCardField.setCard(generateRandomCommandCard());
-        }
+        if(emptyCardField == null) return;
 
+        emptyCardField.setCard(generateRandomCommandCard());
     }
 
     /**
