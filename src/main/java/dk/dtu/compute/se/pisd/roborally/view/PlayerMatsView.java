@@ -23,9 +23,8 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.board.Game;
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 import javafx.scene.control.TabPane;
 
 /**
