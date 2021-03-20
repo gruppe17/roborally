@@ -25,13 +25,16 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.view.board.GameView;
 import javafx.scene.control.TabPane;
 
 /**
- * ...
+ * <p>The area of the {@link GameView} where the player mats
+ * are displayed as well as the container for the
+ * {@link PlayerMatView}s</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class PlayerMatsView extends TabPane implements ViewObserver {
 
@@ -55,10 +58,9 @@ public class PlayerMatsView extends TabPane implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == game) {
-            Player current = game.getCurrentPlayer();
-            this.getSelectionModel().select(game.getPlayerNumber(current));
-        }
+        if (subject != game) return;
+        Player current = game.getCurrentPlayer();
+        this.getSelectionModel().select(game.getPlayerNumber(current));
     }
 
 }
