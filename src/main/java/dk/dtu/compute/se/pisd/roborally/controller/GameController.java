@@ -154,28 +154,30 @@ public class GameController {
      */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() == Phase.ACTIVATION && currentPlayer != null) {
-            int step = board.getStep();
-            if (step >= 0 && step < Player.NO_REGISTERS) {
-                CommandCard card = currentPlayer.getProgramField(step).getCard();
-                if (card != null) {
-                    Command command = card.command;
-                    if (command.isInteractive()) {
-                        board.setPhase(Phase.PLAYER_INTERACTION);
-                        return;
-                    }
-                    executeCommand(currentPlayer, command);
-                }
-                subRoundComplete();
-            } else {
-                // this should not happen
-                assert false;
-            }
-        } else {
-            // this should not happen
+        int step = board.getStep();
+
+        if (board.getPhase() != Phase.ACTIVATION || currentPlayer == null) { // this should not happen
             assert false;
+            return;
         }
+        if (step < 0 || step >= Player.NO_REGISTERS) {
+            assert false;
+            return;
+        }
+
+        CommandCard card = currentPlayer.getProgramField(step).getCard();
+        if (card != null) {
+            Command command = card.command;
+            if (command.isInteractive()) {
+                board.setPhase(Phase.PLAYER_INTERACTION);
+                return;
+            }
+            executeCommand(currentPlayer, command);
+        }
+
+        subRoundComplete();
     }
+
 
     /**
      * <p>Handles what happens after a player instruction has been executed.</p>
