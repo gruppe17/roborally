@@ -86,13 +86,17 @@ public class Player extends Subject {
         return name;
     }
 
-    public void setName(String name) {
-        if (name != null && !name.equals(this.name)) {
-            this.name = name;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
+    /**
+     * <p>Sets the name of the player.</p>
+     * @param name a string containing the name of the player
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void setName(@NotNull String name) {
+        if (name == null || name.equals(this.name)) return;
+        this.name = name;
+        notifyChange();
+        if (space != null) {
+            space.playerChanged();
         }
     }
 
