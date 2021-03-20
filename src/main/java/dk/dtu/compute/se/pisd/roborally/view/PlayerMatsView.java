@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.board.Game;
 import javafx.scene.control.TabPane;
 
 /**
@@ -35,29 +36,29 @@ import javafx.scene.control.TabPane;
  */
 public class PlayerMatsView extends TabPane implements ViewObserver {
 
-    private Board board;
+    private Game game;
 
     private PlayerMatView[] playerMatViews;
 
     public PlayerMatsView(GameController gameController) {
-        board = gameController.board;
+        game = gameController.game;
 
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-        playerMatViews = new PlayerMatView[board.getPlayersNumber()];
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            playerMatViews[i] = new PlayerMatView(gameController, board.getPlayer(i));
+        playerMatViews = new PlayerMatView[game.getNumPlayers()];
+        for (int i = 0; i < game.getNumPlayers(); i++) {
+            playerMatViews[i] = new PlayerMatView(gameController, game.getPlayer(i));
             this.getTabs().add(playerMatViews[i]);
         }
-        board.attach(this);
-        update(board);
+        game.attach(this);
+        update(game);
     }
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == board) {
-            Player current = board.getCurrentPlayer();
-            this.getSelectionModel().select(board.getPlayerNumber(current));
+        if (subject == game) {
+            Player current = game.getCurrentPlayer();
+            this.getSelectionModel().select(game.getPlayerNumber(current));
         }
     }
 

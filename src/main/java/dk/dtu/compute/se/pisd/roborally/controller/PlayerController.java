@@ -197,7 +197,7 @@ public class PlayerController implements ILaser {
             return;
         while (true) {
             /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
             Player playerAtSpace = lastSpace.getPlayer();
             /* remember to add the right elements to prevent hitting walls and stuff here */
            /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
@@ -229,7 +229,7 @@ public class PlayerController implements ILaser {
         /*Maybe do some cleanup of fx here?*/
         while (true) {
             /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
             if (lastSpace == null) {
                 break;
             }

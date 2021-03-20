@@ -24,6 +24,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,7 @@ public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
     final public PlayerController playerController;
-    final public Board board;
+    final public Game game;
 
     private String name;
     private String color;
@@ -62,10 +63,10 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] hand;
 
-    public Player(@NotNull Board board, String color, @NotNull String name) {
+    public Player(@NotNull Game game, String color, @NotNull String name) {
         playerController = new PlayerController(this);
 
-        this.board = board;
+        this.game = game;
         this.name = name;
         this.color = color;
 
@@ -135,7 +136,7 @@ public class Player extends Subject {
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space == oldSpace) return;
-        if (space != null && space.board != this.board) return;
+        if (space != null && space.board != game.getBoard()) return;
 
         this.space = space;
         if (oldSpace != null) {
@@ -143,7 +144,7 @@ public class Player extends Subject {
         }
         if (space != null) {
             space.setPlayer(this);
-            distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
+            distanceToPrioritySpace = game.getBoard().getRectilinearDistanceToPrioritySpace(space);
         } else distanceToPrioritySpace = -1;
         notifyChange();
     }

@@ -108,7 +108,7 @@ public class BoardView extends VBox implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public BoardView(@NotNull GameController gameController) {
-        board = gameController.board;
+        board = gameController.game.getBoard();
 
         initBoardAreaPane();
         initPlayerMatsView(gameController);

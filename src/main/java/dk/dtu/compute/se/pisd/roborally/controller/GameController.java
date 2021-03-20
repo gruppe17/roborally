@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
@@ -36,24 +37,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GameController {
 
-    final public Board board;
+    final public Game game;
 
-    public GameController(@NotNull Board board) {
-        this.board = board;
+    public GameController(@NotNull Game game) {
+        this.game = game;
     }
 
     // XXX: V2
     public void startProgrammingPhase() {
-        board.setPhase(Phase.PROGRAMMING);
-        board.setCurrentPlayer(board.getPlayer(0));
-        board.setStep(0);
+        game.setPhase(Phase.PROGRAMMING);
+        game.setCurrentPlayer(game.getPlayer(0));
+        game.setStep(0);
 
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
+        for (Player player: game.getPlayers()) {
             if (player == null) continue;
             player.playerController.discardHand(); //Shouldn't actually change anything, but it's good to be safe.
             player.playerController.fillHand();
         }
+
         setProgramFieldsVisibility(true);
         setHandFieldsVisibility(true);
     }
@@ -62,10 +63,10 @@ public class GameController {
     public void finishProgrammingPhase() {
         setProgramFieldsVisibility(false);
         makeProgramFieldVisible(0);
-        board.setPhase(Phase.ACTIVATION);
-        board.playerQueueForceRepopulate();
-        board.setCurrentPlayer(board.nextPlayer());
-        board.setStep(0);
+        game.setPhase(Phase.ACTIVATION);
+        game.playerQueueForceRepopulate();
+        game.setCurrentPlayer(game.nextPlayer());
+        game.setStep(0);
     }
 
     /**
@@ -75,9 +76,8 @@ public class GameController {
      */
     private void makeProgramFieldVisible(int register) {
         if (register < 0 || register >= Player.NO_REGISTERS) return;
-
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            board.getPlayer(i).getProgramField(register).setVisible(true);
+        for (Player player: game.getPlayers()) {
+            player.getProgramField(register).setVisible(true);
         }
     }
 
@@ -97,23 +97,21 @@ public class GameController {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void setProgramFieldsVisibility(boolean visible) {
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
+        for (Player player: game.getPlayers()) {
             if (player == null) continue;
-            for (int j = 0; j < Player.NO_REGISTERS; j++) {
-                player.getProgramField(j).setVisible(visible);
+            for (CommandCardField cCField: player.getProgram()) {
+                cCField.setVisible(visible);
             }
         }
     }
 
     /**
      * <p>Sets the visibility of all the players' hands.</p>
-     * @param visible true if the hand fields should be visible
+     * @param visible whether the hand fields should be visible
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void setHandFieldsVisibility(boolean visible){
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            Player player = board.getPlayer(i);
+        for (Player player: game.getPlayers()) {
             if (player == null) continue;
             for (CommandCardField cCField: player.getHand()) {
                 cCField.setVisible(visible);
@@ -121,15 +119,13 @@ public class GameController {
         }
     }
 
-
-
     /**
      * <p>Runs the entirety of the players' programs.</p>
      *
      * @see #executeStep()
      */
     public void executePrograms() {
-        board.setStepMode(false);
+        game.setStepMode(false);
         continuePrograms();
     }
 
@@ -139,22 +135,22 @@ public class GameController {
      * @see #executePrograms()
      */
     public void executeStep() {
-        board.setStepMode(true);
+        game.setStepMode(true);
         continuePrograms();
     }
 
     /**
      * <p>Continues, or starts, the execution of the players' programs in
-     * accordance with {@link Board#isStepMode()}.</p>
+     * accordance with {@link Game#isStepMode()}.</p>
      *
-     * <p>If {@link Board#isStepMode()} is true {@link #executeStep()} is
+     * <p>If {@link Game#isStepMode()} is true {@link #executeStep()} is
      * called only once. Otherwise, it is called until the activation phase
      * is over.</p>
      */
     private void continuePrograms() {
         do {
             executeNextStep();
-        } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
+        } while (game.getPhase() == Phase.ACTIVATION && !game.isStepMode());
     }
 
     /**
@@ -166,10 +162,10 @@ public class GameController {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void executeNextStep() {
-        Player currentPlayer = board.getCurrentPlayer();
-        int step = board.getStep();
+        Player currentPlayer = game.getCurrentPlayer();
+        int step = game.getStep();
 
-        if (board.getPhase() != Phase.ACTIVATION || currentPlayer == null) { // this should not happen
+        if (game.getPhase() != Phase.ACTIVATION || currentPlayer == null) { // this should not happen
             assert false;
             return;
         }
@@ -182,7 +178,7 @@ public class GameController {
         if (card != null) {
             Command command = card.command;
             if (command.isInteractive()) {
-                board.setPhase(Phase.PLAYER_INTERACTION);
+                game.setPhase(Phase.PLAYER_INTERACTION);
                 return;
             }
             executeCommand(currentPlayer, command);
@@ -200,28 +196,28 @@ public class GameController {
      * No matter what, the next player is always set.</p>
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
-     * @see Board#getStep()
+     * @see Game#getStep()
      * @see #activateElements()
      */
     private void subRoundComplete() {
-        if (board.getPhase() != Phase.ACTIVATION) {
+        if (game.getPhase() != Phase.ACTIVATION) {
             assert false;
             return;
         }
 
-        if (!board.isPlayerActivationQueueEmpty()) { //Not all players have been activated yet
-            board.setCurrentPlayer(board.nextPlayer());
+        if (!game.isPlayerActivationQueueEmpty()) { //Not all players have been activated yet
+            game.setCurrentPlayer(game.nextPlayer());
             return;
         }
 
-        activateElements();
-        int step = board.getStep() + 1;
-        board.playerQueueForceRepopulate();
-        board.setCurrentPlayer(board.nextPlayer());
+        activateElements(); //All players have been activated, activate the board elements
+        int step = game.getStep() + 1;
+        game.playerQueueForceRepopulate();
+        game.setCurrentPlayer(game.nextPlayer());
 
         if (step < Player.NO_REGISTERS) { //The activation phase is not complete
             makeProgramFieldVisible(step);
-            board.setStep(step);
+            game.setStep(step);
             return;
         }
 
@@ -240,7 +236,7 @@ public class GameController {
                 return ((ActivationElement) e).getPriority();
             } else return 6;//if (e instanceof RobotLaser){return RobotLaser.getPriority();}
         }));
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
+        for (int i = 0; i < board.getNumPlayers(); i++) {
             ActivationElement[] activationElements = board.getPlayer(i).getSpace().getActivationElements();
             if (activationElements != null && activationElements.length > 0)
                 priorityQueue.addAll(Arrays.asList(activationElements));
@@ -258,7 +254,7 @@ public class GameController {
      * @see #executeCommandAndContinue(Command)
      */
     private void executeCommand(@NotNull Player player, Command command) {
-        if (player != null && player.board == board && command != null) {
+        if (player != null && player.game == game && command != null) {
             // XXX This is a very simplistic way of dealing with some basic cards and
             //     their execution. This should eventually be done in a more elegant way
             //     (this concerns the way cards are modelled as well as the way they are executed).
@@ -285,7 +281,7 @@ public class GameController {
 
     /**
      * <p>Executes a command on the current player and continues
-     * execution of players' programs respecting {@link Board#isStepMode}.</p>
+     * execution of players' programs respecting {@link Game#isStepMode}.</p>
      * <p>This is different from {@link #executeCommand} which simply returns.</p>
      *
      * @param command the command which is to be executed
@@ -293,16 +289,16 @@ public class GameController {
      * @see #executeCommand(Player, Command)
      */
     public void executeCommandAndContinue(@NotNull Command command) {
-        Player currentPlayer = board.getCurrentPlayer();
-        if (board.getPhase() != Phase.PLAYER_INTERACTION || currentPlayer == null) {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (game.getPhase() != Phase.PLAYER_INTERACTION || currentPlayer == null) {
             assert false;
             return;
         }
-        board.setPhase(Phase.ACTIVATION);
+        game.setPhase(Phase.ACTIVATION);
 
         executeCommand(currentPlayer, command);
         subRoundComplete();
-        if (!board.isStepMode()) continuePrograms();
+        if (!game.isStepMode()) continuePrograms();
     }
 
     /**

@@ -135,9 +135,9 @@ public class PlayerMatView extends Tab implements ViewObserver {
         initTop();
         this.setContent(top);
 
-        if (player.board != null) {
-            player.board.attach(this);
-            update(player.board);
+        if (player.game != null) {
+            player.game.attach(this);
+            update(player.game);
         }
     }
 
@@ -323,11 +323,11 @@ public class PlayerMatView extends Tab implements ViewObserver {
      */
     @Override
     public void updateView(Subject subject) {
-        if (subject != player.board) return;
+        if (subject != player.game) return;
 
         updateRegisters();
 
-        if (player.board.getPhase() == Phase.PLAYER_INTERACTION) {
+        if (player.game.getPhase() == Phase.PLAYER_INTERACTION) {
             updatePlayerInteractionPanel();
             return;
         }
@@ -346,26 +346,26 @@ public class PlayerMatView extends Tab implements ViewObserver {
             if (cardFieldView == null) continue;
 
             //The programming phase has just started; zero out all the registers.
-            if (player.board.getPhase() == Phase.PROGRAMMING) {
+            if (player.game.getPhase() == Phase.PROGRAMMING) {
                 cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
                 continue;
             }
 
             //This card was executed last round
-            if (i < player.board.getStep()) {
+            if (i < player.game.getStep()) {
                 cardFieldView.setBackground(CardFieldView.BG_DONE);
                 continue;
             }
 
-            if (i == player.board.getStep()) {
+            if (i == player.game.getStep()) {
                 //This card is about to be executed
-                if (player.board.getCurrentPlayer() == player) {
+                if (player.game.getCurrentPlayer() == player) {
                     cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
                     continue;
                 }
 
                 //This card was executed earlier this round
-                if (player.board.getPlayerNumber(player.board.getCurrentPlayer()) > player.board.getPlayerNumber(player)) {
+                if (player.game.getPlayerNumber(player.game.getCurrentPlayer()) > player.game.getPlayerNumber(player)) {
                     cardFieldView.setBackground(CardFieldView.BG_DONE);
                     continue;
                 }
@@ -384,15 +384,15 @@ public class PlayerMatView extends Tab implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void updatePlayerInteractionPanel() {
-        if (player.board.getPhase() == Phase.PLAYER_INTERACTION
+        if (player.game.getPhase() == Phase.PLAYER_INTERACTION
                 && !topTopHalf.getChildren().contains(playerInteractionPanel)) {
             topTopHalf.getChildren().remove(buttonPanel);
             topTopHalf.add(playerInteractionPanel, Player.NO_REGISTERS, 0);
         }
         playerInteractionPanel.getChildren().clear();
 
-        if (player.board.getCurrentPlayer() == player) {
-            int registerNum = player.board.getStep();
+        if (player.game.getCurrentPlayer() == player) {
+            int registerNum = player.game.getStep();
             Command command = player.getProgramField(registerNum).getCard().command;
             if (!command.isInteractive()) assert false;
             Button optionBtn;
@@ -418,7 +418,7 @@ public class PlayerMatView extends Tab implements ViewObserver {
             topTopHalf.getChildren().remove(playerInteractionPanel);
             topTopHalf.add(buttonPanel, Player.NO_REGISTERS, 0);
         }
-        switch (player.board.getPhase()) {
+        switch (player.game.getPhase()) {
             case INITIALISATION:
                 finishButton.setDisable(true);
                 // XXX just to make sure that there is a way for the player to get
