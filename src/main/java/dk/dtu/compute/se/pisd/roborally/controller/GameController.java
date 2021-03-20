@@ -42,23 +42,38 @@ public class GameController {
         this.game = game;
     }
 
-    // XXX: V2
+    /**
+     * <p>Starts the programming phase.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Oscar
+     */
     public void startProgrammingPhase() {
         game.setPhase(Phase.PROGRAMMING);
         game.setCurrentPlayer(game.getPlayer(0));
         game.setStep(0);
 
-        for (Player player: game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             if (player == null) continue;
-            player.playerController.discardHand(); //Shouldn't actually change anything, but it's good to be safe.
+            player.playerController.discardProgram();
+            player.playerController.discardHand();
             player.playerController.fillHand();
         }
 
         setProgramFieldsVisibility(true);
+
         setHandFieldsVisibility(true);
     }
 
-    // XXX: V2
+    /**
+     * <p>Finishes the programming phase and starts
+     * the activation phase.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Oscar
+     */
     public void finishProgrammingPhase() {
         setProgramFieldsVisibility(false);
         makeProgramFieldVisible(0);
@@ -70,21 +85,23 @@ public class GameController {
 
     /**
      * <p>Makes the specified program field visible.</p>
+     *
      * @param register the index of the program field to make visible
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void makeProgramFieldVisible(int register) {
         if (register < 0 || register >= Player.NO_REGISTERS) return;
-        for (Player player: game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             player.getProgramField(register).setVisible(true);
         }
     }
 
     /**
      * <p>Makes all the program fields invisible.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #setProgramFieldsVisibility(boolean)
-     * @deprecated 
+     * @deprecated
      */
     private void makeProgramFieldsInvisible() {
         setProgramFieldsVisibility(false);
@@ -92,13 +109,14 @@ public class GameController {
 
     /**
      * <p>Sets the visibility of all the program fields.</p>
+     *
      * @param visible true if the program fields should be visible
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void setProgramFieldsVisibility(boolean visible) {
-        for (Player player: game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             if (player == null) continue;
-            for (CommandCardField cCField: player.getProgram()) {
+            for (CommandCardField cCField : player.getProgram()) {
                 cCField.setVisible(visible);
             }
         }
@@ -106,13 +124,14 @@ public class GameController {
 
     /**
      * <p>Sets the visibility of all the players' hands.</p>
+     *
      * @param visible whether the hand fields should be visible
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void setHandFieldsVisibility(boolean visible){
-        for (Player player: game.getPlayers()) {
+    private void setHandFieldsVisibility(boolean visible) {
+        for (Player player : game.getPlayers()) {
             if (player == null) continue;
-            for (CommandCardField cCField: player.getHand()) {
+            for (CommandCardField cCField : player.getHand()) {
                 cCField.setVisible(visible);
             }
         }
@@ -228,7 +247,7 @@ public class GameController {
      *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void activateElements(){
+    private void activateElements() {
         /*
         PriorityQueue<IActivateable> priorityQueue = new PriorityQueue<>(6, Comparator.comparingInt(e -> {
             if (e instanceof ActivationElement) {
