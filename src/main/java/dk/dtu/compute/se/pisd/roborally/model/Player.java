@@ -59,6 +59,8 @@ public class Player extends Subject {
     private CommandCardField[] program;
     private CommandCardField[] cards;
 
+    private int energyCubes;
+
     public Player(@NotNull Board board, String color, @NotNull String name) {
         playerController = new PlayerController(this);
 
@@ -174,8 +176,9 @@ public class Player extends Subject {
 
     /**
      * Get an empty CommandCardField in players deck.
-     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     *
      * @return first empty card field or null if there isn't any.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     public CommandCardField getEmptyCardField() {
         for (CommandCardField cardField : cards) {
@@ -184,5 +187,50 @@ public class Player extends Subject {
             }
         }
         return null;
+    }
+
+    /**
+     * Get the amount of energy cubes held by robot
+     *
+     * @return amount of energy cubes owned by player.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public int getEnergyCubes() {
+        return energyCubes;
+    }
+
+    /**
+     * set the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public void setEnergyCubes(int amount) {
+        this.energyCubes = amount;
+    }
+
+    /**
+     * add to the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public void addEnergyCubes(int amount) {
+        this.energyCubes += amount;
+    }
+
+
+    /**
+     * Try to pay with energy cubes
+     *
+     * @param amount the amount of cubes to pay with
+     * @return true if payment was successful
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public boolean payWithEnergyCubes(int amount) {
+        if (energyCubes >= amount) {
+            energyCubes = energyCubes - amount;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
