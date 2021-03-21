@@ -143,7 +143,6 @@ public class PlayerController {
      * Try to pay with energy cubes
      *
      * @param amount the amount of cubes to pay with
-     * @param player
      * @return true if payment was successful
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
