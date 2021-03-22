@@ -76,10 +76,9 @@ public class Game extends Subject {
     }
 
     public void addPlayer(@NotNull Player player) {
-        if (player.game == this && !players.contains(player)) {
-            players.add(player);
-            notifyChange();
-        }
+        if (player.game != this || players.contains(player)) return;
+        players.add(player);
+        notifyChange();
     }
 
     public Player getPlayer(int i) {
@@ -99,10 +98,9 @@ public class Game extends Subject {
     }
 
     public void setCurrentPlayer(Player player) {
-        if (player != this.current && players.contains(player)) {
-            this.current = player;
-            notifyChange();
-        }
+        if (player == this.current || !players.contains(player)) return;
+        this.current = player;
+        notifyChange();
     }
 
     public Phase getPhase() {
@@ -110,10 +108,9 @@ public class Game extends Subject {
     }
 
     public void setPhase(Phase phase) {
-        if (phase != this.phase) {
-            this.phase = phase;
-            notifyChange();
-        }
+        if (phase == this.phase) return;
+        this.phase = phase;
+        notifyChange();
     }
 
     public int getStep() {
@@ -121,10 +118,9 @@ public class Game extends Subject {
     }
 
     public void setStep(int step) {
-        if (step != this.step) {
-            this.step = step;
-            notifyChange();
-        }
+        if (step == this.step) return;
+        this.step = step;
+        notifyChange();
     }
 
     /**
@@ -137,10 +133,9 @@ public class Game extends Subject {
     }
 
     public void setStepMode(boolean stepMode) {
-        if (stepMode != this.stepMode) {
-            this.stepMode = stepMode;
-            notifyChange();
-        }
+        if (stepMode == this.stepMode) return;
+        this.stepMode = stepMode;
+        notifyChange();
     }
 
     public int getPlayerNumber(@NotNull Player player) {
