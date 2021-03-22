@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class Wall extends BoardElement {
+    //todo: should this really be a class still? It is very small
 
     /**
      * <p>Creates a new wall with a given position.</p>

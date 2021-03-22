@@ -1,5 +1,18 @@
 {
   "width" : 8,
   "height" : 8,
-  "spaces" : []
+  "spaces" : [
+    {
+      "x" : 0,
+      "y" : 0,
+      "boardElements" : [
+        {
+          "CLASSNAME" : "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE" : {
+            "position" : "NORTH"
+          }
+        }
+      ]
+    }
+  ]
 }

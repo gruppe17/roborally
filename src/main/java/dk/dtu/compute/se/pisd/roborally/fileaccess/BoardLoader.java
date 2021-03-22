@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
@@ -53,23 +52,25 @@ public class BoardLoader {
      * @return a new board that was generated from a file
      * @throws IOException
      */
-    public static Board loadBoard(String boardname) {
-        if (boardname == null) {
-            boardname = DEFAULTBOARD;
+    public static Board loadBoard(String boardName) {
+        if (boardName == null) {
+            boardName = DEFAULTBOARD;
         }
 
         ClassLoader classLoader = BoardLoader.class.getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardname + "." + JSON_EXT);
+        InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + "." + JSON_EXT);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
             return new Board(8,8);
         }
 
-		// In simple cases, we can create a Gson object with new Gson():
+
+		// In simple cases, we can create a Gson object with: new Gson()
         GsonBuilder simpleBuilder = new GsonBuilder().registerTypeAdapter(
                 BoardElement.class, new Adapter<BoardElement>());
         //new GsonBuilder().registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
+
 
 		Board result;
 		// FileReader fileReader = null;
@@ -110,7 +111,7 @@ public class BoardLoader {
     /**
      * <p>Saves a {@link Board} to as a jason file.</p>
      * @param board The board to save
-     * @param fileName the name of the file that should be written to
+     * @param name the name of the file that should be written to
      */
     public static void saveBoard(Board board, String name) {
         BoardTemplate template = new BoardTemplate();
