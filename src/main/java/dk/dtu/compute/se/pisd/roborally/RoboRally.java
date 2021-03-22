@@ -23,7 +23,7 @@ package dk.dtu.compute.se.pisd.roborally;
 
 import dk.dtu.compute.se.pisd.roborally.controller.AppController;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.view.BoardView;
+import dk.dtu.compute.se.pisd.roborally.view.board.GameView;
 import dk.dtu.compute.se.pisd.roborally.view.RoboRallyMenuBar;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -44,7 +44,7 @@ public class RoboRally extends Application {
     private static final int MIN_APP_HEIGHT = 750;
 
     private Stage stage;
-    private BorderPane boardRoot;
+    private BorderPane gameRoot;
     // private RoboRallyMenuBar menuBar;
 
     // private AppController appController;
@@ -64,15 +64,15 @@ public class RoboRally extends Application {
         // the board view (which initially is empty); it will be filled
         // when the user creates a new game or loads a game
         RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
-        boardRoot = new BorderPane();
-        VBox vbox = new VBox(menuBar, boardRoot);
+        gameRoot = new BorderPane();
+        VBox vbox = new VBox(menuBar, gameRoot);
         vbox.setMinWidth(MIN_APP_WIDTH);
 
         bindWidth(menuBar, vbox.widthProperty(), 1);
 
-        bindWidth(boardRoot, vbox.widthProperty(), 1);
-        boardRoot.minHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
-        boardRoot.maxHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+        bindWidth(gameRoot, vbox.widthProperty(), 1);
+        gameRoot.minHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+        gameRoot.maxHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
 
         Scene primaryScene = new Scene(vbox);
         //bindSize(vbox, primaryStage.widthProperty(), primaryStage.heightProperty(), 1, 1);
@@ -90,16 +90,16 @@ public class RoboRally extends Application {
         stage.show();
     }
 
-    public void createBoardView(GameController gameController) {
-        // if present, remove old BoardView
-        boardRoot.getChildren().clear();
+    public void createGameView(GameController gameController) {
+        // if present, remove old GameView
+        gameRoot.getChildren().clear();
 
         if (gameController != null) {
-            ((VBox)boardRoot.parentProperty().get()).setMinHeight(MIN_APP_HEIGHT);
-            // create and add view for new board
-            BoardView boardView = new BoardView(gameController);
-            bindSize(boardView, boardRoot, 1, 1);
-            boardRoot.setCenter(boardView);
+            ((VBox) gameRoot.parentProperty().get()).setMinHeight(MIN_APP_HEIGHT);
+            // create and add view for new game
+            GameView gameView = new GameView(gameController);
+            bindSize(gameView, gameRoot, 1, 1);
+            gameRoot.setCenter(gameView);
         }
 
         stage.sizeToScene();

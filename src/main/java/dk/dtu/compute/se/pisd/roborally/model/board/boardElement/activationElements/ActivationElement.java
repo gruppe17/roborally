@@ -18,8 +18,8 @@ public abstract class ActivationElement extends BoardElement {
      */
     protected int priority;
 
-    protected ActivationElement(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
-        super(impassableFrom, opaqueFrom, direction);
+    protected ActivationElement(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
+        super(position, impassableFrom, opaqueFrom, direction);
         this.space = space;
         this.priority = priority;
     }

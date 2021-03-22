@@ -19,9 +19,12 @@ public class MoveHazard extends ActivationElement {
      */
     public int distance;
 
+    public MoveHazard(Heading direction, Space space, int priority, int rotation, int distance){
+        this(new Heading[0], new Heading[0], direction, space, priority, rotation, distance);
+    }
 
     protected MoveHazard(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority, int rotation, int distance){
-        super(impassableFrom, opaqueFrom, direction, space, priority);
+        super(new Heading[0], impassableFrom, opaqueFrom, direction, space, priority);
         this.rotation = rotation;
         this.distance = distance;
     }
