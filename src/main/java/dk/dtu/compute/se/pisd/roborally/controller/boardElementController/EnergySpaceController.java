@@ -1,7 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.EnergySpace;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
 
 public class EnergySpaceController implements IBoardElementController {
 
