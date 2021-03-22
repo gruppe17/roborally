@@ -16,7 +16,7 @@ public class EnergySpaceController implements IBoardElementController {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
 
-        if(model.getHasEnergyCube() || player.board.getStep() == 5){
+        if(model.getHasEnergyCube() || player.game.getStep() == 5){
             player.addEnergyCubes(1);
             model.setHasEnergyCube(false);
         }
