@@ -7,6 +7,12 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>The controller for a {@link Player}.</p>
+ *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
+ */
 public class PlayerController implements ILaser {
     Player player;
 
@@ -21,25 +27,43 @@ public class PlayerController implements ILaser {
      *
      * @param direction The direction in which to move
      * @param distance  The amount of spaces to move
+     * @return the distance moved by the player
      * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see #moveForward(int)
      */
-    public void move(@NotNull Heading direction, int distance) {
+    public int move(@NotNull Heading direction, int distance) {
         Space currentSpace = player.getSpace();
-        if (currentSpace == null) return;
-        for (int i = 0; i < distance; i++) {
+        if (currentSpace == null) return -1;
+
+        int distanceMoved;
+        for (distanceMoved = 0; distanceMoved < distance; distanceMoved++) {
             Space target = currentSpace.board.getNeighbour(currentSpace, direction);
             if (target == null) break;
-            if (target.getPlayer() != null) { //If there's a player on the target, try to move them.
-                target.getPlayer().playerController.move(direction, distance - i);
-                if (target.getPlayer() != null) {//If they are still there, break
-                    break;
-                }
-            }
+
+            if (!pushRobots(target, direction, distance - distanceMoved)) break;
             currentSpace = target;
         }
         player.setSpace(currentSpace); //identical to target.setPlayer(player);
+        return distanceMoved;
+    }
 
+    /**
+     * <p>Tries to push the robot on the specified space in the
+     * specified direction by the specified distance distance.
+     * Returns the whether the space was cleared regardless of
+     * whether the it was already vacant.</p>
+     *
+     * @param space     the space whose robot is to be pushed
+     * @param direction the direction in which to push the robot
+     * @param distance  the distance to push the robot
+     * @return true no robot remains on the specified space
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private boolean pushRobots(@NotNull Space space, @NotNull Heading direction, int distance) {
+        if (space.getPlayer() == null) return true;
+        space.getPlayer().playerController.move(direction, distance);
+        if (space.getPlayer() == null) return true;
+        return false;
     }
 
     /**
@@ -59,7 +83,7 @@ public class PlayerController implements ILaser {
      * <p>Moves the player forward by one</p>
      * <p>Identical to {@code moveForward(1)}</p>
      *
-     * @see #moveForward(int) 
+     * @see #moveForward(int)
      */
     public void moveForward() {
         moveForward(1);
@@ -69,8 +93,8 @@ public class PlayerController implements ILaser {
      * <p>Moves the player forward by two</p>
      * <p>Identical to {@code moveForward(2)}</p>
      *
-     * @deprecated 
-     * @see #moveForward(int) 
+     * @see #moveForward(int)
+     * @deprecated
      */
     public void fastForward() {
         moveForward(2);
@@ -109,8 +133,9 @@ public class PlayerController implements ILaser {
 
     /**
      * Returns a random CommandCard
-     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     *
      * @return
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
@@ -120,9 +145,12 @@ public class PlayerController implements ILaser {
 
     /**
      * adds a card to an empty card field if possible
+     *
      * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @deprecated
      */
     public void addCard(CommandCard card) {
+        //Seems identical to drawCard? I assume it was just partially renamed, but not done automatically?
         CommandCardField emptyCardField = player.getEmptyCardField();
 
         if (emptyCardField == null || card == null) return;
@@ -130,14 +158,64 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * adds a random card to an empty card field if possible
+     * <p>Adds a {@link CommandCard} to the player's deck</p>
+     *
+     * @param card the card to be added to the player's deck
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void addCardToDeck(CommandCard card) {
+        //Todo: Should be moved to different class.
+        // maybe like a deck class or something.
+    }
+
+    /**
+     * Adds a random card to an empty card field if possible
+     *
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
-    private void drawCard(){
+    public void drawCard() {
         CommandCardField emptyCardField = player.getEmptyCardField();
-        if(emptyCardField == null) return;
+        if (emptyCardField == null) return;
 
         emptyCardField.setCard(generateRandomCommandCard());
+    }
+
+    /**
+     * <p>Draws cards until the player's hand is full.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void fillHand() {
+        //todo: The player should probably keep track of their hand.
+        //      If this is called while the player is programming their robot
+        //      the cards in the registers are not counted.
+        while (player.getEmptyCardField() != null) {
+            drawCard();
+        }
+    }
+
+    /**
+     * <p>Discards the player's current hand.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void discardHand() {
+        for (CommandCardField cCField : player.getHand()) {
+            cCField.setCard(null);
+        }
+    }
+
+    /**
+     * <p>Discards the player's current program.
+     * That is, discards the cards currently in
+     * the player's registers.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void discardProgram() {
+        for (CommandCardField cCField : player.getProgram()) {
+            cCField.setCard(null);
+        }
     }
 
     /**
@@ -146,6 +224,7 @@ public class PlayerController implements ILaser {
      * limit. Any robot in the line of sight is
      * shot. Robot lasers cannot fire through
      * walls or shoot more than one robot.</p>
+     *
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     @Override
@@ -158,7 +237,7 @@ public class PlayerController implements ILaser {
             return;
         while (true) {
             /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
             Player playerAtSpace = lastSpace.getPlayer();
             /* remember to add the right elements to prevent hitting walls and stuff here */
            /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
@@ -190,7 +269,7 @@ public class PlayerController implements ILaser {
         /*Maybe do some cleanup of fx here?*/
         while (true) {
             /* get next space */
-            lastSpace = player.board.getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
             if (lastSpace == null) {
                 break;
             }
