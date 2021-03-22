@@ -5,7 +5,7 @@ import dk.dtu.compute.se.pisd.roborally.Utils.imageFinder.BoardElementImageFinde
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class BoardElementView extends Pane implements ViewObserver {
+public class BoardElementView extends StackPane implements ViewObserver {
 
     private BoardElementImageFinder imageFinder;
     private ImageView imageView;
@@ -49,7 +49,7 @@ public class BoardElementView extends Pane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void fitImageSize() {
-        //imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
     }

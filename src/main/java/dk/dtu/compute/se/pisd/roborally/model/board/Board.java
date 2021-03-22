@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +67,7 @@ public class Board {
         spaces[3][1].addBoardElement(new Wall(Heading.EAST));
         spaces[7][0].addBoardElement(new Wall(Heading.WEST));
         spaces[1][2].addBoardElement(new Wall(Heading.SOUTH));
-
+        spaces[4][3].addBoardElement(new EnergySpace(spaces[4][3]));
         //TODO: implement this for real
         prioritySpace = spaces[1][1];
     }

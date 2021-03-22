@@ -35,6 +35,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
 public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
@@ -61,6 +62,8 @@ public class Player extends Subject {
 
     private CommandCardField[] program;
     private CommandCardField[] hand;
+
+    private int energyCubes;
 
     public Player(@NotNull Game game, String color, @NotNull String name) {
         playerController = new PlayerController(this);
@@ -153,12 +156,13 @@ public class Player extends Subject {
     }
 
     public void setHeading(@NotNull Heading heading) {
-        if (heading != this.heading) {
-            this.heading = heading;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
+        if (heading == this.heading) return;
+
+        this.heading = heading;
+        notifyChange();
+
+        if (space != null) {
+            space.playerChanged();
         }
     }
 
@@ -210,4 +214,37 @@ public class Player extends Subject {
         }
         return null;
     }
+
+    /**
+     * Get the amount of energy cubes held by robot
+     *
+     * @return amount of energy cubes owned by player.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public int getEnergyCubes() {
+        return energyCubes;
+    }
+
+    /**
+     * set the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void setEnergyCubes(int amount) {
+        this.energyCubes = amount;
+        notifyChange();
+    }
+
+    /**
+     * add to the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void addEnergyCubes(int amount) {
+        setEnergyCubes(this.energyCubes + amount);
+    }
+
+
 }
