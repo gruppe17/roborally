@@ -19,14 +19,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.model;
+package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Phase.INITIALISATION;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Phase.INITIALISATION;
 
 /**
  * ...
@@ -88,8 +92,15 @@ public class Board extends Subject {
                 spaces[x][y] = space;
             }
         }
+
+        spaces[0][0].addBoardElement(new Wall(Heading.NORTH));
+        spaces[5][5].addBoardElement(new Wall(Heading.EAST));
+        spaces[3][1].addBoardElement(new Wall(Heading.EAST));
+        spaces[7][0].addBoardElement(new Wall(Heading.WEST));
+        spaces[1][2].addBoardElement(new Wall(Heading.SOUTH));
+
         //TODO: implement this for real
-        prioritySpace = spaces[0][0];
+        prioritySpace = spaces[1][1];
         this.stepMode = false;
     }
 
@@ -216,6 +227,8 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
+        //todo: Maybe a space should know its own neighbours?
+        if (space.containsObstacleTo(heading)) return null;
         int x = space.x;
         int y = space.y;
         switch (heading) {
@@ -233,18 +246,9 @@ public class Board extends Subject {
                 break;
         }
 
-        return getSpace(x, y);
-    }
-
-    public String getStatusMessage() {
-        // this is actually a view aspect, but for making assignment V1 easy for
-        // the students, this method gives a string representation of the current
-        // status of the game
-
-        // XXX: V2 changed the status so that it shows the phase, the player and the step
-        return "Phase: " + getPhase().name() +
-                ", Player = " + getCurrentPlayer().getName() +
-                ", Step: " + getStep();
+        Space neighbor = getSpace(x, y);
+        if (neighbor.containsObstacleFrom(heading.prev().prev())) return null;
+        return neighbor;
     }
 
     /**
@@ -309,7 +313,7 @@ public class Board extends Subject {
      * @return Returns a boolean indicating whether the activation queue is empty or the next element is null
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public boolean isActivationQueueEmpty() {
+    public boolean isPlayerActivationQueueEmpty() {
         return playerActivationQueue.isEmpty() || playerActivationQueue.peek() == null;
     }
 

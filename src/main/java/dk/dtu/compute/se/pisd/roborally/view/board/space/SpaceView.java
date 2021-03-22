@@ -19,12 +19,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.view;
+package dk.dtu.compute.se.pisd.roborally.view.board.space;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -35,38 +37,61 @@ import java.util.Random;
 
 
 /**
- * ...
+ * <p>The view of a {@link Space}.</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
 public class SpaceView extends StackPane implements ViewObserver {
-
-    final public static int SPACE_HEIGHT = 75; // 60; // 75;
-    final public static int SPACE_WIDTH = 75;  // 60; // 75;
-
+    /**
+     * <p>The path of the image used for all spaces
+     * relative to the resources directory.</p>
+     */
     final private static String FACTORY_FLOOR_IMAGE_PATH = "images/tiles/factoryFloor.png";
 
+    /**
+     * <p>The {@link Space} this is a view of.</p>
+     */
     public final Space space;
+
+    /**
+     * <p>The {@link ImageView} on which the image of
+     * the {@link #space} is drawn.</p>
+     */
     public final ImageView imageView;
-    private BoardElementView boardElementView;
+
+    /**
+     * <p>The view of all the {@link BoardElement}s</p>
+     */
+    private SpaceBoardElementsView boardElementsView;
+
+    /**
+     * <p>On this panel, a robot on the space is displayed.</p>
+     */
+    private StackPane robotPane;
+
 
     private Random random = new Random();
 
+    /**
+     * <p>Create a new view of the specified {@link Space}.</p>
+     * @param space the {@link Space} for which a new view is to be made
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
-        // XXX the following styling should better be done with styles
         imageView = new ImageView(FACTORY_FLOOR_IMAGE_PATH);
-        this.getChildren().add(imageView);
         setImageSize(imageView);
         rotateToRandomDirection(imageView);
 
-        initBoardElementView();
+        initBoardElementsView();
 
+        robotPane = new StackPane();
+        RoboRally.bindSize(robotPane, this, 1, 1);
 
-        // updatePlayer();
+        addBackChildren();
 
         // This space view should listen to changes of the space
         space.attach(this);
@@ -74,47 +99,48 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
     /**
-     * <p>Initializes {@link #boardElementView}. Simply returns if the
-     * {@link dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement}
-     * of {@link #space} is {@code null}</p>
+     * <p>Initializes {@link #boardElementsView} to a
+     * new {@link SpaceBoardElementsView}.</p>
+     *
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void initBoardElementView(){
-        if (space.element == null) return;
-        boardElementView = new BoardElementView(space.element);
-        this.getChildren().add(boardElementView);
-        RoboRally.bindSize(boardElementView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+    private void initBoardElementsView() {
+        boardElementsView = new SpaceBoardElementsView(space);
+        //RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
+        RoboRally.bindSize(boardElementsView, this, 1, 1);
     }
+
 
     /**
      * <p>Randomly sets an {@link ImageView}'s rotation to be either 0°, 90°, 180° or 270°.</p>
+     *
      * @param imageView the ImageView to rotate
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void rotateToRandomDirection(ImageView imageView){
+    private void rotateToRandomDirection(@NotNull ImageView imageView) {
         imageView.setRotate(random.nextInt(4) * 90);
     }
 
     /**
      * <p>Sets the size of an {@link ImageView}. This is done by binding it the this {@link SpaceView}</p>
+     *
      * @param imageView the ImageView to set the size of
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    private void setImageSize(ImageView imageView){
-        imageView.setPreserveRatio(true);
+    private void setImageSize(@NotNull ImageView imageView) {
+        //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
     }
 
+
+    /**
+     * <p>Draws or removes the player where needed.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     private void updatePlayer() {
-        //When it is established what a player is on the board, then it can simply be checked
-        // if the last element is a player and then only remove that element
-        this.getChildren().clear();
-        this.getChildren().add(imageView);
-        if (space.element != null){
-            if (boardElementView == null) initBoardElementView();
-            this.getChildren().add(boardElementView);
-        }
+        robotPane.getChildren().clear();
 
         Player player = space.getPlayer();
         if (player != null) {
@@ -128,8 +154,21 @@ public class SpaceView extends StackPane implements ViewObserver {
             }
 
             arrow.setRotate((90 * player.getHeading().ordinal()) % 360);
-            this.getChildren().add(arrow);
+            robotPane.getChildren().add(arrow);
         }
+
+    }
+
+    /**
+     * <p>Adds the children of this space excluding a potential player.</p>
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @deprecated
+     */
+    private void addBackChildren() {
+        this.getChildren().add(imageView);
+        this.getChildren().add(boardElementsView);
+        this.getChildren().add(robotPane);
     }
 
     @Override

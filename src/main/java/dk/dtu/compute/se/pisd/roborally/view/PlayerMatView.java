@@ -25,6 +25,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,6 +36,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+//Todo: while it's all related this class does a lot of things.
+// Maybe it would be more readable if it was split into multiple classes?
+
 /**
  * <p>This class represents a players view. I.e. something akin the player mat.
  * NOTICE: this is not the view for the robot.</p>
@@ -42,7 +47,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  *
  */
-public class PlayerView extends Tab implements ViewObserver {
+public class PlayerMatView extends Tab implements ViewObserver {
 
     /**
      * The player which this is a view for.
@@ -113,14 +118,14 @@ public class PlayerView extends Tab implements ViewObserver {
     private GameController gameController;
 
 
-    //todo: move to PlayerView
+    //todo: move to PlayerMatsView
     private VBox buttonPanel;
     private Button finishButton;
     private Button executeButton;
     private Button stepButton;
 
 
-    public PlayerView(@NotNull GameController gameController, @NotNull Player player) {
+    public PlayerMatView(@NotNull GameController gameController, @NotNull Player player) {
         super(player.getName());
         this.setStyle("-fx-text-base-color: " + player.getColor() + ";");
 

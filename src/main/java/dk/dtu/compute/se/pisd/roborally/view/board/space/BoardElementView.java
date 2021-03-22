@@ -1,11 +1,11 @@
-package dk.dtu.compute.se.pisd.roborally.view;
+package dk.dtu.compute.se.pisd.roborally.view.board.space;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.imageFinder.BoardElementImageFinder;
-import dk.dtu.compute.se.pisd.roborally.model.boardElement.BoardElement;
-import javafx.scene.image.Image;
+import dk.dtu.compute.se.pisd.roborally.Utils.imageFinder.BoardElementImageFinder;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,18 +14,18 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class BoardElementView extends BorderPane implements ViewObserver {
-
+public class BoardElementView extends Pane implements ViewObserver {
 
     private BoardElementImageFinder imageFinder;
     private ImageView imageView;
+    private int rotation = 0;
 
     public BoardElementView(@NotNull BoardElement boardElement) {
         imageFinder = new BoardElementImageFinder();
 
         imageView = new ImageView();
         initImageView(boardElement);
-        this.setCenter(imageView);
+        this.getChildren().add(imageView);
 
         //Should listen for changes to the board element.
         boardElement.attach(this);
@@ -38,9 +38,9 @@ public class BoardElementView extends BorderPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void initImageView(BoardElement boardElement) {
-        imageView.setImage(new Image(imageFinder.getImagePath(boardElement)));
-        fitImageSize();
+        imageView.setImage(imageFinder.getImage(boardElement));
         updateRotation(boardElement);
+        fitImageSize();
     }
 
     /**
@@ -49,9 +49,9 @@ public class BoardElementView extends BorderPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void fitImageSize() {
+        //imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(this.widthProperty());
         imageView.fitHeightProperty().bind(this.heightProperty());
-        imageView.setPreserveRatio(true);
     }
 
     /**
@@ -63,9 +63,8 @@ public class BoardElementView extends BorderPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void updateRotation(BoardElement boardElement) {
-        int direction = 0;
-        if (boardElement.getDirection() != null) direction = boardElement.getDirection().ordinal();
-        imageView.setRotate(direction * 90);
+        if (boardElement.getDirection() != null) rotation = boardElement.getDirection().ordinal();
+        imageView.setRotate(rotation * 90);
     }
 
 

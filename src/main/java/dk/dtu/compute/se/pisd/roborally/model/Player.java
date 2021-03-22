@@ -23,9 +23,12 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
 /**
  * ...
@@ -85,13 +88,17 @@ public class Player extends Subject {
         return name;
     }
 
-    public void setName(String name) {
-        if (name != null && !name.equals(this.name)) {
-            this.name = name;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
+    /**
+     * <p>Sets the name of the player.</p>
+     * @param name a string containing the name of the player
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void setName(@NotNull String name) {
+        if (name == null || name.equals(this.name)) return;
+        this.name = name;
+        notifyChange();
+        if (space != null) {
+            space.playerChanged();
         }
     }
 
@@ -118,28 +125,29 @@ public class Player extends Subject {
     }
 
     /**
-     * <p>Sets the {@link #space} the player currently is on to the argument
-     * and sets the player on the argument space to this player.
-     * If the player previously was on a space then that space's player
+     * <p>Sets the {@link #space} the player currently is on to the specified
+     * {@link Space} and sets the player on the specified {@link Space} to this
+     * player. If the player previously was on a space then that space's player
      * is set to null.</p>
      *
      * @param space the space that this player should be on
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Space#setPlayer(Player)
      */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
-        if (space != oldSpace &&
-                (space == null || space.board == this.board)) {
-            this.space = space;
-            if (oldSpace != null) {
-                oldSpace.setPlayer(null);
-            }
-            if (space != null) {
-                space.setPlayer(this);
-                distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
-            } else distanceToPrioritySpace = -1;
-            notifyChange();
+        if (space == oldSpace) return;
+        if (space != null && space.board != this.board) return;
+
+        this.space = space;
+        if (oldSpace != null) {
+            oldSpace.setPlayer(null);
         }
+        if (space != null) {
+            space.setPlayer(this);
+            distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
+        } else distanceToPrioritySpace = -1;
+        notifyChange();
     }
 
     public Heading getHeading() {
