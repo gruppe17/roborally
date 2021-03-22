@@ -2,6 +2,7 @@ package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.scene.image.Image;
 
@@ -35,6 +36,10 @@ public class BoardElementImageFinder {
             Heading direction = boardElement.getDirection();
             if (direction == Heading.NORTH) return BASE_DIRECTORY + WALLS + "wallShadeEast.png";
             return BASE_DIRECTORY + WALLS + "wallShadeNorth.png";
+        }
+
+        if (boardElement instanceof EnergySpace){
+            return BASE_DIRECTORY + "energySpace.png";
         }
 
         return "";
