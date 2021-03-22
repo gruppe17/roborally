@@ -9,7 +9,10 @@
         {
           "CLASSNAME" : "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
           "INSTANCE" : {
-            "position" : "NORTH"
+            "position" : ["NORTH"],
+            "impassableFrom" : ["NORTH", "SOUTH"],
+            "opaqueFrom" : ["NORTH", "SOUTH"],
+            "direction" : "NORTH"
           }
         }
       ]

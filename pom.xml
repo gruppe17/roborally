@@ -20,9 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>15.0.1</javafx.version>
 
-        <resources>
-            src/main/resources
-        </resources>
     </properties>
 
 
@@ -73,6 +70,11 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/config</directory>
+            </resource>
+        </resources>
         <!-- we use default maven directory structure as indicated below
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <resources>

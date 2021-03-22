@@ -26,6 +26,8 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
+import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
+import dk.dtu.compute.se.pisd.roborally.dal.RepositoryAccess;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
@@ -75,7 +77,9 @@ public class AppController implements Observer {
 
         // XXX the board should eventually be created programmatically or loaded from a file
         //     here we just create an empty board with the required number of players.
-        Board board = BoardLoader.loadBoard("test2");//new Board(8, 8);
+        //Board board = BoardLoader.loadBoard("test");//new Board(8, 8);
+        Board board = new Board(8, 8);
+        BoardLoader.saveBoard(board, "test3");
         Game game = new Game(board);
         gameController = new GameController(game);
         int no = result.get();
@@ -84,6 +88,7 @@ public class AppController implements Observer {
             game.addPlayer(player);
             player.setSpace(board.getSpace(i % board.width, i));
         }
+
 
         // XXX: V2
         // board.setCurrentPlayer(board.getPlayer(0));
@@ -101,7 +106,8 @@ public class AppController implements Observer {
         // XXX needs to be implememted eventually
         // for now, we just create a new game
         if (gameController != null) return;
-        newGame();
+        GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
+        //ChoiceDialog<String> dialog = new ChoiceDialog<>(gameInDBs.)
     }
 
     /**

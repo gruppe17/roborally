@@ -52,6 +52,7 @@ public abstract class Subject {
 	 * @param observer the observer who registers
 	 */
 	final public void attach(Observer observer) {
+		if (observers == null) observers = Collections.newSetFromMap(new WeakHashMap<>());
 		observers.add(observer);
 	}
 	
@@ -62,6 +63,7 @@ public abstract class Subject {
 	 * @param observer the observer who unregisters
 	 */
 	final public void detach(Observer observer) {
+		if (observers == null) return;
 		observers.remove(observer);
 	}
 	
@@ -71,6 +73,7 @@ public abstract class Subject {
 	 * relevant for the observer).
 	 */
 	final protected void notifyChange() {
+		if (observers == null) return;
 		for (Observer observer: observers) {
 			observer.update(this);
 		}

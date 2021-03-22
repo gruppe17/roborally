@@ -30,16 +30,7 @@ package dk.dtu.compute.se.pisd.roborally.model.enums;
  */
 public enum Heading {
     /**
-     * <p>Represents the vector</p>
-     * <table cellspacing="0" cellpadding="0"><tbody><tr>
-     *         <td><nobr><font style="font-size:3.1em; font-weight:1" >(</font></nobr></td>
-     *         <td><table><tbody>
-     *             <tr><td align="center">0</td></tr>
-     *             <tr><td align="center">&minus;1</td></tr>
-     *         </tbody></table></td>
-     *     <td><font style="font-size:3.1em">)</font></td>
-     * </tr></tbody></table>
-     *
+     * <p>Represents the vector (0, -1)</p>
      */
     SOUTH,
     /**
