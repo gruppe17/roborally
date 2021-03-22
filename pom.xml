@@ -19,7 +19,13 @@
         <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>15.0.1</javafx.version>
+
+        <resources>
+            src/main/resources
+        </resources>
     </properties>
+
+
 
     <dependencies>
         <!-- Note that the dependencies here include some more dependencies

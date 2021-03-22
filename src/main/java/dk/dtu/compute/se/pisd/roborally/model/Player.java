@@ -22,23 +22,26 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
+import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
 /**
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
- *
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
 public class Player extends Subject {
-
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
-
-    final public Board board;
+    final public PlayerController playerController;
+    final public Game game;
 
     private String name;
     private String color;
@@ -58,10 +61,14 @@ public class Player extends Subject {
     private Heading heading = SOUTH;
 
     private CommandCardField[] program;
-    private CommandCardField[] cards;
+    private CommandCardField[] hand;
 
-    public Player(@NotNull Board board, String color, @NotNull String name) {
-        this.board = board;
+    private int energyCubes;
+
+    public Player(@NotNull Game game, String color, @NotNull String name) {
+        playerController = new PlayerController(this);
+
+        this.game = game;
         this.name = name;
         this.color = color;
 
@@ -72,9 +79,9 @@ public class Player extends Subject {
             program[i] = new CommandCardField(this);
         }
 
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        hand = new CommandCardField[NO_CARDS];
+        for (int i = 0; i < hand.length; i++) {
+            hand[i] = new CommandCardField(this);
         }
     }
 
@@ -82,13 +89,17 @@ public class Player extends Subject {
         return name;
     }
 
-    public void setName(String name) {
-        if (name != null && !name.equals(this.name)) {
-            this.name = name;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
+    /**
+     * <p>Sets the name of the player.</p>
+     * @param name a string containing the name of the player
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void setName(@NotNull String name) {
+        if (name == null || name.equals(this.name)) return;
+        this.name = name;
+        notifyChange();
+        if (space != null) {
+            space.playerChanged();
         }
     }
 
@@ -115,28 +126,29 @@ public class Player extends Subject {
     }
 
     /**
-     * <p>Sets the {@link #space} the player currently is on to the argument
-     * and sets the player on the argument space to this player.
-     * If the player previously was on a space then that space's player
+     * <p>Sets the {@link #space} the player currently is on to the specified
+     * {@link Space} and sets the player on the specified {@link Space} to this
+     * player. If the player previously was on a space then that space's player
      * is set to null.</p>
      *
      * @param space the space that this player should be on
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      * @see Space#setPlayer(Player)
      */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
-        if (space != oldSpace &&
-                (space == null || space.board == this.board)) {
-            this.space = space;
-            if (oldSpace != null) {
-                oldSpace.setPlayer(null);
-            }
-            if (space != null) {
-                space.setPlayer(this);
-                distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
-            } else distanceToPrioritySpace = -1;
-            notifyChange();
+        if (space == oldSpace) return;
+        if (space != null && space.board != game.getBoard()) return;
+
+        this.space = space;
+        if (oldSpace != null) {
+            oldSpace.setPlayer(null);
         }
+        if (space != null) {
+            space.setPlayer(this);
+            distanceToPrioritySpace = game.getBoard().getRectilinearDistanceToPrioritySpace(space);
+        } else distanceToPrioritySpace = -1;
+        notifyChange();
     }
 
     public Heading getHeading() {
@@ -144,12 +156,13 @@ public class Player extends Subject {
     }
 
     public void setHeading(@NotNull Heading heading) {
-        if (heading != this.heading) {
-            this.heading = heading;
-            notifyChange();
-            if (space != null) {
-                space.playerChanged();
-            }
+        if (heading == this.heading) return;
+
+        this.heading = heading;
+        notifyChange();
+
+        if (space != null) {
+            space.playerChanged();
         }
     }
 
@@ -167,8 +180,71 @@ public class Player extends Subject {
         return program[i];
     }
 
-    public CommandCardField getCardField(int i) {
-        return cards[i];
+    /**
+     * <p>Returns the player's current program.</p>
+     * @return a CommandCardField array containing the player's current program
+     */
+    public CommandCardField[] getProgram(){
+        return program;
     }
+
+    public CommandCardField getHandField(int i) {
+        return hand[i];
+    }
+
+    /**
+     * <p>Returns the player's current hand.</p>
+     * @return a CommandCardField array containing the player's current hand
+     */
+    public CommandCardField[] getHand(){
+        return hand;
+    }
+
+    /**
+     * <p>Get an empty CommandCardField in players deck.</p>
+     *
+     * @return first empty card field or null if there isn't any.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public CommandCardField getEmptyCardField() {
+        for (CommandCardField cardField : hand) {
+            if (cardField.getCard() == null) {
+                return cardField;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get the amount of energy cubes held by robot
+     *
+     * @return amount of energy cubes owned by player.
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     */
+    public int getEnergyCubes() {
+        return energyCubes;
+    }
+
+    /**
+     * set the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void setEnergyCubes(int amount) {
+        this.energyCubes = amount;
+        notifyChange();
+    }
+
+    /**
+     * add to the amount of energy cubes held by robot
+     *
+     * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void addEnergyCubes(int amount) {
+        setEnergyCubes(this.energyCubes + amount);
+    }
+
 
 }

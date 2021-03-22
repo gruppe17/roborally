@@ -23,42 +23,44 @@ package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
-import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.view.board.GameView;
 import javafx.scene.control.TabPane;
 
 /**
- * ...
+ * <p>The area of the {@link GameView} where the player mats
+ * are displayed as well as the container for the
+ * {@link PlayerMatView}s</p>
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class PlayersView extends TabPane implements ViewObserver {
+public class PlayerMatsView extends TabPane implements ViewObserver {
 
-    private Board board;
+    private Game game;
 
-    private PlayerView[] playerViews;
+    private PlayerMatView[] playerMatViews;
 
-    public PlayersView(GameController gameController) {
-        board = gameController.board;
+    public PlayerMatsView(GameController gameController) {
+        game = gameController.game;
 
         this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-        playerViews = new PlayerView[board.getPlayersNumber()];
-        for (int i = 0; i < board.getPlayersNumber(); i++) {
-            playerViews[i] = new PlayerView(gameController, board.getPlayer(i));
-            this.getTabs().add(playerViews[i]);
+        playerMatViews = new PlayerMatView[game.getNumPlayers()];
+        for (int i = 0; i < game.getNumPlayers(); i++) {
+            playerMatViews[i] = new PlayerMatView(gameController, game.getPlayer(i));
+            this.getTabs().add(playerMatViews[i]);
         }
-        board.attach(this);
-        update(board);
+        game.attach(this);
+        update(game);
     }
 
     @Override
     public void updateView(Subject subject) {
-        if (subject == board) {
-            Player current = board.getCurrentPlayer();
-            this.getSelectionModel().select(board.getPlayerNumber(current));
-        }
+        if (subject != game) return;
+        Player current = game.getCurrentPlayer();
+        this.getSelectionModel().select(game.getPlayerNumber(current));
     }
 
 }

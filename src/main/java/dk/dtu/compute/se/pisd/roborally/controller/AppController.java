@@ -26,9 +26,10 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -65,32 +66,30 @@ public class AppController implements Observer {
         dialog.setHeaderText("Select number of players");
         Optional<Integer> result = dialog.showAndWait();
 
-        if (result.isPresent()) {
-            if (gameController != null) {
-                // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
-                if (!stopGame()) {
-                    return;
-                }
-            }
+        if (!result.isPresent()) return;
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
-            gameController = new GameController(board);
-            int no = result.get();
-            for (int i = 0; i < no; i++) {
-                Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
-                board.addPlayer(player);
-                player.setSpace(board.getSpace(i % board.width, i));
-            }
+        // The UI should not allow this, but in case this happens anyway.
+        // give the user the option to save the game or abort this operation!
+        if (gameController != null && !stopGame()) return;
 
-            // XXX: V2
-            // board.setCurrentPlayer(board.getPlayer(0));
-            gameController.startProgrammingPhase();
-
-            roboRally.createBoardView(gameController);
+        // XXX the board should eventually be created programmatically or loaded from a file
+        //     here we just create an empty board with the required number of players.
+        Board board = new Board(8, 8);
+        Game game = new Game(board);
+        gameController = new GameController(game);
+        int no = result.get();
+        for (int i = 0; i < no; i++) {
+            Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
+            game.addPlayer(player);
+            player.setSpace(board.getSpace(i % board.width, i));
         }
+
+        // XXX: V2
+        // board.setCurrentPlayer(board.getPlayer(0));
+        gameController.startProgrammingPhase();
+
+        roboRally.createGameView(gameController);
+
     }
 
     public void saveGame() {
@@ -100,9 +99,8 @@ public class AppController implements Observer {
     public void loadGame() {
         // XXX needs to be implememted eventually
         // for now, we just create a new game
-        if (gameController == null) {
-            newGame();
-        }
+        if (gameController != null) return;
+        newGame();
     }
 
     /**
@@ -115,16 +113,14 @@ public class AppController implements Observer {
      * @return true if the current game was stopped, false otherwise
      */
     public boolean stopGame() {
-        if (gameController != null) {
+        if (gameController == null) return false;
 
-            // here we save the game (without asking the user).
-            saveGame();
+        // here we save the game (without asking the user).
+        saveGame();
 
-            gameController = null;
-            roboRally.createBoardView(null);
-            return true;
-        }
-        return false;
+        gameController = null;
+        roboRally.createGameView(null);
+        return true;
     }
 
     public void exit() {
