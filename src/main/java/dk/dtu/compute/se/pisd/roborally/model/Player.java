@@ -40,7 +40,7 @@ public class Player extends Subject {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
     final public PlayerController playerController;
-    final public Board board;
+    final public Game game;
 
     private String name;
     private String color;
@@ -60,14 +60,12 @@ public class Player extends Subject {
     private Heading heading = SOUTH;
 
     private CommandCardField[] program;
-    private CommandCardField[] cards;
+    private CommandCardField[] hand;
 
-    private int energyCubes;
-
-    public Player(@NotNull Board board, String color, @NotNull String name) {
+    public Player(@NotNull Game game, String color, @NotNull String name) {
         playerController = new PlayerController(this);
 
-        this.board = board;
+        this.game = game;
         this.name = name;
         this.color = color;
 
@@ -78,9 +76,9 @@ public class Player extends Subject {
             program[i] = new CommandCardField(this);
         }
 
-        cards = new CommandCardField[NO_CARDS];
-        for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CommandCardField(this);
+        hand = new CommandCardField[NO_CARDS];
+        for (int i = 0; i < hand.length; i++) {
+            hand[i] = new CommandCardField(this);
         }
     }
 
@@ -137,7 +135,7 @@ public class Player extends Subject {
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space == oldSpace) return;
-        if (space != null && space.board != this.board) return;
+        if (space != null && space.board != game.getBoard()) return;
 
         this.space = space;
         if (oldSpace != null) {
@@ -145,7 +143,7 @@ public class Player extends Subject {
         }
         if (space != null) {
             space.setPlayer(this);
-            distanceToPrioritySpace = board.getRectilinearDistanceToPrioritySpace(space);
+            distanceToPrioritySpace = game.getBoard().getRectilinearDistanceToPrioritySpace(space);
         } else distanceToPrioritySpace = -1;
         notifyChange();
     }
@@ -178,18 +176,34 @@ public class Player extends Subject {
         return program[i];
     }
 
-    public CommandCardField getCardField(int i) {
-        return cards[i];
+    /**
+     * <p>Returns the player's current program.</p>
+     * @return a CommandCardField array containing the player's current program
+     */
+    public CommandCardField[] getProgram(){
+        return program;
+    }
+
+    public CommandCardField getHandField(int i) {
+        return hand[i];
     }
 
     /**
-     * Get an empty CommandCardField in players deck.
+     * <p>Returns the player's current hand.</p>
+     * @return a CommandCardField array containing the player's current hand
+     */
+    public CommandCardField[] getHand(){
+        return hand;
+    }
+
+    /**
+     * <p>Get an empty CommandCardField in players deck.</p>
      *
      * @return first empty card field or null if there isn't any.
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     public CommandCardField getEmptyCardField() {
-        for (CommandCardField cardField : cards) {
+        for (CommandCardField cardField : hand) {
             if (cardField.getCard() == null) {
                 return cardField;
             }

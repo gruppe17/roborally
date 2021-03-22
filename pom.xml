@@ -21,9 +21,7 @@
         <javafx.version>15.0.1</javafx.version>
 
         <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
+            src/main/resources
         </resources>
     </properties>
 

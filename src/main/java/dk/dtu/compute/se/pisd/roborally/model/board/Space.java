@@ -168,7 +168,7 @@ public class Space extends Subject {
     public void setPlayer(Player player) {
         Player oldPlayer = this.player;
         if (player == oldPlayer) return;
-        if (player != null && player.board != board) return;
+        if (player != null && player.game.getBoard() != board) return;
 
         this.player = player;
         if (oldPlayer != null) {
