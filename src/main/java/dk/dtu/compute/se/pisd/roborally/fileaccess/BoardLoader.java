@@ -25,11 +25,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * ...
@@ -43,6 +47,12 @@ public class BoardLoader {
     private static final String DEFAULTBOARD = "defaultboard";
     private static final String JSON_EXT = "json";
 
+    /**
+     * <p>Load a {@link Board} from a file and returns it.</p>
+     * @param boardName the name of the board which is to be loaded
+     * @return a new board that was generated from a file
+     * @throws IOException
+     */
     public static Board loadBoard(String boardname) {
         if (boardname == null) {
             boardname = DEFAULTBOARD;
@@ -56,8 +66,9 @@ public class BoardLoader {
         }
 
 		// In simple cases, we can create a Gson object with new Gson():
-        GsonBuilder simpleBuilder = new GsonBuilder().
-                registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
+        GsonBuilder simpleBuilder = new GsonBuilder().registerTypeAdapter(
+                BoardElement.class, new Adapter<BoardElement>());
+        //new GsonBuilder().registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
 
 		Board result;
@@ -70,10 +81,11 @@ public class BoardLoader {
 
 			result = new Board(template.width, template.height);
 			for (SpaceTemplate spaceTemplate: template.spaces) {
-			    Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
-			    if (space != null) {
-                    space.getActions().addAll(spaceTemplate.actions);
-                    space.getWalls().addAll(spaceTemplate.walls);
+                Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
+                if (space == null) continue;
+                //todo add all method in space?
+                for (BoardElement boardElement : spaceTemplate.boardElements) {
+                    space.addBoardElement(boardElement);
                 }
             }
 			reader.close();
@@ -94,22 +106,26 @@ public class BoardLoader {
 		return null;
     }
 
+
+    /**
+     * <p>Saves a {@link Board} to as a jason file.</p>
+     * @param board The board to save
+     * @param fileName the name of the file that should be written to
+     */
     public static void saveBoard(Board board, String name) {
         BoardTemplate template = new BoardTemplate();
         template.width = board.width;
         template.height = board.height;
 
         for (int i=0; i<board.width; i++) {
-            for (int j=0; j<board.height; j++) {
-                Space space = board.getSpace(i,j);
-                if (!space.getWalls().isEmpty() || !space.getActions().isEmpty()) {
-                    SpaceTemplate spaceTemplate = new SpaceTemplate();
-                    spaceTemplate.x = space.x;
-                    spaceTemplate.y = space.y;
-                    spaceTemplate.actions.addAll(space.getActions());
-                    spaceTemplate.walls.addAll(space.getWalls());
-                    template.spaces.add(spaceTemplate);
-                }
+            for (int j = 0; j < board.height; j++) {
+                Space space = board.getSpace(i, j);
+                if (space.getElements().length < 1) continue;
+                SpaceTemplate spaceTemplate = new SpaceTemplate();
+                spaceTemplate.x = space.x;
+                spaceTemplate.y = space.y;
+                spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
+                template.spaces.add(spaceTemplate);
             }
         }
 
@@ -127,9 +143,9 @@ public class BoardLoader {
         // But, if you need to configure it, it is better to create it from
         // a builder (here, we want to configure the JSON serialisation with
         // a pretty printer):
-        GsonBuilder simpleBuilder = new GsonBuilder().
+        GsonBuilder simpleBuilder = new GsonBuilder();/*.
                 registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>()).
-                setPrettyPrinting();
+                setPrettyPrinting();*/
         Gson gson = simpleBuilder.create();
 
         FileWriter fileWriter = null;

@@ -21,8 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.dal;
 
-import dk.dtu.compute.se.pisd.roborally.model.Board;
-import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.Game;
 
 import java.util.List;
 
@@ -34,11 +33,11 @@ import java.util.List;
  */
 public interface IRepository {
 	
- 	boolean createGameInDB(Board game);
+ 	boolean createGameInDB(Game game);
 	
-	boolean updateGameInDB(Board game);
+	boolean updateGameInDB(Game game);
 	
-	Board loadGameFromDB(int id);
+	Game loadGameFromDB(int id);
 	
 	List<GameInDB> getGames();
 

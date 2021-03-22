@@ -71,7 +71,7 @@ class Repository implements IRepository {
 	}
 
 	@Override
-	public boolean createGameInDB(Board game) {
+	public boolean createGameInDB(Game game) {
 		if (game.getGameId() != null) {
 			System.err.println("Game cannot be created in DB, since it has a game id already!");
 			return false;
@@ -148,7 +148,7 @@ class Repository implements IRepository {
 	}
 		
 	@Override
-	public boolean updateGameInDB(Board game) {
+	public boolean updateGameInDB(Game game) {
 		assert game.getGameId() != null;
 		
 		Connection connection = connector.getConnection();
@@ -195,8 +195,8 @@ class Repository implements IRepository {
 	}
 	
 	@Override
-	public Board loadGameFromDB(int id) {
-		Board game;
+	public Game loadGameFromDB(int id) {
+		Game game;
 		try {
 			// TODO here, we could actually use a simpler statement
 			//      which is not updatable, but reuse the one from
@@ -213,7 +213,7 @@ class Repository implements IRepository {
 				// game = new Board(width,height);
 				// TODO and we should also store the used game board in the database
 				//      for now, we use the default game board
-				game = BoardLoader.loadBoard(null);
+				game = new Game(BoardLoader.loadBoard(null));
 				if (game == null) {
 					return null;
 				}
@@ -230,7 +230,7 @@ class Repository implements IRepository {
 			game.setGameId(id);			
 			loadPlayersFromDB(game);
 
-			if (playerNo >= 0 && playerNo < game.getPlayersNumber()) {
+			if (playerNo >= 0 && playerNo < game.getNumPlayers()) {
 				game.setCurrentPlayer(game.getPlayer(playerNo));
 			} else {
 				// TODO  error handling
@@ -273,13 +273,13 @@ class Repository implements IRepository {
 		return result;		
 	}
 
-	private void createPlayersInDB(Board game) throws SQLException {
+	private void createPlayersInDB(Game game) throws SQLException {
 		// TODO code should be more defensive
 		PreparedStatement ps = getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
 		
 		ResultSet rs = ps.executeQuery();
-		for (int i = 0; i < game.getPlayersNumber(); i++) {
+		for (int i = 0; i < game.getNumPlayers(); i++) {
 			Player player = game.getPlayer(i);
 			rs.moveToInsertRow();
 			rs.updateInt(PLAYER_GAMEID, game.getGameId());
@@ -295,7 +295,7 @@ class Repository implements IRepository {
 		rs.close();
 	}
 	
-	private void loadPlayersFromDB(Board game) throws SQLException {
+	private void loadPlayersFromDB(Game game) throws SQLException {
 		PreparedStatement ps = getSelectPlayersASCStatement();
 		ps.setInt(1, game.getGameId());
 		
@@ -312,7 +312,7 @@ class Repository implements IRepository {
 				
 				int x = rs.getInt(PLAYER_POSITION_X);
 				int y = rs.getInt(PLAYER_POSITION_Y);
-				player.setSpace(game.getSpace(x,y));
+				player.setSpace(game.getBoard().getSpace(x,y));
 				int heading = rs.getInt(PLAYER_HEADING);
 				player.setHeading(Heading.values()[heading]);
 
@@ -325,7 +325,7 @@ class Repository implements IRepository {
 		rs.close();
 	}
 	
-	private void updatePlayersInDB(Board game) throws SQLException {
+	private void updatePlayersInDB(Game game) throws SQLException {
 		PreparedStatement ps = getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
 		
