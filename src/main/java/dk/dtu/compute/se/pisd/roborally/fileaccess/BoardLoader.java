@@ -30,6 +30,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.Arrays;
@@ -47,10 +48,12 @@ public class BoardLoader {
     private static final String JSON_EXT = "json";
 
     /**
-     * <p>Load a {@link Board} from a file and returns it.</p>
+     * <p>Loads a {@link Board} from a file and returns it.</p>
+     *
      * @param boardName the name of the board which is to be loaded
      * @return a new board that was generated from a file
      * @throws IOException
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public static Board loadBoard(String boardName) {
         if (boardName == null) {
@@ -61,81 +64,62 @@ public class BoardLoader {
         InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + "." + JSON_EXT);
         if (inputStream == null) {
             // TODO these constants should be defined somewhere
-            return new Board(8,8);
+            return new Board(8, 8);
         }
 
 
-		// In simple cases, we can create a Gson object with: new Gson()
+        // In simple cases, we can create a Gson object with: new Gson()
         GsonBuilder simpleBuilder = new GsonBuilder().registerTypeAdapter(
                 BoardElement.class, new Adapter<BoardElement>());
         //new GsonBuilder().registerTypeAdapter(FieldAction.class, new Adapter<FieldAction>());
         Gson gson = simpleBuilder.create();
 
 
-		Board result;
-		// FileReader fileReader = null;
+        Board result;
+        // FileReader fileReader = null;
         JsonReader reader = null;
-		try {
-			// fileReader = new FileReader(filename);
-			reader = gson.newJsonReader(new InputStreamReader(inputStream));
-			BoardTemplate template = gson.fromJson(reader, BoardTemplate.class);
+        try {
+            // fileReader = new FileReader(filename);
+            reader = gson.newJsonReader(new InputStreamReader(inputStream));
+            BoardTemplate template = gson.fromJson(reader, BoardTemplate.class);
 
-			result = new Board(template.width, template.height);
-			for (SpaceTemplate spaceTemplate: template.spaces) {
-                Space space = result.getSpace(spaceTemplate.x, spaceTemplate.y);
-                if (space == null) continue;
-                //todo add all method in space?
-                for (BoardElement boardElement : spaceTemplate.boardElements) {
-                    space.addBoardElement(boardElement);
-                }
-            }
-			reader.close();
-			return result;
-		} catch (IOException e1) {
+            result = boardFromBoardTemplate(template);
+            reader.close();
+            return result;
+        } catch (IOException e1) {
             if (reader != null) {
                 try {
                     reader.close();
                     inputStream = null;
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
             if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e2) {}
-			}
-		}
-		return null;
+                try {
+                    inputStream.close();
+                } catch (IOException e2) {
+                }
+            }
+        }
+        return null;
     }
 
 
     /**
      * <p>Saves a {@link Board} to as a jason file.</p>
+     *
      * @param board The board to save
-     * @param name the name of the file that should be written to
+     * @param name  the name of the file that should be written to
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public static void saveBoard(Board board, String name) {
-        BoardTemplate template = new BoardTemplate();
-        template.width = board.width;
-        template.height = board.height;
-
-        for (int i=0; i<board.width; i++) {
-            for (int j = 0; j < board.height; j++) {
-                Space space = board.getSpace(i, j);
-                if (space.getElements().length < 1) continue;
-                SpaceTemplate spaceTemplate = new SpaceTemplate();
-                spaceTemplate.x = space.x;
-                spaceTemplate.y = space.y;
-                spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
-                template.spaces.add(spaceTemplate);
-            }
-        }
+    public static void saveBoard(@NotNull Board board, String name) {
+        BoardTemplate template = boardToBoardTemplate(board);
 
         ClassLoader classLoader = BoardLoader.class.getClassLoader();
         // TODO: this is not very defensive, and will result in a NullPointerException
         //       when the folder "resources" does not exist! But, it does not need
         //       the file "simpleCards.json" to exist!
         String filename = classLoader.getResource(BOARDSFOLDER).getPath() + "/" + name + "." + JSON_EXT;
-                //BOARDSFOLDER + "/" + name  + "." + JSON_EXT;
 
         // In simple cases, we can create a Gson object with new:
         //
@@ -155,21 +139,94 @@ public class BoardLoader {
             fileWriter = new FileWriter(filename);
             writer = gson.newJsonWriter(fileWriter);
             gson.toJson(template, template.getClass(), writer);
-            writer.close();
         } catch (IOException e1) {
             assert false;
+        } finally {
             if (writer != null) {
                 try {
                     writer.close();
-                    fileWriter = null;
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
             if (fileWriter != null) {
                 try {
                     fileWriter.close();
-                } catch (IOException e2) {}
+                } catch (IOException e2) {
+                }
             }
         }
     }
 
+    /**
+     * <p>Creates a new {@link Board} from a {@link BoardTemplate}.</p>
+     *
+     * @param template the template from which to create a new board
+     * @return a new board created from the template
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    @NotNull
+    private static Board boardFromBoardTemplate(BoardTemplate template) {
+        Board board = new Board(template.width, template.height);
+        for (SpaceTemplate spaceTemplate : template.spaces) {
+            Space space = board.getSpace(spaceTemplate.x, spaceTemplate.y);
+            if (space == null) continue;
+            //todo add all method in space?
+            for (BoardElement boardElement : spaceTemplate.boardElements) {
+                space.addBoardElement(boardElement);
+            }
+        }
+        return board;
+    }
+
+    /**
+     * <p>Creates a new {@link BoardTemplate} from a {@link Board}.</p>
+     *
+     * @param board the board of which to create a template
+     * @return a new board template of the specified board
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    @NotNull
+    private static BoardTemplate boardToBoardTemplate(@NotNull Board board) {
+        BoardTemplate template = new BoardTemplate();
+        template.width = board.width;
+        template.height = board.height;
+
+        for (int i = 0; i < board.width; i++) {
+            for (int j = 0; j < board.height; j++) {
+                Space space = board.getSpace(i, j);
+                if (space.getElements().length < 1) continue;
+                template.spaces.add(spaceTemplateFromSpace(space));
+            }
+        }
+        return template;
+    }
+
+    /**
+     * <p>Creates a new {@link SpaceTemplate} of a specified {@link Space}.</p>
+     *
+     * @param space the space of which to create a template
+     * @return a new SpaceTemplate of a specified space
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private static SpaceTemplate spaceTemplateFromSpace(@NotNull Space space) {
+        SpaceTemplate spaceTemplate = new SpaceTemplate();
+        spaceTemplate.x = space.x;
+        spaceTemplate.y = space.y;
+        /*
+        for (BoardElement boardElement: space.getElements()) {
+            spaceTemplate.boardElements.add(boardElementToBoardElementTemplate(boardElement));
+        }
+         */
+        spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
+        return spaceTemplate;
+    }
+    /*
+    private static BoardElementTemplate boardElementToBoardElementTemplate(@NotNull BoardElement boardElement){
+        BoardElementTemplate boardElementTemplate = new BoardElementTemplate();
+        boardElementTemplate.impassableFrom =  boardElement.getImpassableFrom();
+        boardElementTemplate.opaqueFrom = boardElement.getOpaqueFrom();
+        boardElementTemplate.position = boardElement.getPosition();
+        boardElementTemplate.direction = boardElement.getDirection();
+    }
+*/
 }
