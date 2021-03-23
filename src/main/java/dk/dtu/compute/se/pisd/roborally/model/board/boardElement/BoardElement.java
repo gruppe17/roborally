@@ -26,11 +26,6 @@ public abstract class BoardElement extends Subject {
     protected Heading[] opaqueFrom;
 
     /**
-     * <p>Which way the element is pointing. May be null if the element has no direction.</p>
-     */
-    protected Heading direction;
-
-    /**
      * <p>Represents the position of the element.
      * I.e. an element with position {{@link Heading#NORTH},
      * {@link Heading#EAST}} could potentially block
@@ -38,6 +33,12 @@ public abstract class BoardElement extends Subject {
      * east or both.</p>
      */
     protected Heading[] position;
+
+    /**
+     * <p>Which way the element is pointing. May be null if the element has no direction.</p>
+     */
+    protected Heading direction;
+
 
     /*Getters and setters*/
 
