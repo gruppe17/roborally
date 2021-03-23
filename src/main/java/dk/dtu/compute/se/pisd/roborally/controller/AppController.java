@@ -97,6 +97,9 @@ public class AppController implements Observer {
     }
 
     public void saveGame() {
+        //Name the save
+
+
         // XXX needs to be implemented eventually
     }
 

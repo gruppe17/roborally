@@ -64,6 +64,13 @@ class Repository implements IRepository {
 
 	private static final String PLAYER_HEADING = "heading";
 
+	private static final String ACTIVATION_QUEUE_GAMEID = "gameID";
+
+	private static final String ACTIVATION_QUEUE_PLAYERID = "playerID";
+
+	private static final String ACTIVATION_QUEUE_PRIORITY = "priority";
+
+
 	private Connector connector;
 	
 	Repository(Connector connector){
@@ -171,6 +178,7 @@ class Repository implements IRepository {
 			rs.close();
 
 			updatePlayersInDB(game);
+			updateActivationQueueInDB(game);
 			//TODO this method needs to be implemented
 			//updateCardFieldsInDB(game);
 
@@ -364,13 +372,20 @@ class Repository implements IRepository {
 		createActivationQueueInDB(game);
 	}
 
+
+
 	/**
 	 * <p>Deletes the activation queue of a {@link Game} in the database.</p>
 	 * @param game the game which activation queue should be deleted
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void deleteActivationQueueInDB(Game game) throws SQLException {
-
+		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		preparedStatement.setInt(0, game.getGameId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		while (resultSet.next()){
+			resultSet.deleteRow();
+		}
 	}
 
 	/**
@@ -379,8 +394,42 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createActivationQueueInDB(Game game) throws SQLException {
-
+		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		preparedStatement.setInt(0, game.getGameId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		resultSet.moveToInsertRow();
+		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
+		Player player;
+		int i = 0;
+		while ((player = game.nextPlayer()) != null){
+			resultSet.updateInt(ACTIVATION_QUEUE_GAMEID, game.getGameId());
+			//resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, //TODO: find out how to get player id);
+			resultSet.updateInt(ACTIVATION_QUEUE_PRIORITY, i);
+			i++;
+		}
 	}
+
+	private static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ?";
+
+	private PreparedStatement selectActivationQueueStatement = null;
+
+	/**
+	 *
+	 * @return
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private PreparedStatement getSelectActivationQueueStatementUpdatable(){
+		if (selectActivationQueueStatement != null) return selectActivationQueueStatement;
+		Connection connection = connector.getConnection();
+		try {
+			selectActivationQueueStatement = connection.prepareStatement(SQL_SELECT_ACTIVATION_QUEUE,
+					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return selectActivationQueueStatement;
+	}
+
 
 	private static final String SQL_INSERT_GAME =
 			"INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
