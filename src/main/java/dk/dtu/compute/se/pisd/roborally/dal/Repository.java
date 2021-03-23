@@ -113,10 +113,11 @@ class Repository implements IRepository {
 				createCardFieldsInDB(game);
 				 */
 
-			// since current player is a foreign key, it can oly be
-			// inserted after the players are created, since MySQL does
-			// not have a per transaction validation, but validates on
-			// a per row basis.
+			// since player is a foreign key, activation queue can only be
+			// created now, since MySQL does not have a per transaction validation,
+			// but validates on a per row basis.
+			createActivationQueueInDB(game);
+
 			ps = getSelectGameStatementU();
 			ps.setInt(1, game.getGameId());
 
@@ -345,6 +346,40 @@ class Repository implements IRepository {
 		rs.close();
 		
 		// TODO error handling/consistency check: check whether all players were updated
+	}
+
+	/**
+	 * <p>Update the activation queue of a {@link Game} stored in the database.</p>
+	 * <p>This done by deleting the activation queue and then recreating it.
+	 * This is done because it is not possible to simply update the priority
+	 * of the players, as not necessarily all players were in the activation queue
+	 * before, and some players in the activation queue when it was stored may
+	 * not be in it any longer.</p>
+	 *
+	 * @param game the game which activation queue should be updated in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void updateActivationQueueInDB(Game game) throws SQLException {
+		deleteActivationQueueInDB(game);
+		createActivationQueueInDB(game);
+	}
+
+	/**
+	 * <p>Deletes the activation queue of a {@link Game} in the database.</p>
+	 * @param game the game which activation queue should be deleted
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void deleteActivationQueueInDB(Game game) throws SQLException {
+
+	}
+
+	/**
+	 * <p>Create the activation queue of a {@link Game} in the database.</p>
+	 * @param game the game which activation queue should be created
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void createActivationQueueInDB(Game game) throws SQLException {
+
 	}
 
 	private static final String SQL_INSERT_GAME =
