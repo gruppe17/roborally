@@ -29,6 +29,16 @@ CREATE TABLE IF NOT EXISTS Player (
   FOREIGN KEY (gameID) REFERENCES Game(gameID)
 );;
 
+CREATE TABLE IF NOT EXISTS ActivationQueue (
+    gameID int NOT NULL,
+    playerID, tinyint NOT NULL,
+    priority tinyint NOT NULL,
+
+    PRIMARY KEY (gameID, priority),
+    FOREIGN KEY (gameID) REFERENCES Game(gameID),
+    FOREIGN KEY (gameID, playerID) REFERENCES Player(gameID, playerID)
+);;
+
 SET FOREIGN_KEY_CHECKS = 1;;
 
 // TODO still some stuff missing here
