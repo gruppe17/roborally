@@ -63,11 +63,15 @@ public class Board {
         }
 
         spaces[0][0].addBoardElement(new Wall(Heading.NORTH));
-        spaces[5][5].addBoardElement(new Wall(Heading.EAST));
-        spaces[3][1].addBoardElement(new Wall(Heading.EAST));
-        spaces[7][0].addBoardElement(new Wall(Heading.WEST));
         spaces[1][2].addBoardElement(new Wall(Heading.SOUTH));
+        spaces[2][6].addBoardElement(new Wall(Heading.SOUTH));
+        spaces[2][6].addBoardElement(new Wall(Heading.EAST));
+        spaces[3][1].addBoardElement(new Wall(Heading.EAST));
+        spaces[4][2].addBoardElement(new Wall(Heading.NORTH));
         spaces[4][3].addBoardElement(new EnergySpace(spaces[4][3]));
+        spaces[4][3].addBoardElement(new Wall(Heading.SOUTH));
+        spaces[5][5].addBoardElement(new Wall(Heading.EAST));
+        spaces[7][0].addBoardElement(new Wall(Heading.WEST));
 
         //TODO: implement this for real
         prioritySpace = spaces[1][1];
