@@ -26,17 +26,17 @@ CREATE TABLE IF NOT EXISTS Player (
   heading tinyint,
   
   PRIMARY KEY (gameID, playerID),
-  FOREIGN KEY (gameID) REFERENCES Game(gameID)
+  FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE
 );;
 
 CREATE TABLE IF NOT EXISTS ActivationQueue (
     gameID int NOT NULL,
-    playerID, tinyint NOT NULL,
+    playerID tinyint NOT NULL,
     priority tinyint NOT NULL,
 
     PRIMARY KEY (gameID, priority),
-    FOREIGN KEY (gameID) REFERENCES Game(gameID),
-    FOREIGN KEY (gameID, playerID) REFERENCES Player(gameID, playerID)
+    FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE,
+    FOREIGN KEY (gameID, playerID) REFERENCES Player(gameID, playerID) ON DELETE CASCADE
 );;
 
 SET FOREIGN_KEY_CHECKS = 1;;
