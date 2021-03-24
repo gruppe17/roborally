@@ -34,10 +34,8 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -48,7 +46,7 @@ import java.util.Optional;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class AppController implements Observer {
 
@@ -96,13 +94,19 @@ public class AppController implements Observer {
 
     }
 
+    /**
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public void saveGame() {
         //Name the save
-
-
-        // XXX needs to be implemented eventually
+        if (gameController == null) return;
+        RepositoryAccess.getRepository().createGameInDB(gameController.game);
     }
 
+    /**
+     *
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
     public void loadGame() {
         // XXX needs to be implememted eventually
         // for now, we just create a new game
