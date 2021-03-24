@@ -23,7 +23,6 @@ package dk.dtu.compute.se.pisd.roborally.dal;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
-import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 
@@ -39,25 +38,25 @@ import java.util.List;
  *
  */
 class Repository implements IRepository {
-	
+
 	private static final String GAME_GAMEID = "gameID";
 
 	private static final String GAME_NAME = "name";
-	
+
 	private static final String GAME_CURRENTPLAYER = "currentPlayer";
 
 	private static final String GAME_PHASE = "phase";
 
 	private static final String GAME_STEP = "step";
-	
+
 	private static final String PLAYER_PLAYERID = "playerID";
-	
+
 	private static final String PLAYER_NAME = "name";
 
 	private static final String PLAYER_COLOUR = "colour";
-	
+
 	private static final String PLAYER_GAMEID = "gameID";
-	
+
 	private static final String PLAYER_POSITION_X = "positionX";
 
 	private static final String PLAYER_POSITION_Y = "positionY";
@@ -72,7 +71,7 @@ class Repository implements IRepository {
 
 
 	private Connector connector;
-	
+
 	Repository(Connector connector){
 		this.connector = connector;
 	}
@@ -82,12 +81,12 @@ class Repository implements IRepository {
 		if (game.getGameId() != null) {
 			System.err.println("Game cannot be created in DB, since it has a game id already!");
 			return false;
+			//Todo: maybe it should just update it instead?
 		}
 
 		Connection connection = connector.getConnection();
 		try {
 			connection.setAutoCommit(false);
-
 			PreparedStatement ps = getInsertGameStatementRGK();
 			// TODO: the name should eventually set by the user
 			//       for the game and should be then used
@@ -154,18 +153,18 @@ class Repository implements IRepository {
 		}
 		return false;
 	}
-		
+
 	@Override
 	public boolean updateGameInDB(Game game) {
 		assert game.getGameId() != null;
-		
+
 		Connection connection = connector.getConnection();
 		try {
 			connection.setAutoCommit(false);
 
 			PreparedStatement ps = getSelectGameStatementU();
 			ps.setInt(1, game.getGameId());
-			
+
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
@@ -190,7 +189,7 @@ class Repository implements IRepository {
 			// TODO error handling
 			e.printStackTrace();
 			System.err.println("Some DB error");
-			
+
 			try {
 				connection.rollback();
 				connection.setAutoCommit(true);
@@ -202,7 +201,7 @@ class Repository implements IRepository {
 
 		return false;
 	}
-	
+
 	@Override
 	public Game loadGameFromDB(int id) {
 		Game game;
@@ -212,7 +211,7 @@ class Repository implements IRepository {
 			//      above for the pupose
 			PreparedStatement ps = getSelectGameStatementU();
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
 			int playerNo = -1;
 			if (rs.next()) {
@@ -236,7 +235,7 @@ class Repository implements IRepository {
 			}
 			rs.close();
 
-			game.setGameId(id);			
+			game.setGameId(id);
 			loadPlayersFromDB(game);
 
 			if (playerNo >= 0 && playerNo < game.getNumPlayers()) {
@@ -258,7 +257,7 @@ class Repository implements IRepository {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public List<GameInDB> getGames() {
 		// TODO when there many games in the DB, fetching all available games
@@ -279,14 +278,14 @@ class Repository implements IRepository {
 			// TODO proper error handling
 			e.printStackTrace();
 		}
-		return result;		
+		return result;
 	}
 
 	private void createPlayersInDB(Game game) throws SQLException {
 		// TODO code should be more defensive
 		PreparedStatement ps = getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
-		
+
 		ResultSet rs = ps.executeQuery();
 		for (int i = 0; i < game.getNumPlayers(); i++) {
 			Player player = game.getPlayer(i);
@@ -303,11 +302,11 @@ class Repository implements IRepository {
 
 		rs.close();
 	}
-	
+
 	private void loadPlayersFromDB(Game game) throws SQLException {
 		PreparedStatement ps = getSelectPlayersASCStatement();
 		ps.setInt(1, game.getGameId());
-		
+
 		ResultSet rs = ps.executeQuery();
 		int i = 0;
 		while (rs.next()) {
@@ -318,7 +317,7 @@ class Repository implements IRepository {
 				String colour = rs.getString(PLAYER_COLOUR);
 				Player player = new Player(game, colour ,name);
 				game.addPlayer(player);
-				
+
 				int x = rs.getInt(PLAYER_POSITION_X);
 				int y = rs.getInt(PLAYER_POSITION_Y);
 				player.setSpace(game.getBoard().getSpace(x,y));
@@ -333,11 +332,11 @@ class Repository implements IRepository {
 		}
 		rs.close();
 	}
-	
+
 	private void updatePlayersInDB(Game game) throws SQLException {
 		PreparedStatement ps = getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
-		
+
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			int playerId = rs.getInt(PLAYER_PLAYERID);
@@ -352,7 +351,7 @@ class Repository implements IRepository {
 			rs.updateRow();
 		}
 		rs.close();
-		
+
 		// TODO error handling/consistency check: check whether all players were updated
 	}
 
@@ -381,7 +380,7 @@ class Repository implements IRepository {
 	 */
 	private void deleteActivationQueueInDB(Game game) throws SQLException {
 		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
-		preparedStatement.setInt(0, game.getGameId());
+		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()){
 			resultSet.deleteRow();
@@ -400,7 +399,7 @@ class Repository implements IRepository {
 	 */
 	private void createActivationQueueInDB(Game game) throws SQLException {
 		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
-		preparedStatement.setInt(0, game.getGameId());
+		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 		resultSet.moveToInsertRow();
 		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
@@ -423,7 +422,8 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>The prepared statement for getting and updating the
-	 * activation queue associated with a given gameID.</p>
+	 * activation queue associated with a given gameID. Setting
+	 * parameter 1, will set the gameID.</p>
 	 * @see #getSelectActivationQueueStatementUpdatable()
 	 */
 	private PreparedStatement selectActivationQueueStatement = null;
@@ -434,7 +434,7 @@ class Repository implements IRepository {
 	 * statement will return an updatable {@link ResultSet}.</p>
 	 * @return 	the prepared statement for getting and updating
 	 * 			the player activation associated with a given gameID
-	 * 		
+	 *
 	 * @author 	Rasmus Nylander, s205418@student.dtu.dk
 	 * @see 	#SQL_SELECT_ACTIVATION_QUEUE
 	 * @see 	#selectActivationQueueStatement
