@@ -36,6 +36,15 @@ public interface IRepository {
  	boolean createGameInDB(Game game);
 	
 	boolean updateGameInDB(Game game);
+
+	//TODO: Should maybe be saveGame, rather than create and update?
+	// Shouldn't the repository be responsible for communicating with the database
+	// and knowing whether the game should be created or updated?
+	// But what if it already is saved and you want to make a new save without
+	// overwriting the old save? Maybe it should take an argument allowing the
+	// saver to force the creation of a new save. Then it should probably also
+	// have a method that returns whether saving would overwrite an existing save
+	// allowing the saver to ask the user if the want to overwrite the old save.
 	
 	Game loadGameFromDB(int id);
 	

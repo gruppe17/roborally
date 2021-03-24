@@ -35,7 +35,7 @@ import java.util.List;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class Repository implements IRepository {
 
@@ -401,12 +401,12 @@ class Repository implements IRepository {
 		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
-		resultSet.moveToInsertRow();
 		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
 		// Something should be done to deal with that.
 		Player player;
 		int i = 0;
 		while ((player = game.nextPlayer()) != null){
+			resultSet.moveToInsertRow();
 			resultSet.updateInt(ACTIVATION_QUEUE_GAMEID, game.getGameId());
 			resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
 			resultSet.updateInt(ACTIVATION_QUEUE_PRIORITY, i);
