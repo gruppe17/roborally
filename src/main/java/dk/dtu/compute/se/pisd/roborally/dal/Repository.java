@@ -395,7 +395,7 @@ class Repository implements IRepository {
 	 * <b>NOT</b> be done be calling {@link Game#playerQueueForceRepopulate()}
 	 * as this will not take into account any players who have already been
 	 * activated, nor whether any players have been pushed around.</p>
-	 * @param game the game which activation queue should be created
+	 * @param game the game which activation queue should be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createActivationQueueInDB(Game game) throws SQLException {
@@ -404,6 +404,7 @@ class Repository implements IRepository {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		resultSet.moveToInsertRow();
 		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
+		// Something should be done to deal with that.
 		Player player;
 		int i = 0;
 		while ((player = game.nextPlayer()) != null){
@@ -414,16 +415,31 @@ class Repository implements IRepository {
 		}
 	}
 
+	/**
+	 * <p>The SQL command for selecting the activation queue
+	 * associated with a specific game ín the database.</p>
+	 */
 	private static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ?";
 
+	/**
+	 * <p>The prepared statement for getting and updating the
+	 * activation queue associated with a given gameID.</p>
+	 * @see #getSelectActivationQueueStatementUpdatable()
+	 */
 	private PreparedStatement selectActivationQueueStatement = null;
 
 	/**
-	 *
-	 * @return
-	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * <p>Initializes, if not already initialized, and returns the
+	 * {@link #selectActivationQueueStatement}. Executing the
+	 * statement will return an updatable {@link ResultSet}.</p>
+	 * @return 	the prepared statement for getting and updating
+	 * 			the player activation associated with a given gameID
+	 * 		
+	 * @author 	Rasmus Nylander, s205418@student.dtu.dk
+	 * @see 	#SQL_SELECT_ACTIVATION_QUEUE
+	 * @see 	#selectActivationQueueStatement
 	 */
-	private PreparedStatement getSelectActivationQueueStatementUpdatable(){
+	private PreparedStatement getSelectActivationQueueStatementUpdatable() {
 		if (selectActivationQueueStatement != null) return selectActivationQueueStatement;
 		Connection connection = connector.getConnection();
 		try {
