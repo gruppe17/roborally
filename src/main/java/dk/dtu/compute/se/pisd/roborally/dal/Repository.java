@@ -390,6 +390,11 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Create the activation queue of a {@link Game} in the database.</p>
+	 * <p><b>NOTICE:</b> this destroys the playerActivationQueue of the game.
+	 * If the game is to be continued, then it must be recreated. This should
+	 * <b>NOT</b> be done be calling {@link Game#playerQueueForceRepopulate()}
+	 * as this will not take into account any players who have already been
+	 * activated, nor whether any players have been pushed around.</p>
 	 * @param game the game which activation queue should be created
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -403,7 +408,7 @@ class Repository implements IRepository {
 		int i = 0;
 		while ((player = game.nextPlayer()) != null){
 			resultSet.updateInt(ACTIVATION_QUEUE_GAMEID, game.getGameId());
-			//resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, //TODO: find out how to get player id);
+			resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
 			resultSet.updateInt(ACTIVATION_QUEUE_PRIORITY, i);
 			i++;
 		}
