@@ -21,7 +21,6 @@
  */
 package dk.dtu.compute.se.pisd.roborally.dal;
 
-import com.mysql.cj.util.StringUtils;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.IOUtil;
 
 import java.sql.Connection;
@@ -36,12 +35,15 @@ import java.sql.Statement;
  *
  */
 class Connector {
-    //private static final String HOST     = "localhost";
-	private static final String HOST     = "104.223.62.200";
+    private static final String HOST     = "localhost";
+	//private static final String HOST     = "104.223.62.200";
     private static final int    PORT     = 3306;
-    private static final String DATABASE = "tobiasma_roborally";
-    private static final String USERNAME = "tobiasma_robouser";
-    private static final String PASSWORD = "";
+	//private static final String DATABASE = "tobiasma_roborally";
+	private static final String DATABASE = "roborally";
+	//private static final String USERNAME = "tobiasma_robouser";
+	private static final String USERNAME = "root";
+	//private static final String PASSWORD = "";
+	private static final String PASSWORD = "";
 
     private static final String DELIMITER = ";;";
     
@@ -50,7 +52,7 @@ class Connector {
     Connector() {
         try {
 			// String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
-			String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
+			String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
 			connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
 
 			createDatabaseSchema();
@@ -71,7 +73,7 @@ class Connector {
     		connection.setAutoCommit(false);
     		Statement statement = connection.createStatement();
     		for (String sql : createTablesStatement.split(DELIMITER)) {
-    			if (!StringUtils.isEmptyOrWhitespaceOnly(sql)) {
+    			if (sql != null && !sql.isBlank()) {
     				statement.executeUpdate(sql);
     			}
     		}
