@@ -410,6 +410,7 @@ class Repository implements IRepository {
 			resultSet.updateInt(ACTIVATION_QUEUE_GAMEID, game.getGameId());
 			resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
 			resultSet.updateInt(ACTIVATION_QUEUE_PRIORITY, i);
+			resultSet.insertRow();
 			i++;
 		}
 	}
