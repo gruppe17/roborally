@@ -25,6 +25,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	@Override
-	public boolean createGameInDB(Game game) {
+	public boolean createGameInDB(@NotNull Game game) {
 		if (game.getGameId() != null) {
 			System.err.println("Game cannot be created in DB, since it has a game id already!");
 			return false;
@@ -161,8 +162,14 @@ class Repository implements IRepository {
 		return false;
 	}
 
+	/**
+	 * <p>Updates a game in the database and returns a boolean indicating
+	 * whether the operation was successful.</p>
+	 * @param game the game to be updated in the database, may not be null
+	 * @return
+	 */
 	@Override
-	public boolean updateGameInDB(Game game) {
+	public boolean updateGameInDB(@NotNull Game game) {
 		assert game.getGameId() != null;
 
 		Connection connection = connector.getConnection();
