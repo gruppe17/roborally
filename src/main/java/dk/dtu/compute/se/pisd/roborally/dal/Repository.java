@@ -76,6 +76,13 @@ class Repository implements IRepository {
 		this.connector = connector;
 	}
 
+	/**
+	 * <p>Creates a game in the database and returns a boolean indicating
+	 * whether the creation was successful.</p>
+	 * @param game the game to be created in the database
+	 * @return true if the game was successfully created
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
 	@Override
 	public boolean createGameInDB(Game game) {
 		if (game.getGameId() != null) {
