@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS CardCommand(
 
     PRIMARY KEY (cardID, command),
     FOREIGN KEY (cardID) REFERENCES Card(cardID) ON DELETE CASCADE
-)
+);;
 
 SET FOREIGN_KEY_CHECKS = 1;;
 

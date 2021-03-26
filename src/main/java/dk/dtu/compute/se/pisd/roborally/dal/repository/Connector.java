@@ -19,7 +19,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.dal;
+package dk.dtu.compute.se.pisd.roborally.dal.repository;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.IOUtil;
 
@@ -42,7 +42,7 @@ class Connector {
 	private static final String DATABASE = "roborally";
 	//private static final String USERNAME = "tobiasma_robouser";
 	private static final String USERNAME = "root";
-	//private static final String PASSWORD = "";
+	//private static final String PASSWORD = "K1y#.%YuPHu#";
 	private static final String PASSWORD = "";
 
     private static final String DELIMITER = ";;";
@@ -52,7 +52,8 @@ class Connector {
     Connector() {
         try {
 			// String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
-			String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
+			//String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
+			String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE;
 			connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
 
 			createDatabaseSchema();

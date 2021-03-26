@@ -19,7 +19,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.dal;
+package dk.dtu.compute.se.pisd.roborally.dal.repository;
+
+import dk.dtu.compute.se.pisd.roborally.dal.IRepository;
 
 /**
  * ...

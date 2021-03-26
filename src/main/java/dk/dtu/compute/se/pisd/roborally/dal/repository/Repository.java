@@ -19,8 +19,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package dk.dtu.compute.se.pisd.roborally.dal;
+package dk.dtu.compute.se.pisd.roborally.dal.repository;
 
+import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
+import dk.dtu.compute.se.pisd.roborally.dal.IRepository;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
@@ -39,53 +41,6 @@ import java.util.Date;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class Repository implements IRepository {
-
-	//Todo: move these to their own file. One should have to enter the Repository file to tinker with the names
-	// in the database - Rasmus
-	private static final String GAME_GAMEID = "gameID";
-
-	private static final String GAME_NAME = "name";
-
-	private static final String GAME_CURRENTPLAYER = "currentPlayer";
-
-	private static final String GAME_PHASE = "phase";
-
-	private static final String GAME_STEP = "step";
-
-	private static final String PLAYER_PLAYERID = "playerID";
-
-	private static final String PLAYER_NAME = "name";
-
-	private static final String PLAYER_COLOUR = "colour";
-
-	private static final String PLAYER_GAMEID = "gameID";
-
-	private static final String PLAYER_POSITION_X = "positionX";
-
-	private static final String PLAYER_POSITION_Y = "positionY";
-
-	private static final String PLAYER_HEADING = "heading";
-
-	private static final String ACTIVATION_QUEUE_GAMEID = "gameID";
-
-	private static final String ACTIVATION_QUEUE_PLAYERID = "playerID";
-
-	private static final String ACTIVATION_QUEUE_PRIORITY = "priority";
-
-	private static final String CARD_ID = "cardID";
-
-	private static final String CARD_TYPE = "type";
-
-	private static final String CARD_POSITION = "position";
-
-	private static final String CARD_COMMAND = "command";
-
-	//Should be enum?
-	private static final int CARD_TYPE_PROGRAM = 0;
-	private static final int CARD_TYPE_HAND = 1;
-	private static final int CARD_TYPE_DECK = 2;
-	private static final int CARD_TYPE_DISCARD = 3;
-	private static final int CARD_TYPE_UPGRADE = 4;
 
 
 	Random random = new Random();
@@ -154,7 +109,7 @@ class Repository implements IRepository {
 
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
+				rs.updateInt(DatabaseConstants.GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
 				rs.updateRow();
 			} else {
 				// TODO error handling
@@ -200,9 +155,9 @@ class Repository implements IRepository {
 
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				rs.updateInt(GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
-				rs.updateInt(GAME_PHASE, game.getPhase().ordinal());
-				rs.updateInt(GAME_STEP, game.getStep());
+				rs.updateInt(DatabaseConstants.GAME_CURRENTPLAYER, game.getPlayerNumber(game.getCurrentPlayer()));
+				rs.updateInt(DatabaseConstants.GAME_PHASE, game.getPhase().ordinal());
+				rs.updateInt(DatabaseConstants.GAME_STEP, game.getStep());
 				rs.updateRow();
 			} else {
 				// TODO error handling
@@ -258,10 +213,10 @@ class Repository implements IRepository {
 				if (game == null) {
 					return null;
 				}
-				playerNo = rs.getInt(GAME_CURRENTPLAYER);
+				playerNo = rs.getInt(DatabaseConstants.GAME_CURRENTPLAYER);
 				// TODO currently we do not set the games name (needs to be added)
-				game.setPhase(Phase.values()[rs.getInt(GAME_PHASE)]);
-				game.setStep(rs.getInt(GAME_STEP));
+				game.setPhase(Phase.values()[rs.getInt(DatabaseConstants.GAME_PHASE)]);
+				game.setStep(rs.getInt(DatabaseConstants.GAME_STEP));
 
 			} else {
 				// TODO error handling
@@ -305,8 +260,8 @@ class Repository implements IRepository {
 			PreparedStatement ps = getSelectGameIdsStatement();
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int id = rs.getInt(GAME_GAMEID);
-				String name = rs.getString(GAME_NAME);
+				int id = rs.getInt(DatabaseConstants.GAME_GAMEID);
+				String name = rs.getString(DatabaseConstants.GAME_NAME);
 				result.add(new GameInDB(id,name));
 			}
 			rs.close();
@@ -326,13 +281,13 @@ class Repository implements IRepository {
 		for (int i = 0; i < game.getNumPlayers(); i++) {
 			Player player = game.getPlayer(i);
 			rs.moveToInsertRow();
-			rs.updateInt(PLAYER_GAMEID, game.getGameId());
-			rs.updateInt(PLAYER_PLAYERID, i);
-			rs.updateString(PLAYER_NAME, player.getName());
-			rs.updateString(PLAYER_COLOUR, player.getColor());
-			rs.updateInt(PLAYER_POSITION_X, player.getSpace().x);
-			rs.updateInt(PLAYER_POSITION_Y, player.getSpace().y);
-			rs.updateInt(PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_GAMEID, game.getGameId());
+			rs.updateInt(DatabaseConstants.PLAYER_PLAYERID, i);
+			rs.updateString(DatabaseConstants.PLAYER_NAME, player.getName());
+			rs.updateString(DatabaseConstants.PLAYER_COLOUR, player.getColor());
+			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
+			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
+			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
 			rs.insertRow();
 		}
 
@@ -346,18 +301,18 @@ class Repository implements IRepository {
 		ResultSet rs = ps.executeQuery();
 		int i = 0;
 		while (rs.next()) {
-			int playerId = rs.getInt(PLAYER_PLAYERID);
+			int playerId = rs.getInt(DatabaseConstants.PLAYER_PLAYERID);
 			if (i++ == playerId) {
 				// TODO this should be more defensive
-				String name = rs.getString(PLAYER_NAME);
-				String colour = rs.getString(PLAYER_COLOUR);
+				String name = rs.getString(DatabaseConstants.PLAYER_NAME);
+				String colour = rs.getString(DatabaseConstants.PLAYER_COLOUR);
 				Player player = new Player(game, colour ,name);
 				game.addPlayer(player);
 
-				int x = rs.getInt(PLAYER_POSITION_X);
-				int y = rs.getInt(PLAYER_POSITION_Y);
+				int x = rs.getInt(DatabaseConstants.PLAYER_POSITION_X);
+				int y = rs.getInt(DatabaseConstants.PLAYER_POSITION_Y);
 				player.setSpace(game.getBoard().getSpace(x,y));
-				int heading = rs.getInt(PLAYER_HEADING);
+				int heading = rs.getInt(DatabaseConstants.PLAYER_HEADING);
 				player.setHeading(Heading.values()[heading]);
 
 				// TODO  should also load players program and hand here
@@ -375,13 +330,13 @@ class Repository implements IRepository {
 
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			int playerId = rs.getInt(PLAYER_PLAYERID);
+			int playerId = rs.getInt(DatabaseConstants.PLAYER_PLAYERID);
 			// TODO should be more defensive
 			Player player = game.getPlayer(playerId);
 			// rs.updateString(PLAYER_NAME, player.getName()); // not needed: player's names does not change
-			rs.updateInt(PLAYER_POSITION_X, player.getSpace().x);
-			rs.updateInt(PLAYER_POSITION_Y, player.getSpace().y);
-			rs.updateInt(PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
+			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
+			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
 			// TODO error handling
 			// TODO take care of case when number of players changes, etc
 			rs.updateRow();
@@ -414,7 +369,7 @@ class Repository implements IRepository {
 	 */
 	private void createPlayerHandInDatabase(Player player) throws SQLException {
 		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
-		createCardsInDB(gameID, playerID, CARD_TYPE_HAND, player.getHand());
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_HAND, player.getHand());
 	}
 
 	/**
@@ -424,7 +379,7 @@ class Repository implements IRepository {
 	 */
 	private void createPlayerProgramInDatabase(Player player) throws SQLException {
 		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
-		createCardsInDB(gameID, playerID, CARD_TYPE_PROGRAM, player.getProgram());
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_PROGRAM, player.getProgram());
 	}
 
 	/**
@@ -452,11 +407,11 @@ class Repository implements IRepository {
 				cardID = random.nextInt();
 				try {
 					resultSetCards.moveToInsertRow();
-					resultSetCards.updateInt(CARD_ID, cardID);
-					resultSetCards.updateInt(PLAYER_GAMEID, gameID);
-					resultSetCards.updateInt(PLAYER_PLAYERID, playerID);
-					resultSetCards.updateInt(CARD_TYPE, cardType);
-					resultSetCards.updateInt(CARD_POSITION, i);
+					resultSetCards.updateInt(DatabaseConstants.CARD_ID, cardID);
+					resultSetCards.updateInt(DatabaseConstants.PLAYER_GAMEID, gameID);
+					resultSetCards.updateInt(DatabaseConstants.PLAYER_PLAYERID, playerID);
+					resultSetCards.updateInt(DatabaseConstants.CARD_TYPE, cardType);
+					resultSetCards.updateInt(DatabaseConstants.CARD_POSITION, i);
 					resultSetCards.updateRow();
 					break;
 				} catch (SQLException e) {
@@ -556,7 +511,7 @@ class Repository implements IRepository {
 	 * <p>The SQL command for inserting the commands
 	 * associated with a specific card ín the database.</p>
 	 */
-	private static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_ID + CARD_COMMAND + ") VALUES(?, ?)";
+	private static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + DatabaseConstants.CARD_ID + DatabaseConstants.CARD_COMMAND + ") VALUES(?, ?)";
 
 	/**
 	 * <p>The prepared statement for inserting a
@@ -635,7 +590,7 @@ class Repository implements IRepository {
 
 		PriorityQueue<Player> activationQueue = new PriorityQueue<>();
 		while (resultSet.next()){
-			activationQueue.add(game.getPlayer(resultSet.getInt(PLAYER_PLAYERID)));
+			activationQueue.add(game.getPlayer(resultSet.getInt(DatabaseConstants.PLAYER_PLAYERID)));
 		}
 		game.setPlayerActivationQueue(activationQueue);
 		resultSet.close();
@@ -694,9 +649,9 @@ class Repository implements IRepository {
 		int i = 0;
 		while ((player = game.nextPlayer()) != null){
 			resultSet.moveToInsertRow();
-			resultSet.updateInt(ACTIVATION_QUEUE_GAMEID, game.getGameId());
-			resultSet.updateInt(ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
-			resultSet.updateInt(ACTIVATION_QUEUE_PRIORITY, i);
+			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_GAMEID, game.getGameId());
+			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
+			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PRIORITY, i);
 			resultSet.insertRow();
 			i++;
 		}
