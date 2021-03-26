@@ -489,7 +489,23 @@ class Repository implements IRepository {
 	}
 
 
-	
+	/**
+	 * <p>Deletes the cards of the specified players in the database</p>
+	 * @param players a list of players whose cards are to be deleted from the database
+	 * @throws SQLException
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void deletePlayerCardsInDB(Player... players) throws SQLException {
+		PreparedStatement preparedStatement = getSelectCardStatementUpdatable();
+		for (Player player: players) {
+			preparedStatement.setInt(1, player.game.getGameId());
+			preparedStatement.setInt(2, player.game.getPlayerNumber(player));
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				resultSet.deleteRow();
+			}
+		}
+	}
 	
 
 	/**
