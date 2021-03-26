@@ -447,11 +447,12 @@ class Repository implements IRepository {
 		for (int i = 0; i < cCFields.length; i++) {
 			CommandCardField cCardField = cCFields[i];
 			if (cCardField.getCard() == null) continue;
-
+			int cardID;
 			while (true){
+				cardID = random.nextInt();
 				try {
 					resultSetCards.moveToInsertRow();
-					resultSetCards.updateInt(CARD_ID, random.nextInt());
+					resultSetCards.updateInt(CARD_ID, cardID);
 					resultSetCards.updateInt(PLAYER_GAMEID, gameID);
 					resultSetCards.updateInt(PLAYER_PLAYERID, playerID);
 					resultSetCards.updateInt(CARD_TYPE, cardType);
@@ -462,10 +463,7 @@ class Repository implements IRepository {
 					if (e.getErrorCode() != 1062) throw e; //1062 == duplicate entry
 				}
 			}
-
-//23000 1062
-			createCardCommandsInDatabase(gameID, playerID, cardType, i, cCardField);
-
+			createCardCommandsInDatabase(cardID, cCardField);
 		}
 
 
@@ -473,30 +471,20 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Saves the {@link Command}s of a {@link CommandCard} in the database.</p>
-	 * @param gameID part of primary key of cCardField in database
-	 * @param playerID part of primary key of cCardField in database
-	 * @param cardType part of primary key of cCardField in database
-	 * @param position part of primary key of cCardField in database
+	 * @param cardID the primary key of the card in the database
 	 * @param cCardField the card field of the card whose commands are to be saved in the database
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void createCardCommandsInDatabase(int gameID, int playerID, int cardType, int position, CommandCardField cCardField) throws SQLException {
-		PreparedStatement ps = getSelectCardCommandStatementUpdatable();
-		ps.setInt(1, gameID);
-		ps.setInt(2, playerID);
-		ps.setInt(3, cardType);
-		ps.setInt(4, position);
-		ResultSet resultSetCommands = ps.executeQuery();
+	private void createCardCommandsInDatabase(int cardID, CommandCardField cCardField) throws SQLException {
+		PreparedStatement ps = getInsertCardCommandStatement();
+		ps.setInt(1, cardID);
+
 		List<Command> commands = cCardField.getCard().command.getOptions();
 		if (commands.isEmpty()) commands.add(cCardField.getCard().command);
 		for (Command command: commands) {
-			resultSetCommands.moveToInsertRow();
-			resultSetCommands.updateInt(PLAYER_GAMEID, gameID);
-			resultSetCommands.updateInt(PLAYER_PLAYERID, playerID);
-			resultSetCommands.updateInt(CARD_TYPE, cardType);
-			resultSetCommands.updateInt(CARD_POSITION, position);
-			resultSetCommands.updateInt(CARD_COMMAND, command.ordinal());
+			ps.setInt(1, command.ordinal());
+			ps.execute();
 		}
 	}
 
@@ -565,19 +553,56 @@ class Repository implements IRepository {
 	}
 
 	/**
+	 * <p>The SQL command for inserting the commands
+	 * associated with a specific card ín the database.</p>
+	 */
+	private static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_ID + CARD_COMMAND + ") VALUES(?, ?)";
+
+	/**
+	 * <p>The prepared statement for inserting a
+	 * commands associated with a given card. Setting
+	 * parameter 1 will set the cardID</p>
+	 * @see #getSelectCardCommandStatement()
+	 */
+	private PreparedStatement insertCardCommandStatement = null;
+
+	/**
+	 * <p>Initializes, if not already initialized, and returns the
+	 * {@link #selectActivationQueueStatement}. Executing the
+	 * statement will return an updatable {@link ResultSet}.</p>
+	 * @return 	the prepared statement for getting and updating
+	 * 			the player activation associated with a given gameID
+	 *
+	 * @author 	Rasmus Nylander, s205418@student.dtu.dk
+	 * @see 	#SQL_SELECT_ACTIVATION_QUEUE
+	 * @see 	#selectActivationQueueStatement
+	 */
+	private PreparedStatement getInsertCardCommandStatement() {
+		if (insertCardCommandStatement != null) return insertCardCommandStatement;
+		Connection connection = connector.getConnection();
+		try {
+			insertCardCommandStatement = connection.prepareStatement(SQL_INSERT_CARD_COMMAND_STATEMENT,
+					ResultSet.TYPE_FORWARD_ONLY);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return insertCardCommandStatement;
+	}
+
+	/**
 	 * <p>The SQL command for selecting the commands
 	 * associated with a specific card ín the database.</p>
 	 */
-	private static final String SQL_SELECT_CARD_COMMAND_STATEMENT = "SELECT * FROM CardCommand WHERE gameID = ? AND playerID = ? AND type = ? AND position = ? ORDER BY type, position ASC";
+	private static final String SQL_SELECT_CARD_COMMAND_STATEMENT = "SELECT * FROM CardCommand WHERE cardID = ?";
 
 	/**
-	 * <p>The prepared statement for getting and updating the
+	 * <p>The prepared statement for getting the
 	 * commands associated with a given card. Setting
-	 * parameter 1 will set the gameID, 2 will set
-	 * playerID, 3 will set type and 4 will set position.</p>
-	 * @see #getSelectCardCommandStatementUpdatable()
+	 * parameter 1 will set the cardID</p>
+	 * @see #getSelectCardCommandStatement()
 	 */
 	private PreparedStatement selectCardCommandStatement = null;
+
 
 
 	/**
@@ -585,12 +610,12 @@ class Repository implements IRepository {
 	 * @return
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private PreparedStatement getSelectCardCommandStatementUpdatable() {
+	private PreparedStatement getSelectCardCommandStatement() {
 		if (selectCardCommandStatement != null) return selectCardCommandStatement;
 		Connection connection = connector.getConnection();
 		try {
 			selectCardCommandStatement = connection.prepareStatement(SQL_SELECT_CARD_COMMAND_STATEMENT,
-					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+					ResultSet.TYPE_FORWARD_ONLY);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
