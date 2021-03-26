@@ -124,9 +124,8 @@ class Repository implements IRepository {
 			// statement.close();
 
 			createPlayersInDB(game);
-				/* TOODO this method needs to be implemented first
-				createCardFieldsInDB(game);
-				 */
+			createCardsInDB(game);
+
 
 			// since player is a foreign key, activation queue can only be
 			// created now, since MySQL does not have a per transaction validation,
@@ -163,6 +162,8 @@ class Repository implements IRepository {
 		return false;
 	}
 
+
+
 	/**
 	 * <p>Updates a game in the database and returns a boolean indicating
 	 * whether the operation was successful.</p>
@@ -194,7 +195,7 @@ class Repository implements IRepository {
 			updatePlayersInDB(game);
 			updateActivationQueueInDB(game);
 			//TODO this method needs to be implemented
-			//updateCardFieldsInDB(game);
+			updateCardsInDB(game);
 
 
             connection.commit();
@@ -371,6 +372,22 @@ class Repository implements IRepository {
 		rs.close();
 
 		// TODO error handling/consistency check: check whether all players were updated
+	}
+
+	/**
+	 *
+	 * @param player
+	 */
+	private void createCardsInDB(Player player) {
+
+	}
+
+	/**
+	 *
+	 * @param player
+	 */
+	private void updateCardsInDB(Player player) {
+
 	}
 
 	/**
