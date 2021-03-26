@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.dal;
 
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
 import dk.dtu.compute.se.pisd.roborally.model.*;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
@@ -70,6 +71,20 @@ class Repository implements IRepository {
 	private static final String ACTIVATION_QUEUE_PLAYERID = "playerID";
 
 	private static final String ACTIVATION_QUEUE_PRIORITY = "priority";
+
+	private static final String CARD_TYPE = "type";
+
+	private static final String CARD_POSITION = "position";
+
+
+
+	//Should be enum?
+	private static final int CARD_TYPE_PROGRAM = 0;
+	private static final int CARD_TYPE_HAND = 1;
+	private static final int CARD_TYPE_DECK = 2;
+	private static final int CARD_TYPE_DISCARD = 3;
+	private static final int CARD_TYPE_UPGRADE = 4;
+
 
 
 	private Connector connector;
@@ -124,8 +139,7 @@ class Repository implements IRepository {
 			// statement.close();
 
 			createPlayersInDB(game);
-			createCardsInDB(game);
-
+			createPlayerCardsInDB(game.getPlayers());
 
 			// since player is a foreign key, activation queue can only be
 			// created now, since MySQL does not have a per transaction validation,
@@ -195,7 +209,7 @@ class Repository implements IRepository {
 			updatePlayersInDB(game);
 			updateActivationQueueInDB(game);
 			//TODO this method needs to be implemented
-			updateCardsInDB(game);
+			updatePlayerCardsInDB(game.getPlayers());
 
 
             connection.commit();
@@ -375,18 +389,114 @@ class Repository implements IRepository {
 	}
 
 	/**
-	 *
-	 * @param player
+	 * <p>Creates all of the specified players' cards in the database</p>
+	 * @param players a list of players whose cards are to be created in the database
+	 * @throws SQLException
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void createCardsInDB(Player player) {
+	private void createPlayerCardsInDB(Player... players) throws SQLException {
+		for (Player player: players) {
+			createPlayerProgramInDatabase(player);
+			createPlayerHandInDatabase(player);
+			//createPlayerDeckInDatabase(player);
+			//createPlayerDiscardInDatabase(player); //?
+			//createPlayerUpgradeCardsInDatabase(player)
+		}
+	}
+
+	/**
+	 * <p>Creates the specified player' hand in the database.</p>
+	 * @param player the player whose hand is to be created in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void createPlayerHandInDatabase(Player player) throws SQLException {
+		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
+		createCardsInDB(gameID, playerID, CARD_TYPE_HAND, player.getHand());
+	}
+
+	/**
+	 * <p>Creates the specified player' program in the database.</p>
+	 * @param player the player whose program is to be created in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void createPlayerProgramInDatabase(Player player) throws SQLException {
+		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
+		createCardsInDB(gameID, playerID, CARD_TYPE_PROGRAM, player.getProgram());
+	}
+
+	/**
+	 * <p>Create a list of {@link CommandCardField}s in the database
+	 * belonging to a specified player's specified deck. I.e. their
+	 * program, hand, discard pile, program deck, and so on</p>
+	 * @param gameID the ID of the game that the player belongs to
+	 * @param playerID the ID of the player whom the deck belongs to
+	 * @param cardType the type of the deck
+	 * @param cCFields the deck that is to be created in the database
+	 * @throws SQLException
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void createCardsInDB(int gameID, int playerID, int cardType, CommandCardField[] cCFields) throws SQLException {
+		PreparedStatement preparedStatement = getSelectCardStatementUpdatable();
+		preparedStatement.setInt(1, gameID);
+		preparedStatement.setInt(2, playerID);
+		ResultSet resultSetCards = preparedStatement.executeQuery();
+
+		for (int i = 0; i < cCFields.length; i++) {
+			CommandCardField cCardField = cCFields[i];
+			if (cCardField.getCard() == null) continue;
+
+			resultSetCards.moveToInsertRow();
+			resultSetCards.updateInt(PLAYER_GAMEID, gameID);
+			resultSetCards.updateInt(PLAYER_PLAYERID, playerID);
+			resultSetCards.updateInt(CARD_TYPE, cardType);
+			resultSetCards.updateInt(CARD_POSITION, i);
+			resultSetCards.updateRow();
+
+			createCardCommandsInDatabase(gameID, playerID, cardType, i, cCardField);
+
+		}
+
 
 	}
 
 	/**
-	 *
-	 * @param player
+	 * <p>Saves the {@link Command}s of a {@link CommandCard} in the database.</p>
+	 * @param gameID part of primary key of cCardField in database
+	 * @param playerID part of primary key of cCardField in database
+	 * @param cardType part of primary key of cCardField in database
+	 * @param position part of primary key of cCardField in database
+	 * @param cCardField the card field of the card whose commands are to be saved in the database
+	 * @throws SQLException
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void updateCardsInDB(Player player) {
+	private void createCardCommandsInDatabase(int gameID, int playerID, int cardType, int position, CommandCardField cCardField) throws SQLException {
+		PreparedStatement ps = getSelectCardCommandStatementUpdatable();
+		ps.setInt(1, gameID);
+		ps.setInt(2, playerID);
+		ps.setInt(3, cardType);
+		ps.setInt(4, position);
+		ResultSet resultSetCommands = ps.executeQuery();
+		List<Command> commands = cCardField.getCard().command.getOptions();
+		if (commands.isEmpty()) commands.add(cCardField.getCard().command);
+		for (Command command: commands) {
+			resultSetCommands.moveToInsertRow();
+			resultSetCommands.updateInt(PLAYER_GAMEID, gameID);
+			resultSetCommands.updateInt(PLAYER_PLAYERID, playerID);
+			resultSetCommands.updateInt(CARD_TYPE, cardType);
+			resultSetCommands.updateInt(CARD_POSITION, position);
+			resultSetCommands.updateInt(CARD_COMMAND, command.ordinal());
+		}
+	}
+
+
+	
+	
+
+	/**
+	 *
+	 * @param players
+	 */
+	private void updatePlayerCardsInDB(Player... players) {
 
 	}
 
