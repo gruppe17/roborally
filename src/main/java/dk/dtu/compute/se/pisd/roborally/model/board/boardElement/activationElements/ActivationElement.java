@@ -28,5 +28,9 @@ public abstract class ActivationElement extends BoardElement {
         return space;
     }
 
+    public void setSpace(Space space) {
+        this.space = space;
+    }
+
     public int getPriority() {return priority;}
 }
