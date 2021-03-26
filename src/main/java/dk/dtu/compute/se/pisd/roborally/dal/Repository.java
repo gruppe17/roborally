@@ -520,6 +520,76 @@ class Repository implements IRepository {
 
 
 	/**
+	 * <p>Reads cards from database and assigns them to the right positions on all players.</p>
+	 *
+	 * @param players
+	 * @throws SQLException
+	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
+	 */
+	private void loadPlayerCardsFromDB(Player... players) throws SQLException {
+		PreparedStatement ps = getSelectCardStatementUpdatable();
+
+		for (Player player : players) {
+			ps.setInt(1, player.game.getGameId());
+			ps.setInt(2, player.game.getPlayerNumber(player));
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int cardId = rs.getInt(CARD_ID);
+				int type = rs.getInt(CARD_TYPE);
+				int position = rs.getInt(CARD_POSITION);
+
+				Command command = loadPlayerCardCommandFromDB(cardId);
+				CommandCard card = new CommandCard(command);
+				switch (type) {
+					case CARD_TYPE_PROGRAM:
+						player.getProgramField(position).setCard(card);
+						break;
+					case CARD_TYPE_HAND:
+						player.getHandField(position).setCard(card);
+						break;
+					case CARD_TYPE_DECK:
+
+						break;
+					case CARD_TYPE_DISCARD:
+
+						break;
+					case CARD_TYPE_UPGRADE:
+
+						break;
+				}
+
+
+
+			}
+
+		}
+	}
+
+	/**
+	 * <p> Reads from database a command from assigned to the specific cardId </p>
+	 * @param cardID
+	 * @return
+	 * @throws SQLException
+	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
+	 */
+	private Command loadPlayerCardCommandFromDB(int cardID) throws SQLException {
+		PreparedStatement ps = getSelectCardCommandStatement();
+
+		ps.setInt(1, cardID);
+		ResultSet rs = ps.executeQuery();
+
+		// Get first row
+		rs.next();
+		int commandId = rs.getInt(CARD_COMMAND);
+
+		return Command.values()[commandId];
+
+
+	}
+
+
+	/**
 	 * <p>The SQL command for selecting the cards
 	 * associated with a specific player ín the database.</p>
 	 */
