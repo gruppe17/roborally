@@ -76,7 +76,7 @@ class Repository implements IRepository {
 
 	private static final String CARD_POSITION = "position";
 
-
+	private static final String CARD_COMMAND = "command";
 
 	//Should be enum?
 	private static final int CARD_TYPE_PROGRAM = 0;
@@ -501,12 +501,58 @@ class Repository implements IRepository {
 	}
 
 
-	private PreparedStatement getSelectCardStatementUpdatable() {
+	/**
+	 * <p>The SQL command for selecting the cards
+	 * associated with a specific player ín the database.</p>
+	 */
+	private static final String SQL_SELECT_CARD_STATEMENT = "SELECT * FROM Card WHERE gameID = ? AND playerID = ? ORDER BY type, position ASC";
 
+	/**
+	 * <p>The prepared statement for getting and updating the
+	 * cards associated with a given gameID and playerID. Setting
+	 * parameter 1 will set the gameID and setting 2 will set
+	 * playerID.</p>
+	 * @see #getSelectCardStatementUpdatable()
+	 */
+	private PreparedStatement selectCardStatement = null;
+
+	private PreparedStatement getSelectCardStatementUpdatable() {
+		if (selectCardStatement != null) return selectCardStatement;
+		Connection connection = connector.getConnection();
+		try {
+			selectCardStatement = connection.prepareStatement(SQL_SELECT_CARD_STATEMENT,
+					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return selectActivationQueueStatement;
 	}
 
-	private PreparedStatement getSelectCardCommandStatementUpdatable() {
+	/**
+	 * <p>The SQL command for selecting the commands
+	 * associated with a specific card ín the database.</p>
+	 */
+	private static final String SQL_SELECT_CARD_COMMAND_STATEMENT = "SELECT * FROM CardCommand WHERE gameID = ? AND playerID = ? AND type = ? AND position = ? ORDER BY type, position ASC";
 
+	/**
+	 * <p>The prepared statement for getting and updating the
+	 * commands associated with a given card. Setting
+	 * parameter 1 will set the gameID, 2 will set
+	 * playerID, 3 will set type and 4 will set position.</p>
+	 * @see #getSelectCardCommandStatementUpdatable()
+	 */
+	private PreparedStatement selectCardCommandStatement = null;
+
+	private PreparedStatement getSelectCardCommandStatementUpdatable() {
+		if (selectCardCommandStatement != null) return selectCardCommandStatement;
+		Connection connection = connector.getConnection();
+		try {
+			selectCardCommandStatement = connection.prepareStatement(SQL_SELECT_CARD_COMMAND_STATEMENT,
+					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return selectCardCommandStatement;
 	}
 
 	/**
