@@ -29,10 +29,8 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
-import java.util.PriorityQueue;
 
 /**
  * ...
@@ -74,6 +72,8 @@ class Repository implements IRepository {
 
 	private static final String ACTIVATION_QUEUE_PRIORITY = "priority";
 
+	private static final String CARD_ID = "cardID";
+
 	private static final String CARD_TYPE = "type";
 
 	private static final String CARD_POSITION = "position";
@@ -88,6 +88,7 @@ class Repository implements IRepository {
 	private static final int CARD_TYPE_UPGRADE = 4;
 
 
+	Random random = new Random();
 
 	private Connector connector;
 
@@ -447,13 +448,22 @@ class Repository implements IRepository {
 			CommandCardField cCardField = cCFields[i];
 			if (cCardField.getCard() == null) continue;
 
-			resultSetCards.moveToInsertRow();
-			resultSetCards.updateInt(PLAYER_GAMEID, gameID);
-			resultSetCards.updateInt(PLAYER_PLAYERID, playerID);
-			resultSetCards.updateInt(CARD_TYPE, cardType);
-			resultSetCards.updateInt(CARD_POSITION, i);
-			resultSetCards.updateRow();
+			while (true){
+				try {
+					resultSetCards.moveToInsertRow();
+					resultSetCards.updateInt(CARD_ID, random.nextInt());
+					resultSetCards.updateInt(PLAYER_GAMEID, gameID);
+					resultSetCards.updateInt(PLAYER_PLAYERID, playerID);
+					resultSetCards.updateInt(CARD_TYPE, cardType);
+					resultSetCards.updateInt(CARD_POSITION, i);
+					resultSetCards.updateRow();
+					break;
+				} catch (SQLException e) {
+					if (e.getErrorCode() != 1062) throw e; //1062 == duplicate entry
+				}
+			}
 
+//23000 1062
 			createCardCommandsInDatabase(gameID, playerID, cardType, i, cCardField);
 
 		}
