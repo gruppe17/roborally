@@ -30,6 +30,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -154,6 +155,15 @@ public class BoardLoader {
                 } catch (IOException e2) {
                 }
             }
+            for (int i = 0; i < board.width; i++) {
+                for (int j = 0; j < board.height; j++) {
+                    Space space = board.getSpace(i, j);
+                    if (space == null) continue;
+                    for (ActivationElement boardElement: space.getActivationElements()) {
+                        boardElement.setSpace(space);
+                    }
+                }
+            }
         }
     }
 
@@ -173,7 +183,9 @@ public class BoardLoader {
             //todo add all method in space?
             for (BoardElement boardElement : spaceTemplate.boardElements) {
                 space.addBoardElement(boardElement);
+                if (boardElement instanceof ActivationElement) ((ActivationElement) boardElement).setSpace(space);
             }
+
         }
         return board;
     }
@@ -218,6 +230,9 @@ public class BoardLoader {
         }
          */
         spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
+        for (ActivationElement boardElement: space.getActivationElements()) {
+            boardElement.setSpace(null);
+        }
         return spaceTemplate;
     }
     /*
