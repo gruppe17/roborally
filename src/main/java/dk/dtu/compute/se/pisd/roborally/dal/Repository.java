@@ -42,6 +42,8 @@ import java.util.PriorityQueue;
  */
 class Repository implements IRepository {
 
+	//Todo: move these to their own file. One should have to enter the Repository file to tinker with the names
+	// in the database - Rasmus
 	private static final String GAME_GAMEID = "gameID";
 
 	private static final String GAME_NAME = "name";
