@@ -46,13 +46,14 @@ class Repository implements IRepository {
 
 	private Connector connector;
 
-	Repository(){
+	Repository() {
 		connector = Connector.getInstance();
 	}
 
 	/**
 	 * <p>Creates a game in the database and returns a boolean indicating
 	 * whether the creation was successful.</p>
+	 *
 	 * @param game the game to be created in the database
 	 * @return true if the game was successfully created
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
@@ -133,11 +134,10 @@ class Repository implements IRepository {
 		return false;
 	}
 
-
-
 	/**
 	 * <p>Updates a game in the database and returns a boolean indicating
 	 * whether the operation was successful.</p>
+	 *
 	 * @param game the game to be updated in the database, may not be null
 	 * @return
 	 */
@@ -169,8 +169,8 @@ class Repository implements IRepository {
 			updatePlayerCardsInDB(game.getPlayers());
 
 
-            connection.commit();
-            connection.setAutoCommit(true);
+			connection.commit();
+			connection.setAutoCommit(true);
 			return true;
 		} catch (SQLException e) {
 			// TODO error handling
@@ -261,7 +261,7 @@ class Repository implements IRepository {
 			while (rs.next()) {
 				int id = rs.getInt(DatabaseConstants.GAME_GAMEID);
 				String name = rs.getString(DatabaseConstants.GAME_NAME);
-				result.add(new GameInDB(id,name));
+				result.add(new GameInDB(id, name));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -305,19 +305,19 @@ class Repository implements IRepository {
 				// TODO this should be more defensive
 				String name = rs.getString(DatabaseConstants.PLAYER_NAME);
 				String colour = rs.getString(DatabaseConstants.PLAYER_COLOUR);
-				Player player = new Player(game, colour ,name);
+				Player player = new Player(game, colour, name);
 				game.addPlayer(player);
 
 				int x = rs.getInt(DatabaseConstants.PLAYER_POSITION_X);
 				int y = rs.getInt(DatabaseConstants.PLAYER_POSITION_Y);
-				player.setSpace(game.getBoard().getSpace(x,y));
+				player.setSpace(game.getBoard().getSpace(x, y));
 				int heading = rs.getInt(DatabaseConstants.PLAYER_HEADING);
 				player.setHeading(Heading.values()[heading]);
 
 				// TODO  should also load players program and hand here
 			} else {
 				// TODO error handling
-				System.err.println("Game in DB does not have a player with id " + i +"!");
+				System.err.println("Game in DB does not have a player with id " + i + "!");
 			}
 		}
 		rs.close();
@@ -347,12 +347,13 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Creates all of the specified players' cards in the database</p>
+	 *
 	 * @param players a list of players whose cards are to be created in the database
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createPlayerCardsInDB(Player... players) throws SQLException {
-		for (Player player: players) {
+		for (Player player : players) {
 			createPlayerProgramInDatabase(player);
 			createPlayerHandInDatabase(player);
 			//createPlayerDeckInDatabase(player);
@@ -363,6 +364,7 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Creates the specified player' hand in the database.</p>
+	 *
 	 * @param player the player whose hand is to be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -373,6 +375,7 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Creates the specified player' program in the database.</p>
+	 *
 	 * @param player the player whose program is to be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -385,7 +388,8 @@ class Repository implements IRepository {
 	 * <p>Create a list of {@link CommandCardField}s in the database
 	 * belonging to a specified player's specified deck. I.e. their
 	 * program, hand, discard pile, program deck, and so on</p>
-	 * @param gameID the ID of the game that the player belongs to
+	 *
+	 * @param gameID   the ID of the game that the player belongs to
 	 * @param playerID the ID of the player whom the deck belongs to
 	 * @param cardType the type of the deck
 	 * @param cCFields the deck that is to be created in the database
@@ -402,7 +406,7 @@ class Repository implements IRepository {
 			CommandCardField cCardField = cCFields[i];
 			if (cCardField.getCard() == null) continue;
 			int cardID;
-			while (true){
+			while (true) {
 				cardID = random.nextInt();
 				try {
 					resultSetCards.moveToInsertRow();
@@ -425,7 +429,8 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Saves the {@link Command}s of a {@link CommandCard} in the database.</p>
-	 * @param cardID the primary key of the card in the database
+	 *
+	 * @param cardID     the primary key of the card in the database
 	 * @param cCardField the card field of the card whose commands are to be saved in the database
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
@@ -436,7 +441,7 @@ class Repository implements IRepository {
 
 		List<Command> commands = cCardField.getCard().command.getOptions();
 		if (commands.isEmpty()) commands.add(cCardField.getCard().command);
-		for (Command command: commands) {
+		for (Command command : commands) {
 			ps.setInt(1, command.ordinal());
 			ps.execute();
 		}
@@ -445,25 +450,26 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Deletes the cards of the specified players in the database</p>
+	 *
 	 * @param players a list of players whose cards are to be deleted from the database
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void deletePlayerCardsInDB(Player... players) throws SQLException {
 		PreparedStatement preparedStatement = preparedStatements.getSelectCardStatementUpdatable();
-		for (Player player: players) {
+		for (Player player : players) {
 			preparedStatement.setInt(1, player.game.getGameId());
 			preparedStatement.setInt(2, player.game.getPlayerNumber(player));
 			ResultSet resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()){
+			while (resultSet.next()) {
 				resultSet.deleteRow();
 			}
 		}
 	}
-	
 
 	/**
 	 * <p>Updates the specified players' cards in the database.</p>
+	 *
 	 * @param players a list of players whose cards are to be updated in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -475,6 +481,7 @@ class Repository implements IRepository {
 	/**
 	 * <p>Loads the activation queue from the database
 	 * into the game. The players should be loaded first!</p>
+	 *
 	 * @param game the game whose activation queue is to be loaded
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -484,7 +491,7 @@ class Repository implements IRepository {
 		ResultSet resultSet = preparedStatement.executeQuery();
 
 		PriorityQueue<Player> activationQueue = new PriorityQueue<>();
-		while (resultSet.next()){
+		while (resultSet.next()) {
 			activationQueue.add(game.getPlayer(resultSet.getInt(DatabaseConstants.PLAYER_PLAYERID)));
 		}
 		game.setPlayerActivationQueue(activationQueue);
@@ -507,10 +514,9 @@ class Repository implements IRepository {
 		createActivationQueueInDB(game);
 	}
 
-
-
 	/**
 	 * <p>Deletes the activation queue of a {@link Game} in the database.</p>
+	 *
 	 * @param game the game which activation queue should be deleted
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -518,7 +524,7 @@ class Repository implements IRepository {
 		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
-		while (resultSet.next()){
+		while (resultSet.next()) {
 			resultSet.deleteRow();
 		}
 		resultSet.close();
@@ -531,6 +537,7 @@ class Repository implements IRepository {
 	 * <b>NOT</b> be done be calling {@link Game#playerQueueForceRepopulate()}
 	 * as this will not take into account any players who have already been
 	 * activated, nor whether any players have been pushed around.</p>
+	 *
 	 * @param game the game which activation queue should be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
@@ -542,7 +549,7 @@ class Repository implements IRepository {
 		// Something should be done to deal with that.
 		Player player;
 		int i = 0;
-		while ((player = game.nextPlayer()) != null){
+		while ((player = game.nextPlayer()) != null) {
 			resultSet.moveToInsertRow();
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_GAMEID, game.getGameId());
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
