@@ -390,6 +390,15 @@ class Repository implements IRepository {
 
 	}
 
+
+	private PreparedStatement getSelectCardStatementUpdatable() {
+
+	}
+
+	private PreparedStatement getSelectCardCommandStatementUpdatable() {
+
+	}
+
 	/**
 	 * <p>Loads the activation queue from the database
 	 * into the game. The players should be loaded first!</p>
