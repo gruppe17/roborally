@@ -41,14 +41,13 @@ import java.util.Date;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class Repository implements IRepository {
-
-
+	private final PreparedStatements preparedStatements = new PreparedStatements(this);
 	Random random = new Random();
 
 	private Connector connector;
 
-	Repository(Connector connector){
-		this.connector = connector;
+	Repository(){
+		connector = Connector.getInstance();
 	}
 
 	/**
@@ -69,7 +68,7 @@ class Repository implements IRepository {
 		Connection connection = connector.getConnection();
 		try {
 			connection.setAutoCommit(false);
-			PreparedStatement ps = getInsertGameStatementRGK();
+			PreparedStatement ps = preparedStatements.getInsertGameStatementRGK();
 			// TODO: the name should eventually set by the user
 			//       for the game and should be then used
 			//       game.getName();
@@ -104,7 +103,7 @@ class Repository implements IRepository {
 			// but validates on a per row basis.
 			createActivationQueueInDB(game);
 
-			ps = getSelectGameStatementU();
+			ps = preparedStatements.getSelectGameStatementU();
 			ps.setInt(1, game.getGameId());
 
 			ResultSet rs = ps.executeQuery();
@@ -150,7 +149,7 @@ class Repository implements IRepository {
 		try {
 			connection.setAutoCommit(false);
 
-			PreparedStatement ps = getSelectGameStatementU();
+			PreparedStatement ps = preparedStatements.getSelectGameStatementU();
 			ps.setInt(1, game.getGameId());
 
 			ResultSet rs = ps.executeQuery();
@@ -197,7 +196,7 @@ class Repository implements IRepository {
 			// TODO here, we could actually use a simpler statement
 			//      which is not updatable, but reuse the one from
 			//      above for the pupose
-			PreparedStatement ps = getSelectGameStatementU();
+			PreparedStatement ps = preparedStatements.getSelectGameStatementU();
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
@@ -257,7 +256,7 @@ class Repository implements IRepository {
 		//      reduce the number of the returned games.
 		List<GameInDB> result = new ArrayList<>();
 		try {
-			PreparedStatement ps = getSelectGameIdsStatement();
+			PreparedStatement ps = preparedStatements.getSelectGameIdsStatement();
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt(DatabaseConstants.GAME_GAMEID);
@@ -274,7 +273,7 @@ class Repository implements IRepository {
 
 	private void createPlayersInDB(Game game) throws SQLException {
 		// TODO code should be more defensive
-		PreparedStatement ps = getSelectPlayersStatementU();
+		PreparedStatement ps = preparedStatements.getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
 
 		ResultSet rs = ps.executeQuery();
@@ -295,7 +294,7 @@ class Repository implements IRepository {
 	}
 
 	private void loadPlayersFromDB(Game game) throws SQLException {
-		PreparedStatement ps = getSelectPlayersASCStatement();
+		PreparedStatement ps = preparedStatements.getSelectPlayersASCStatement();
 		ps.setInt(1, game.getGameId());
 
 		ResultSet rs = ps.executeQuery();
@@ -325,7 +324,7 @@ class Repository implements IRepository {
 	}
 
 	private void updatePlayersInDB(Game game) throws SQLException {
-		PreparedStatement ps = getSelectPlayersStatementU();
+		PreparedStatement ps = preparedStatements.getSelectPlayersStatementU();
 		ps.setInt(1, game.getGameId());
 
 		ResultSet rs = ps.executeQuery();
@@ -394,7 +393,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createCardsInDB(int gameID, int playerID, int cardType, CommandCardField[] cCFields) throws SQLException {
-		PreparedStatement preparedStatement = getSelectCardStatementUpdatable();
+		PreparedStatement preparedStatement = preparedStatements.getSelectCardStatementUpdatable();
 		preparedStatement.setInt(1, gameID);
 		preparedStatement.setInt(2, playerID);
 		ResultSet resultSetCards = preparedStatement.executeQuery();
@@ -432,7 +431,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createCardCommandsInDatabase(int cardID, CommandCardField cCardField) throws SQLException {
-		PreparedStatement ps = getInsertCardCommandStatement();
+		PreparedStatement ps = preparedStatements.getInsertCardCommandStatement();
 		ps.setInt(1, cardID);
 
 		List<Command> commands = cCardField.getCard().command.getOptions();
@@ -451,7 +450,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void deletePlayerCardsInDB(Player... players) throws SQLException {
-		PreparedStatement preparedStatement = getSelectCardStatementUpdatable();
+		PreparedStatement preparedStatement = preparedStatements.getSelectCardStatementUpdatable();
 		for (Player player: players) {
 			preparedStatement.setInt(1, player.game.getGameId());
 			preparedStatement.setInt(2, player.game.getPlayerNumber(player));
@@ -473,110 +472,6 @@ class Repository implements IRepository {
 		createPlayerCardsInDB(players);
 	}
 
-
-	/**
-	 * <p>The SQL command for selecting the cards
-	 * associated with a specific player ín the database.</p>
-	 */
-	private static final String SQL_SELECT_CARD_STATEMENT = "SELECT * FROM Card WHERE gameID = ? AND playerID = ? ORDER BY type, position ASC";
-
-	/**
-	 * <p>The prepared statement for getting and updating the
-	 * cards associated with a given gameID and playerID. Setting
-	 * parameter 1 will set the gameID and setting 2 will set
-	 * playerID.</p>
-	 * @see #getSelectCardStatementUpdatable()
-	 * @author Rasmus Nylander, s205418@student.dtu.dk
-	 */
-	private PreparedStatement selectCardStatement = null;
-
-	/**
-	 *
-	 * @return
-	 * @author Rasmus Nylander, s205418@student.dtu.dk
-	 */
-	private PreparedStatement getSelectCardStatementUpdatable() {
-		if (selectCardStatement != null) return selectCardStatement;
-		Connection connection = connector.getConnection();
-		try {
-			selectCardStatement = connection.prepareStatement(SQL_SELECT_CARD_STATEMENT,
-					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return selectActivationQueueStatement;
-	}
-
-	/**
-	 * <p>The SQL command for inserting the commands
-	 * associated with a specific card ín the database.</p>
-	 */
-	private static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + DatabaseConstants.CARD_ID + DatabaseConstants.CARD_COMMAND + ") VALUES(?, ?)";
-
-	/**
-	 * <p>The prepared statement for inserting a
-	 * commands associated with a given card. Setting
-	 * parameter 1 will set the cardID</p>
-	 * @see #getSelectCardCommandStatement()
-	 */
-	private PreparedStatement insertCardCommandStatement = null;
-
-	/**
-	 * <p>Initializes, if not already initialized, and returns the
-	 * {@link #selectActivationQueueStatement}. Executing the
-	 * statement will return an updatable {@link ResultSet}.</p>
-	 * @return 	the prepared statement for getting and updating
-	 * 			the player activation associated with a given gameID
-	 *
-	 * @author 	Rasmus Nylander, s205418@student.dtu.dk
-	 * @see 	#SQL_SELECT_ACTIVATION_QUEUE
-	 * @see 	#selectActivationQueueStatement
-	 */
-	private PreparedStatement getInsertCardCommandStatement() {
-		if (insertCardCommandStatement != null) return insertCardCommandStatement;
-		Connection connection = connector.getConnection();
-		try {
-			insertCardCommandStatement = connection.prepareStatement(SQL_INSERT_CARD_COMMAND_STATEMENT,
-					ResultSet.TYPE_FORWARD_ONLY);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return insertCardCommandStatement;
-	}
-
-	/**
-	 * <p>The SQL command for selecting the commands
-	 * associated with a specific card ín the database.</p>
-	 */
-	private static final String SQL_SELECT_CARD_COMMAND_STATEMENT = "SELECT * FROM CardCommand WHERE cardID = ?";
-
-	/**
-	 * <p>The prepared statement for getting the
-	 * commands associated with a given card. Setting
-	 * parameter 1 will set the cardID</p>
-	 * @see #getSelectCardCommandStatement()
-	 */
-	private PreparedStatement selectCardCommandStatement = null;
-
-
-
-	/**
-	 *
-	 * @return
-	 * @author Rasmus Nylander, s205418@student.dtu.dk
-	 */
-	private PreparedStatement getSelectCardCommandStatement() {
-		if (selectCardCommandStatement != null) return selectCardCommandStatement;
-		Connection connection = connector.getConnection();
-		try {
-			selectCardCommandStatement = connection.prepareStatement(SQL_SELECT_CARD_COMMAND_STATEMENT,
-					ResultSet.TYPE_FORWARD_ONLY);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return selectCardCommandStatement;
-	}
-
 	/**
 	 * <p>Loads the activation queue from the database
 	 * into the game. The players should be loaded first!</p>
@@ -584,7 +479,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void loadActivationQueueFromDatabase(Game game) throws SQLException {
-		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -620,7 +515,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void deleteActivationQueueInDB(Game game) throws SQLException {
-		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 		while (resultSet.next()){
@@ -640,7 +535,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createActivationQueueInDB(Game game) throws SQLException {
-		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
@@ -657,146 +552,4 @@ class Repository implements IRepository {
 		}
 		resultSet.close();
 	}
-
-	/**
-	 * <p>The SQL command for selecting the activation queue
-	 * associated with a specific game ín the database.</p>
-	 */
-	private static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ? ORDER BY priority ASC";
-
-	/**
-	 * <p>The prepared statement for getting and updating the
-	 * activation queue associated with a given gameID. Setting
-	 * parameter 1, will set the gameID.</p>
-	 * @see #getSelectActivationQueueStatementUpdatable()
-	 */
-	private PreparedStatement selectActivationQueueStatement = null;
-
-	/**
-	 * <p>Initializes, if not already initialized, and returns the
-	 * {@link #selectActivationQueueStatement}. Executing the
-	 * statement will return an updatable {@link ResultSet}.</p>
-	 * @return 	the prepared statement for getting and updating
-	 * 			the player activation associated with a given gameID
-	 *
-	 * @author 	Rasmus Nylander, s205418@student.dtu.dk
-	 * @see 	#SQL_SELECT_ACTIVATION_QUEUE
-	 * @see 	#selectActivationQueueStatement
-	 */
-	private PreparedStatement getSelectActivationQueueStatementUpdatable() {
-		if (selectActivationQueueStatement != null) return selectActivationQueueStatement;
-		Connection connection = connector.getConnection();
-		try {
-			selectActivationQueueStatement = connection.prepareStatement(SQL_SELECT_ACTIVATION_QUEUE,
-					ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return selectActivationQueueStatement;
-	}
-
-
-	private static final String SQL_INSERT_GAME =
-			"INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
-
-	private PreparedStatement insert_game_stmt = null;
-
-	private PreparedStatement getInsertGameStatementRGK() {
-		if (insert_game_stmt == null) {
-			Connection connection = connector.getConnection();
-			try {
-				insert_game_stmt = connection.prepareStatement(
-						SQL_INSERT_GAME,
-						Statement.RETURN_GENERATED_KEYS);
-			} catch (SQLException e) {
-				// TODO error handling
-				e.printStackTrace();
-			}
-		}
-		return insert_game_stmt;
-	}
-
-	private static final String SQL_SELECT_GAME =
-			"SELECT * FROM Game WHERE gameID = ?";
-	
-	private PreparedStatement select_game_stmt = null;
-	
-	private PreparedStatement getSelectGameStatementU() {
-		if (select_game_stmt == null) {
-			Connection connection = connector.getConnection();
-			try {
-				select_game_stmt = connection.prepareStatement(
-						SQL_SELECT_GAME,
-						ResultSet.TYPE_FORWARD_ONLY,
-					    ResultSet.CONCUR_UPDATABLE);
-			} catch (SQLException e) {
-				// TODO error handling
-				e.printStackTrace();
-			}
-		}
-		return select_game_stmt;
-	}
-		
-	private static final String SQL_SELECT_PLAYERS =
-			"SELECT * FROM Player WHERE gameID = ?";
-
-	private PreparedStatement select_players_stmt = null;
-
-	private PreparedStatement getSelectPlayersStatementU() {
-		if (select_players_stmt == null) {
-			Connection connection = connector.getConnection();
-			try {
-				select_players_stmt = connection.prepareStatement(
-						SQL_SELECT_PLAYERS,
-						ResultSet.TYPE_FORWARD_ONLY,
-						ResultSet.CONCUR_UPDATABLE);
-			} catch (SQLException e) {
-				// TODO error handling
-				e.printStackTrace();
-			}
-		}
-		return select_players_stmt;
-	}
-
-	private static final String SQL_SELECT_PLAYERS_ASC =
-			"SELECT * FROM Player WHERE gameID = ? ORDER BY playerID ASC";
-	
-	private PreparedStatement select_players_asc_stmt = null;
-	
-	private PreparedStatement getSelectPlayersASCStatement() {
-		if (select_players_asc_stmt == null) {
-			Connection connection = connector.getConnection();
-			try {
-				// This statement does not need to be updatable
-				select_players_asc_stmt = connection.prepareStatement(
-						SQL_SELECT_PLAYERS_ASC);
-			} catch (SQLException e) {
-				// TODO error handling
-				e.printStackTrace();
-			}
-		}
-		return select_players_asc_stmt;
-	}
-	
-	private static final String SQL_SELECT_GAMES =
-			"SELECT gameID, name FROM Game";
-	
-	private PreparedStatement select_games_stmt = null;
-	
-	private PreparedStatement getSelectGameIdsStatement() {
-		if (select_games_stmt == null) {
-			Connection connection = connector.getConnection();
-			try {
-				select_games_stmt = connection.prepareStatement(
-						SQL_SELECT_GAMES);
-			} catch (SQLException e) {
-				// TODO error handling
-				e.printStackTrace();
-			}
-		}
-		return select_games_stmt;
-	}
-
-
-
 }

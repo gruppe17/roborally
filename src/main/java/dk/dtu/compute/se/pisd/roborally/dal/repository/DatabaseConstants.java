@@ -20,6 +20,11 @@ public class DatabaseConstants {
     static final String CARD_TYPE = "type";
     static final String CARD_POSITION = "position";
     static final String CARD_COMMAND = "command";
+    /**
+     * <p>The SQL command for inserting the commands
+     * associated with a specific card ín the database.</p>
+     */
+    static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_ID + CARD_COMMAND + ") VALUES(?, ?)";
 
     //Should be enum?
     static final int CARD_TYPE_PROGRAM = 0;
@@ -27,4 +32,25 @@ public class DatabaseConstants {
     static final int CARD_TYPE_DECK = 2;
     static final int CARD_TYPE_DISCARD = 3;
     static final int CARD_TYPE_UPGRADE = 4;
+
+    /**
+     * <p>The SQL command for selecting the cards
+     * associated with a specific player ín the database.</p>
+     */
+    static final String SQL_SELECT_CARD_STATEMENT = "SELECT * FROM Card WHERE gameID = ? AND playerID = ? ORDER BY type, position ASC";
+    /**
+     * <p>The SQL command for selecting the commands
+     * associated with a specific card ín the database.</p>
+     */
+    static final String SQL_SELECT_CARD_COMMAND_STATEMENT = "SELECT * FROM CardCommand WHERE cardID = ?";
+    /**
+     * <p>The SQL command for selecting the activation queue
+     * associated with a specific game ín the database.</p>
+     */
+    static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ? ORDER BY priority ASC";
+    static final String SQL_INSERT_GAME = "INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
+    static final String SQL_SELECT_GAME = "SELECT * FROM Game WHERE gameID = ?";
+    static final String SQL_SELECT_PLAYERS = "SELECT * FROM Player WHERE gameID = ?";
+    static final String SQL_SELECT_PLAYERS_ASC = "SELECT * FROM Player WHERE gameID = ? ORDER BY playerID ASC";
+    static final String SQL_SELECT_GAMES = "SELECT gameID, name FROM Game";
 }
