@@ -31,6 +31,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * ...
@@ -235,7 +236,7 @@ class Repository implements IRepository {
 				// game = new Board(width,height);
 				// TODO and we should also store the used game board in the database
 				//      for now, we use the default game board
-				game = new Game(BoardLoader.loadBoard(null));
+				game = new Game(BoardLoader.loadBoard("test3"));
 				if (game == null) {
 					return null;
 				}
@@ -243,6 +244,7 @@ class Repository implements IRepository {
 				// TODO currently we do not set the games name (needs to be added)
 				game.setPhase(Phase.values()[rs.getInt(GAME_PHASE)]);
 				game.setStep(rs.getInt(GAME_STEP));
+
 			} else {
 				// TODO error handling
 				return null;
@@ -251,6 +253,7 @@ class Repository implements IRepository {
 
 			game.setGameId(id);
 			loadPlayersFromDB(game);
+			loadActivationQueueFromDatabase(game);
 
 			if (playerNo >= 0 && playerNo < game.getNumPlayers()) {
 				game.setCurrentPlayer(game.getPlayer(playerNo));
@@ -271,6 +274,7 @@ class Repository implements IRepository {
 		}
 		return null;
 	}
+
 
 	@Override
 	public List<GameInDB> getGames() {
@@ -370,6 +374,25 @@ class Repository implements IRepository {
 	}
 
 	/**
+	 * <p>Loads the activation queue from the database
+	 * into the game. The players should be loaded first!</p>
+	 * @param game the game whose activation queue is to be loaded
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void loadActivationQueueFromDatabase(Game game) throws SQLException {
+		PreparedStatement preparedStatement = getSelectActivationQueueStatementUpdatable();
+		preparedStatement.setInt(1, game.getGameId());
+		ResultSet resultSet = preparedStatement.executeQuery();
+
+		PriorityQueue<Player> activationQueue = new PriorityQueue<>();
+		while (resultSet.next()){
+			activationQueue.add(game.getPlayer(resultSet.getInt(PLAYER_PLAYERID)));
+		}
+		game.setPlayerActivationQueue(activationQueue);
+		resultSet.close();
+	}
+
+	/**
 	 * <p>Update the activation queue of a {@link Game} stored in the database.</p>
 	 * <p>This done by deleting the activation queue and then recreating it.
 	 * This is done because it is not possible to simply update the priority
@@ -399,6 +422,7 @@ class Repository implements IRepository {
 		while (resultSet.next()){
 			resultSet.deleteRow();
 		}
+		resultSet.close();
 	}
 
 	/**
@@ -427,13 +451,14 @@ class Repository implements IRepository {
 			resultSet.insertRow();
 			i++;
 		}
+		resultSet.close();
 	}
 
 	/**
 	 * <p>The SQL command for selecting the activation queue
 	 * associated with a specific game ín the database.</p>
 	 */
-	private static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ?";
+	private static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ? ORDER BY priority ASC";
 
 	/**
 	 * <p>The prepared statement for getting and updating the
