@@ -42,7 +42,7 @@ public class Game extends Subject {
      *
      * @see Player#getDistanceToPrioritySpace()
      */
-    private final Queue<Player> playerActivationQueue = new PriorityQueue<>(6, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
+    private Queue<Player> playerActivationQueue = new PriorityQueue<>(6, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 
     private Player current;
 
@@ -195,5 +195,9 @@ public class Game extends Subject {
     public void playerQueueForceRepopulate() {
         playerActivationQueue.clear();
         playerActivationQueue.addAll(players);
+    }
+
+    public void setPlayerActivationQueue(PriorityQueue<Player> activationQueue){
+        this.playerActivationQueue = activationQueue;
     }
 }
