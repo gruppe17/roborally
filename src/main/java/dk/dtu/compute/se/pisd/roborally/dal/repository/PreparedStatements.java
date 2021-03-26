@@ -2,8 +2,12 @@ package dk.dtu.compute.se.pisd.roborally.dal.repository;
 
 import java.sql.*;
 
+/**
+ * ...
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
 public class PreparedStatements {
-    private Connection connection = Connector.getInstance().getConnection();
+    private final Connection connection = Connector.getInstance().getConnection();
 
     /**
      * <p>The prepared statement for inserting a

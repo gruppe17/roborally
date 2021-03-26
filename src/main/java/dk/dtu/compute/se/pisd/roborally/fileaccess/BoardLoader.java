@@ -235,13 +235,5 @@ public class BoardLoader {
         }
         return spaceTemplate;
     }
-    /*
-    private static BoardElementTemplate boardElementToBoardElementTemplate(@NotNull BoardElement boardElement){
-        BoardElementTemplate boardElementTemplate = new BoardElementTemplate();
-        boardElementTemplate.impassableFrom =  boardElement.getImpassableFrom();
-        boardElementTemplate.opaqueFrom = boardElement.getOpaqueFrom();
-        boardElementTemplate.position = boardElement.getPosition();
-        boardElementTemplate.direction = boardElement.getDirection();
-    }
-*/
+
 }

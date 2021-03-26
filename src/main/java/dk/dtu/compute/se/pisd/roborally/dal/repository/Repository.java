@@ -41,7 +41,7 @@ import java.util.Date;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class Repository implements IRepository {
-	private final PreparedStatements preparedStatements = new PreparedStatements(this);
+	private final PreparedStatements preparedStatements = new PreparedStatements();
 	Random random = new Random();
 
 	private Connector connector;

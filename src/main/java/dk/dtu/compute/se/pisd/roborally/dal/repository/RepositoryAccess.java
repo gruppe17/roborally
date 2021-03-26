@@ -27,7 +27,7 @@ import dk.dtu.compute.se.pisd.roborally.dal.IRepository;
  * ...
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class RepositoryAccess {
     

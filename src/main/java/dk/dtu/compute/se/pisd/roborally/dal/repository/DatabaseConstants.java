@@ -1,5 +1,10 @@
 package dk.dtu.compute.se.pisd.roborally.dal.repository;
 
+/**
+ * ...
+ *
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
 public class DatabaseConstants {
     static final String GAME_GAMEID = "gameID";
     static final String GAME_NAME = "name";
