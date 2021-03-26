@@ -493,11 +493,13 @@ class Repository implements IRepository {
 	
 
 	/**
-	 *
-	 * @param players
+	 * <p>Updates the specified players' cards in the database.</p>
+	 * @param players a list of players whose cards are to be updated in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void updatePlayerCardsInDB(Player... players) {
-
+	private void updatePlayerCardsInDB(Player... players) throws SQLException {
+		deletePlayerCardsInDB(players);
+		createPlayerCardsInDB(players);
 	}
 
 
@@ -513,9 +515,15 @@ class Repository implements IRepository {
 	 * parameter 1 will set the gameID and setting 2 will set
 	 * playerID.</p>
 	 * @see #getSelectCardStatementUpdatable()
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private PreparedStatement selectCardStatement = null;
 
+	/**
+	 *
+	 * @return
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
 	private PreparedStatement getSelectCardStatementUpdatable() {
 		if (selectCardStatement != null) return selectCardStatement;
 		Connection connection = connector.getConnection();
@@ -543,6 +551,12 @@ class Repository implements IRepository {
 	 */
 	private PreparedStatement selectCardCommandStatement = null;
 
+
+	/**
+	 *
+	 * @return
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
 	private PreparedStatement getSelectCardCommandStatementUpdatable() {
 		if (selectCardCommandStatement != null) return selectCardCommandStatement;
 		Connection connection = connector.getConnection();
