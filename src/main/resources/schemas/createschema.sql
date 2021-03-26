@@ -40,25 +40,23 @@ CREATE TABLE IF NOT EXISTS ActivationQueue (
 );;
 
 CREATE TABLE IF NOT EXISTS Card (
+    cardID unsigned int NOT NULL UNIQUE AUTO_INCREMEANT,
     gameID int NOT NULL,
     playerID tinyint NOT NULL,
     type tinyint NOT NULL,
     position tinyint NOT NULL,
 
-    PRIMARY KEY (gameID, playerID, type, position),
+    PRIMARY KEY (cardID),
     FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE,
     FOREIGN KEY (gameID, playerID) REFERENCES Player(gameID, playerID) ON DELETE CASCADE
 );;
 
 CREATE TABLE IF NOT EXISTS CardCommand(
-    gameID int NOT NULL,
-    playerID tinyint NOT NULL,
-    type tinyint NOT NULL,
-    position tinyint NOT NULL,
+    cardID unsigned int NOT NULL,
     command tinyint NOT NULL,
 
-    PRIMARY KEY (gameID, playerID, type, position, command),
-    FOREIGN KEY (gameID, playerID, type, position) REFERENCES Card(gameID, playerID, type, position) ON DELETE CASCADE
+    PRIMARY KEY (cardID, command),
+    FOREIGN KEY (cardID) REFERENCES Card(cardID) ON DELETE CASCADE
 )
 
 SET FOREIGN_KEY_CHECKS = 1;;
