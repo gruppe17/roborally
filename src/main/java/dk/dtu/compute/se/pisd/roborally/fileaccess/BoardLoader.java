@@ -114,7 +114,7 @@ public class BoardLoader {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public static void saveBoard(@NotNull Board board, String name) {
-        BoardTemplate template = boardToBoardTemplate(board);
+        BoardTemplate template = boardToBoardTemplate(board, name);
 
         ClassLoader classLoader = BoardLoader.class.getClassLoader();
         // TODO: this is not very defensive, and will result in a NullPointerException
@@ -176,7 +176,7 @@ public class BoardLoader {
      */
     @NotNull
     private static Board boardFromBoardTemplate(BoardTemplate template) {
-        Board board = new Board(template.width, template.height);
+        Board board = new Board(template.width, template.height, template.name);
         for (SpaceTemplate spaceTemplate : template.spaces) {
             Space space = board.getSpace(spaceTemplate.x, spaceTemplate.y);
             if (space == null) continue;
@@ -198,10 +198,13 @@ public class BoardLoader {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     @NotNull
-    private static BoardTemplate boardToBoardTemplate(@NotNull Board board) {
+    private static BoardTemplate boardToBoardTemplate(@NotNull Board board, String name) {
         BoardTemplate template = new BoardTemplate();
+        template.name = name;
         template.width = board.width;
         template.height = board.height;
+
+        if (name == null) template.name = board.getBoardName();
 
         for (int i = 0; i < board.width; i++) {
             for (int j = 0; j < board.height; j++) {

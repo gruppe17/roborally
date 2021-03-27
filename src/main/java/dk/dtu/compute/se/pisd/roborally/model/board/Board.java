@@ -40,7 +40,7 @@ public class Board {
 
     public final int height;
 
-    public final String boardName;
+    private final String boardName;
 
     private final Space[][] spaces;
 
@@ -159,4 +159,7 @@ public class Board {
         return getRectilinearDistance(from, prioritySpace);
     }
 
+    public String getBoardName() {
+        return boardName;
+    }
 }

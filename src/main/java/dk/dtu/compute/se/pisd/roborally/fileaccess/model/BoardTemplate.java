@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class BoardTemplate {
 
+    public String name;
     public int width;
     public int height;
 

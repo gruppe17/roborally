@@ -75,9 +75,10 @@ class Repository implements IRepository {
 			//       for the game and should be then used
 			//       game.getName();
 			ps.setString(1, "Date: " + new Date()); // instead of name
-			ps.setNull(2, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
-			ps.setInt(3, game.getPhase().ordinal());
-			ps.setInt(4, game.getStep());
+			ps.setString(2, game.getBoard().getBoardName());
+			ps.setNull(3, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
+			ps.setInt(4, game.getPhase().ordinal());
+			ps.setInt(5, game.getStep());
 
 			// If you have a foreign key constraint for current players,
 			// the check would need to be temporarily disabled, since
@@ -209,7 +210,8 @@ class Repository implements IRepository {
 				// game = new Board(width,height);
 				// TODO and we should also store the used game board in the database
 				//      for now, we use the default game board
-				game = new Game(BoardLoader.loadBoard("test3"));
+				String boardName = rs.getString(DatabaseConstants.GAME_BOARD_NAME);
+				game = new Game(BoardLoader.loadBoard(boardName));
 				if (game == null) {
 					return null;
 				}

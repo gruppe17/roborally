@@ -9,6 +9,7 @@ class DatabaseConstants {
     /*Game*/
     static final String GAME_GAMEID = "gameID";
     static final String GAME_NAME = "name";
+    static final String GAME_BOARD_NAME = "boardName";
     static final String GAME_CURRENTPLAYER = "currentPlayer";
     static final String GAME_PHASE = "phase";
     static final String GAME_STEP = "step";
@@ -70,7 +71,7 @@ class DatabaseConstants {
      * associated with a specific game ín the database.</p>
      */
     static final String SQL_SELECT_ACTIVATION_QUEUE = "SELECT * FROM ActivationQueue WHERE gameID = ? ORDER BY priority ASC";
-    static final String SQL_INSERT_GAME = "INSERT INTO Game(name, currentPlayer, phase, step) VALUES (?, ?, ?, ?)";
+    static final String SQL_INSERT_GAME = "INSERT INTO Game(name, boardName, currentPlayer, phase, step) VALUES (?, ?, ?, ?, ?)";
     static final String SQL_SELECT_GAME = "SELECT * FROM Game WHERE gameID = ?";
     static final String SQL_SELECT_PLAYERS = "SELECT * FROM Player WHERE gameID = ?";
     static final String SQL_SELECT_PLAYERS_ASC = "SELECT * FROM Player WHERE gameID = ? ORDER BY playerID ASC";
