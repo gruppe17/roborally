@@ -43,13 +43,14 @@ import static dk.dtu.compute.se.pisd.roborally.dal.repository.DatabaseConstants.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class Repository implements IRepository {
-	private final PreparedStatements preparedStatements = new PreparedStatements();
+	private final PreparedStatements preparedStatements;
 	Random random = new Random();
 
 	private Connector connector;
 
-	Repository() {
-		connector = Connector.getInstance();
+	Repository(Connector connector) {
+		this.connector = connector;
+		preparedStatements = new PreparedStatements(connector);
 	}
 
 	/**

@@ -1,11 +1,11 @@
 package dk.dtu.compute.se.pisd.roborally.dal.repository;
 
 /**
- * ...
+ * <p>Collection of database constants used by the repository.</p>
  *
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class DatabaseConstants {
+class DatabaseConstants {
     static final String GAME_GAMEID = "gameID";
     static final String GAME_NAME = "name";
     static final String GAME_CURRENTPLAYER = "currentPlayer";
@@ -14,12 +14,12 @@ public class DatabaseConstants {
     static final String PLAYER_PLAYERID = "playerID";
     static final String PLAYER_NAME = "name";
     static final String PLAYER_COLOUR = "colour";
-    static final String PLAYER_GAMEID = "gameID";
+    static final String PLAYER_GAMEID = GAME_GAMEID;
     static final String PLAYER_POSITION_X = "positionX";
     static final String PLAYER_POSITION_Y = "positionY";
     static final String PLAYER_HEADING = "heading";
-    static final String ACTIVATION_QUEUE_GAMEID = "gameID";
-    static final String ACTIVATION_QUEUE_PLAYERID = "playerID";
+    static final String ACTIVATION_QUEUE_GAMEID = GAME_GAMEID;
+    static final String ACTIVATION_QUEUE_PLAYERID = PLAYER_PLAYERID;
     static final String ACTIVATION_QUEUE_PRIORITY = "priority";
     static final String CARD_ID = "cardID";
     static final String CARD_TYPE = "type";

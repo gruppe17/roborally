@@ -6,8 +6,12 @@ import java.sql.*;
  * ...
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class PreparedStatements {
-    private final Connection connection = Connector.getInstance().getConnection();
+class PreparedStatements {
+    private final Connection connection;
+
+    PreparedStatements(Connector connector){
+        connection = connector.getConnection();
+    }
 
     /**
      * <p>The prepared statement for inserting a

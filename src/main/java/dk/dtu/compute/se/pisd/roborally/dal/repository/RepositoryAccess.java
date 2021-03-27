@@ -35,7 +35,7 @@ public class RepositoryAccess {
 	
 	public static IRepository getRepository() {
 		if(repository == null) {
-			repository = new Repository();
+			repository = new Repository(Connector.getInstance());
 		}
 		return repository;
 	}
