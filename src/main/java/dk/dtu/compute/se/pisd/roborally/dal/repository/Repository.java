@@ -562,7 +562,7 @@ class Repository implements IRepository {
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 
-		PriorityQueue<Player> activationQueue = new PriorityQueue<>();
+		PriorityQueue<Player> activationQueue = new PriorityQueue<>(Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 		while (resultSet.next()) {
 			activationQueue.add(game.getPlayer(resultSet.getInt(DatabaseConstants.PLAYER_PLAYERID)));
 		}
