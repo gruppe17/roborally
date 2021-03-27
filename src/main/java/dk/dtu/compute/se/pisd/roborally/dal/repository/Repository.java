@@ -443,7 +443,7 @@ class Repository implements IRepository {
 		ps.setInt(1, cardID);
 
 		List<Command> commands = cCardField.getCard().command.getOptions();
-		if (commands.isEmpty()) commands.add(cCardField.getCard().command);
+		if (commands.isEmpty()) commands = Collections.singletonList(cCardField.getCard().command);
 		for (Command command : commands) {
 			ps.setInt(1, command.ordinal());
 			ps.execute();
