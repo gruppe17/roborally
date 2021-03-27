@@ -34,6 +34,8 @@ import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationEleme
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -46,7 +48,7 @@ public class BoardLoader {
 
 	private static final String BOARDSFOLDER = "boards";
 	private static final String DEFAULTBOARD = "defaultboard";
-	private static final String JSON_EXT = "json";
+	private static final String JSON_EXT = ".json";
 
 	/**
 	 * <p>Loads a {@link Board} from a file and returns it.</p>
@@ -62,7 +64,7 @@ public class BoardLoader {
 		}
 
 		ClassLoader classLoader = BoardLoader.class.getClassLoader();
-		InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + "." + JSON_EXT);
+		InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + JSON_EXT);
 		if (inputStream == null) {
 			// TODO these constants should be defined somewhere
 			return new Board(8, 8);
@@ -120,7 +122,8 @@ public class BoardLoader {
 		// TODO: this is not very defensive, and will result in a NullPointerException
 		//       when the folder "resources" does not exist! But, it does not need
 		//       the file "simpleCards.json" to exist!
-		String filename = classLoader.getResource(BOARDSFOLDER).getPath() + "/" + name + "." + JSON_EXT;
+		String filename = classLoader.getResource(BOARDSFOLDER + "/" + name  + JSON_EXT).getPath();
+
 
 		// In simple cases, we can create a Gson object with new:
 		//
@@ -137,6 +140,8 @@ public class BoardLoader {
 		FileWriter fileWriter = null;
 		JsonWriter writer = null;
 		try {
+			//filename = new URI(filename).getPath();
+			filename = URLDecoder.decode(filename, StandardCharsets.UTF_8);
 			fileWriter = new FileWriter(filename);
 			writer = gson.newJsonWriter(fileWriter);
 			gson.toJson(template, template.getClass(), writer);
