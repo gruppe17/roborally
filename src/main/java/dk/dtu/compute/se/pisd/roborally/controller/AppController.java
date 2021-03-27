@@ -103,6 +103,7 @@ public class AppController implements Observer {
         // If possible to update maybe ask player whether to overwrite the old save
         if (gameController == null) return;
         RepositoryAccess.getRepository().createGameInDB(gameController.game);
+
     }
 
     /**
@@ -115,7 +116,8 @@ public class AppController implements Observer {
         if (gameController != null) return;
         GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
         //Todo: show user names and get their choice.
-        RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[1].id);
+        gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[1].id));
+        roboRally.createGameView(gameController);
     }
 
     /**
