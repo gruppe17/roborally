@@ -324,6 +324,8 @@ class Repository implements IRepository {
 			}
 		}
 		rs.close();
+
+		loadPlayerCardsFromDB(game.getPlayers());
 	}
 
 	private void updatePlayersInDB(Game game) throws SQLException {
