@@ -204,6 +204,7 @@ public class BoardLoader {
 	 */
 	@NotNull
 	private static BoardTemplate boardToBoardTemplate(@NotNull Board board, String name) {
+		//Todo: maybe should just be the constructor of BoardTemplate?
 		BoardTemplate template = new BoardTemplate();
 		template.name = name;
 		template.width = board.width;

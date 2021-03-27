@@ -21,6 +21,8 @@
  */
 package dk.dtu.compute.se.pisd.roborally.fileaccess.model;
 
+import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +35,10 @@ import java.util.List;
  */
 public class BoardTemplate {
 
-    public String name;
-    public int width;
-    public int height;
+	public String name;
+	public int width;
+	public int height;
 
-    public List<SpaceTemplate> spaces = new ArrayList<>();
+	public List<SpaceTemplate> spaces = new ArrayList<>();
 
 }
