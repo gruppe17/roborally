@@ -98,7 +98,9 @@ public class AppController implements Observer {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void saveGame() {
-        //Name the save
+        //Todo: Name the save
+        //Todo: Determine whether to create or update
+        // If possible to update maybe ask player whether to overwrite the old save
         if (gameController == null) return;
         RepositoryAccess.getRepository().createGameInDB(gameController.game);
     }
@@ -112,7 +114,8 @@ public class AppController implements Observer {
         // for now, we just create a new game
         if (gameController != null) return;
         GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
-        //ChoiceDialog<String> dialog = new ChoiceDialog<>(gameInDBs.)
+        //Todo: show user names and get their choice.
+        RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[1].id);
     }
 
     /**
