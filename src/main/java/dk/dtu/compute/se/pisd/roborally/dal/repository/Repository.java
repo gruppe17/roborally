@@ -34,8 +34,6 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-import static dk.dtu.compute.se.pisd.roborally.dal.repository.DatabaseConstants.CARD_ID;
-
 /**
  * ...
  *
@@ -290,6 +288,7 @@ class Repository implements IRepository {
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
 			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_ENERGY_CUBES, player.getEnergyCubes());
 			rs.insertRow();
 		}
 
@@ -316,6 +315,7 @@ class Repository implements IRepository {
 				player.setSpace(game.getBoard().getSpace(x, y));
 				int heading = rs.getInt(DatabaseConstants.PLAYER_HEADING);
 				player.setHeading(Heading.values()[heading]);
+				player.setEnergyCubes(rs.getInt(DatabaseConstants.PLAYER_ENERGY_CUBES));
 
 				// TODO  should also load players program and hand here
 			} else {
@@ -341,6 +341,7 @@ class Repository implements IRepository {
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
 			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_ENERGY_CUBES, player.getEnergyCubes());
 			// TODO error handling
 			// TODO take care of case when number of players changes, etc
 			rs.updateRow();
@@ -415,9 +416,9 @@ class Repository implements IRepository {
 				cardID = random.nextInt();
 				try {
 					resultSetCards.moveToInsertRow();
-					resultSetCards.updateInt(CARD_ID, cardID);
-					resultSetCards.updateInt(DatabaseConstants.PLAYER_GAMEID, gameID);
-					resultSetCards.updateInt(DatabaseConstants.PLAYER_PLAYERID, playerID);
+					resultSetCards.updateInt(DatabaseConstants.CARD_CARDID, cardID);
+					resultSetCards.updateInt(DatabaseConstants.CARD_GAMEID, gameID);
+					resultSetCards.updateInt(DatabaseConstants.CARD_PLAYERID, playerID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_TYPE, cardType);
 					resultSetCards.updateInt(DatabaseConstants.CARD_POSITION, i);
 					resultSetCards.insertRow();
@@ -500,7 +501,7 @@ class Repository implements IRepository {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				int cardId = rs.getInt(DatabaseConstants.CARD_ID);
+				int cardId = rs.getInt(DatabaseConstants.CARD_CARDID);
 				int type = rs.getInt(DatabaseConstants.CARD_TYPE);
 				int position = rs.getInt(DatabaseConstants.CARD_POSITION);
 
@@ -564,7 +565,7 @@ class Repository implements IRepository {
 
 		PriorityQueue<Player> activationQueue = new PriorityQueue<>(Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 		while (resultSet.next()) {
-			activationQueue.add(game.getPlayer(resultSet.getInt(DatabaseConstants.PLAYER_PLAYERID)));
+			activationQueue.add(game.getPlayer(resultSet.getInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID)));
 		}
 		game.setPlayerActivationQueue(activationQueue);
 		resultSet.close();

@@ -116,7 +116,7 @@ public class AppController implements Observer {
         if (gameController != null) return;
         GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
         //Todo: show user names and get their choice.
-        gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[1].id));
+        gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[0].id));
         roboRally.createGameView(gameController);
     }
 

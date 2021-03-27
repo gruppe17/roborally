@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS Player (
     positionX int,
     positionY int,
     heading tinyint,
+
+    energyCubes int,
   
     PRIMARY KEY (gameID, playerID),
     FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE
