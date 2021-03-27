@@ -29,7 +29,7 @@ class DatabaseConstants {
      * <p>The SQL command for inserting the commands
      * associated with a specific card ín the database.</p>
      */
-    static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_ID + CARD_COMMAND + ") VALUES(?, ?)";
+    static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_ID + ", " + CARD_COMMAND + ") VALUES(?, ?)";
 
     //Should be enum?
     static final int CARD_TYPE_PROGRAM = 0;
