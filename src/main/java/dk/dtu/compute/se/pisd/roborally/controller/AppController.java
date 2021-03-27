@@ -104,12 +104,16 @@ public class AppController implements Observer {
 	public void saveGame() {
 		if (gameController == null) return;
 
-		//Todo: Determine whether to create or update
-		// If possible to update maybe ask player whether to overwrite the old save
+		// todo: If possible maybe ask player whether to overwrite the old save
+
+		if (gameController.game.getGameId() != null) {
+			RepositoryAccess.getRepository().updateGameInDB(gameController.game);
+			return;
+		}
 
 		String name = getSaveName();
 		if (name == null) return;
-		
+
 		RepositoryAccess.getRepository().createGameInDB(gameController.game, name);
 	}
 
