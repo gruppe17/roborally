@@ -60,7 +60,7 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	@Override
-	public boolean createGameInDB(@NotNull Game game) {
+	public boolean createGameInDB(@NotNull Game game, @NotNull String name) {
 		if (game.getGameId() != null) {
 			System.err.println("Game cannot be created in DB, since it has a game id already!");
 			return false;
@@ -74,7 +74,7 @@ class Repository implements IRepository {
 			// TODO: the name should eventually set by the user
 			//       for the game and should be then used
 			//       game.getName();
-			ps.setString(1, "Date: " + new Date()); // instead of name
+			ps.setString(1, name); // instead of name
 			ps.setString(2, game.getBoard().getBoardName());
 			ps.setNull(3, Types.TINYINT); // game.getPlayerNumber(game.getCurrentPlayer())); is inserted after players!
 			ps.setInt(4, game.getPhase().ordinal());
@@ -598,11 +598,6 @@ class Repository implements IRepository {
 
 	/**
 	 * <p>Create the activation queue of a {@link Game} in the database.</p>
-	 * <p><b>NOTICE:</b> this destroys the playerActivationQueue of the game.
-	 * If the game is to be continued, then it must be recreated. This should
-	 * <b>NOT</b> be done be calling {@link Game#playerQueueForceRepopulate()}
-	 * as this will not take into account any players who have already been
-	 * activated, nor whether any players have been pushed around.</p>
 	 *
 	 * @param game the game which activation queue should be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk

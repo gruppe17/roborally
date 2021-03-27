@@ -37,6 +37,7 @@ import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +98,7 @@ public class AppController implements Observer {
 	}
 
 	/**
+	 * <p>Saves the game of {@link #gameController}.</p>
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	public void saveGame() {
@@ -105,11 +107,42 @@ public class AppController implements Observer {
 		//Todo: Determine whether to create or update
 		// If possible to update maybe ask player whether to overwrite the old save
 
-		//Todo: Name the save
+		String name = getSaveName();
+		if (name == null) return;
+		
+		RepositoryAccess.getRepository().createGameInDB(gameController.game, name);
+	}
 
-
-		RepositoryAccess.getRepository().createGameInDB(gameController.game);
-
+	/**
+	 * <p>Asks the user to name the savefile and
+	 * returns their non-blank answer or null if
+	 * they cancel the operation.</p>
+	 *
+	 * @return a non-blank string or null
+	 * @see String#isBlank()
+	 */
+	@Nullable
+	private String getSaveName() {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Save game");
+		dialog.setHeaderText("Name:");
+		//Todo: Game should remember name. If the chosen name is the
+		// same as the name of the game, i.e. if a game would be stored
+		// with the same name and ID, then overwrite the save (after
+		// asking permission from the player), otherwise create a new
+		// save (with a new gameID).
+		//dialog.getEditor().setText();
+		Optional<String> name;
+		while (true){
+			name = dialog.showAndWait();
+			if (!name.isPresent()) return null;
+			if (name.get().isBlank()) {
+				//todo: inform the user of their wrong doing!
+				continue;
+			}
+			break;
+		}
+		return name.get();
 	}
 
 	/**
@@ -135,7 +168,6 @@ public class AppController implements Observer {
 		String choice = game.get();
 		choice = choice.substring(0, choice.indexOf('.'));
 
-		//Todo: show user names and get their choice.
 		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id));
 		roboRally.createGameView(gameController);
 	}

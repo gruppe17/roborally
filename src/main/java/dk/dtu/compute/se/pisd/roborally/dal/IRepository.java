@@ -33,7 +33,7 @@ import java.util.List;
  */
 public interface IRepository {
 	
- 	boolean createGameInDB(Game game);
+ 	boolean createGameInDB(Game game, String name);
 	
 	boolean updateGameInDB(Game game);
 
