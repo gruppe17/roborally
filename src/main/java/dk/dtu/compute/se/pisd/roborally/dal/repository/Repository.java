@@ -619,5 +619,6 @@ class Repository implements IRepository {
 			i++;
 		}
 		resultSet.close();
+		loadActivationQueueFromDatabase(game);
 	}
 }
