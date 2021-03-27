@@ -67,7 +67,7 @@ class PreparedStatements {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return selectActivationQueueStatement;
+        return selectCardStatement;
     }
 
     /**
