@@ -418,7 +418,7 @@ class Repository implements IRepository {
 					resultSetCards.updateInt(DatabaseConstants.PLAYER_PLAYERID, playerID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_TYPE, cardType);
 					resultSetCards.updateInt(DatabaseConstants.CARD_POSITION, i);
-					resultSetCards.updateRow();
+					resultSetCards.insertRow();
 					break;
 				} catch (SQLException e) {
 					if (e.getErrorCode() != 1062) throw e; //1062 == duplicate entry
