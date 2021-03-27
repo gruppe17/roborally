@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS ActivationQueue (
 );;
 
 CREATE TABLE IF NOT EXISTS Card (
-    cardID int NOT NULL UNIQUE,
+    cardID BIGINT NOT NULL UNIQUE,
     gameID int NOT NULL,
     playerID tinyint NOT NULL,
     type tinyint NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS Card (
 );;
 
 CREATE TABLE IF NOT EXISTS CardCommand(
-    cardID int NOT NULL,
+    cardID BIGINT NOT NULL,
     command tinyint NOT NULL,
 
     PRIMARY KEY (cardID, command),

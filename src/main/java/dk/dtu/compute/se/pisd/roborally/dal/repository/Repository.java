@@ -404,12 +404,12 @@ class Repository implements IRepository {
 		for (int i = 0; i < cCFields.length; i++) {
 			CommandCardField cCardField = cCFields[i];
 			if (cCardField.getCard() == null) continue;
-			int cardID;
+			long cardID;
 			while (true) {
-				cardID = random.nextInt();
+				cardID = random.nextLong();
 				try {
 					resultSetCards.moveToInsertRow();
-					resultSetCards.updateInt(DatabaseConstants.CARD_CARDID, cardID);
+					resultSetCards.updateLong(DatabaseConstants.CARD_CARDID, cardID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_GAMEID, gameID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_PLAYERID, playerID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_TYPE, cardType);
@@ -434,9 +434,9 @@ class Repository implements IRepository {
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void createCardCommandsInDatabase(int cardID, CommandCardField cCardField) throws SQLException {
+	private void createCardCommandsInDatabase(long cardID, CommandCardField cCardField) throws SQLException {
 		PreparedStatement ps = preparedStatements.getInsertCardCommandStatement();
-		ps.setInt(1, cardID);
+		ps.setLong(1, cardID);
 
 		List<Command> commands = cCardField.getCard().command.getOptions();
 		if (commands.isEmpty()) commands = Collections.singletonList(cCardField.getCard().command);
@@ -494,7 +494,7 @@ class Repository implements IRepository {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				int cardId = rs.getInt(DatabaseConstants.CARD_CARDID);
+				long cardId = rs.getLong(DatabaseConstants.CARD_CARDID);
 				int type = rs.getInt(DatabaseConstants.CARD_TYPE);
 				int position = rs.getInt(DatabaseConstants.CARD_POSITION);
 
@@ -529,10 +529,10 @@ class Repository implements IRepository {
 	 * @throws SQLException
 	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
 	 */
-	private Command loadPlayerCardCommandFromDB(int cardID) throws SQLException {
+	private Command loadPlayerCardCommandFromDB(long cardID) throws SQLException {
 		PreparedStatement ps = preparedStatements.getSelectCardCommandStatement();
 
-		ps.setInt(1, cardID);
+		ps.setLong(1, cardID);
 		ResultSet rs = ps.executeQuery();
 
 		// Get first row
