@@ -66,6 +66,7 @@ public class BoardLoader {
 		ClassLoader classLoader = BoardLoader.class.getClassLoader();
 		InputStream inputStream = classLoader.getResourceAsStream(BOARDSFOLDER + "/" + boardName + JSON_EXT);
 		if (inputStream == null) {
+			if (!boardName.equals(DEFAULTBOARD)) return loadBoard(DEFAULTBOARD);
 			// TODO these constants should be defined somewhere
 			return new Board(8, 8);
 		}

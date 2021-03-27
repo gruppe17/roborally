@@ -63,7 +63,7 @@ public class AppController implements Observer {
 
 	public void newGame() {
 		ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
-		dialog.setTitle("Player number");
+		dialog.setTitle("New game");
 		dialog.setHeaderText("Select number of players");
 		Optional<Integer> result = dialog.showAndWait();
 
@@ -100,10 +100,14 @@ public class AppController implements Observer {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	public void saveGame() {
-		//Todo: Name the save
+		if (gameController == null) return;
+
 		//Todo: Determine whether to create or update
 		// If possible to update maybe ask player whether to overwrite the old save
-		if (gameController == null) return;
+
+		//Todo: Name the save
+
+
 		RepositoryAccess.getRepository().createGameInDB(gameController.game);
 
 	}
@@ -117,8 +121,22 @@ public class AppController implements Observer {
 		// for now, we just create a new game
 		if (gameController != null) return;
 		GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
+		//MenuItem[] games = new MenuItem[gameInDBs.length];
+		String[] names = new String[gameInDBs.length];
+		for (int i = 0; i < gameInDBs.length; i++) {
+			names[i] = (i + 1) + ". " + gameInDBs[i].name;
+		}
+
+		ChoiceDialog<String> dialog = new ChoiceDialog<>(names[0], names);
+		dialog.setTitle("Load game");
+		dialog.setHeaderText("Choose a game:");
+		Optional<String> game = dialog.showAndWait();
+		if (!game.isPresent()) return;
+		String choice = game.get();
+		choice = choice.substring(0, choice.indexOf('.'));
+
 		//Todo: show user names and get their choice.
-		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[0].id));
+		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id));
 		roboRally.createGameView(gameController);
 	}
 

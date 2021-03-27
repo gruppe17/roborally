@@ -6,10 +6,17 @@ package dk.dtu.compute.se.pisd.roborally.dal.repository;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 class DatabaseConstants {
+	/*Tables*/
+	static final String TABLE_GAME = "Game";
+	static final String TABLE_PLAYER = "Player";
+	static final String TABLE_ACTIVATION_QUEUE = "ActivationQueue";
+	static final String TABLE_CARD = "Card";
+	static final String TABLE_CARD_COMMAND = "CardCommand";
+
 	/*Game*/
 	static final String GAME_GAMEID = "gameID";
 	static final String GAME_NAME = "name";
-	static final String GAME_BOARD_NAME = "boardName    ";
+	static final String GAME_BOARD_NAME = "boardName";
 	static final String GAME_CURRENTPLAYER = "currentPlayer";
 	static final String GAME_PHASE = "phase";
 	static final String GAME_STEP = "step";
@@ -52,7 +59,7 @@ class DatabaseConstants {
 	 * <p>The SQL command for inserting the commands
 	 * associated with a specific card ín the database.</p>
 	 */
-	static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO CardCommand(" + CARD_CARDID + ", " + CARD_COMMAND + ") VALUES(?, ?)";
+	static final String SQL_INSERT_CARD_COMMAND_STATEMENT = "INSERT INTO " + TABLE_CARD_COMMAND + "(" + CARD_COMMAND_CARD_ID + ", " + CARD_COMMAND + ") VALUES(?, ?)";
 
 	/**
 	 * <p>The SQL command for selecting the cards

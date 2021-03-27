@@ -204,12 +204,6 @@ class Repository implements IRepository {
 			ResultSet rs = ps.executeQuery();
 			int playerNo = -1;
 			if (rs.next()) {
-				// TODO the width and height could eventually come from the database
-				// int width = AppController.BOARD_WIDTH;
-				// int height = AppController.BOARD_HEIGHT;
-				// game = new Board(width,height);
-				// TODO and we should also store the used game board in the database
-				//      for now, we use the default game board
 				String boardName = rs.getString(DatabaseConstants.GAME_BOARD_NAME);
 				game = new Game(BoardLoader.loadBoard(boardName));
 				if (game == null) {
@@ -229,6 +223,7 @@ class Repository implements IRepository {
 			game.setGameId(id);
 			loadPlayersFromDB(game);
 			loadActivationQueueFromDatabase(game);
+			//todo: load store
 
 			if (playerNo >= 0 && playerNo < game.getNumPlayers()) {
 				game.setCurrentPlayer(game.getPlayer(playerNo));
@@ -236,10 +231,6 @@ class Repository implements IRepository {
 				// TODO  error handling
 				return null;
 			}
-
-			/* TOODO this method needs to be implemented first
-			loadCardFieldsFromDB(game);
-			*/
 
 			return game;
 		} catch (SQLException e) {
