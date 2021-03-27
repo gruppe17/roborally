@@ -34,6 +34,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
+import static dk.dtu.compute.se.pisd.roborally.dal.repository.DatabaseConstants.CARD_ID;
+
 /**
  * ...
  *
@@ -410,7 +412,7 @@ class Repository implements IRepository {
 				cardID = random.nextInt();
 				try {
 					resultSetCards.moveToInsertRow();
-					resultSetCards.updateInt(DatabaseConstants.CARD_ID, cardID);
+					resultSetCards.updateInt(CARD_ID, cardID);
 					resultSetCards.updateInt(DatabaseConstants.PLAYER_GAMEID, gameID);
 					resultSetCards.updateInt(DatabaseConstants.PLAYER_PLAYERID, playerID);
 					resultSetCards.updateInt(DatabaseConstants.CARD_TYPE, cardType);
@@ -476,6 +478,73 @@ class Repository implements IRepository {
 	private void updatePlayerCardsInDB(Player... players) throws SQLException {
 		deletePlayerCardsInDB(players);
 		createPlayerCardsInDB(players);
+	}
+
+
+	/**
+	 * <p>Reads cards from database and assigns them to the right positions on all players.</p>
+	 *
+	 * @param players
+	 * @throws SQLException
+	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
+	 */
+	private void loadPlayerCardsFromDB(Player... players) throws SQLException {
+		PreparedStatement ps = preparedStatements.getSelectCardStatementUpdatable();
+
+		for (Player player : players) {
+			ps.setInt(1, player.game.getGameId());
+			ps.setInt(2, player.game.getPlayerNumber(player));
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int cardId = rs.getInt(DatabaseConstants.CARD_ID);
+				int type = rs.getInt(DatabaseConstants.CARD_TYPE);
+				int position = rs.getInt(DatabaseConstants.CARD_POSITION);
+
+				Command command = loadPlayerCardCommandFromDB(cardId);
+				CommandCard card = new CommandCard(command);
+				switch (type) {
+					case DatabaseConstants.CARD_TYPE_PROGRAM:
+						player.getProgramField(position).setCard(card);
+						break;
+					case DatabaseConstants.CARD_TYPE_HAND:
+						player.getHandField(position).setCard(card);
+						break;
+					case DatabaseConstants.CARD_TYPE_DECK:
+						break;
+					case DatabaseConstants.CARD_TYPE_DISCARD:
+						break;
+					case DatabaseConstants.CARD_TYPE_UPGRADE:
+						break;
+				}
+
+
+
+			}
+
+		}
+	}
+
+	/**
+	 * <p> Reads from database a command from assigned to the specific cardId </p>
+	 * @param cardID
+	 * @return
+	 * @throws SQLException
+	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
+	 */
+	private Command loadPlayerCardCommandFromDB(int cardID) throws SQLException {
+		PreparedStatement ps = preparedStatements.getSelectCardCommandStatement();
+
+		ps.setInt(1, cardID);
+		ResultSet rs = ps.executeQuery();
+
+		// Get first row
+		rs.next();
+		int commandId = rs.getInt(DatabaseConstants.CARD_COMMAND);
+
+		return Command.values()[commandId];
+
+
 	}
 
 	/**
