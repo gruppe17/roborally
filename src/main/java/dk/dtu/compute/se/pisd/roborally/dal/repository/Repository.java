@@ -445,7 +445,7 @@ class Repository implements IRepository {
 		List<Command> commands = cCardField.getCard().command.getOptions();
 		if (commands.isEmpty()) commands = Collections.singletonList(cCardField.getCard().command);
 		for (Command command : commands) {
-			ps.setInt(1, command.ordinal());
+			ps.setInt(2, command.ordinal());
 			ps.execute();
 		}
 	}
