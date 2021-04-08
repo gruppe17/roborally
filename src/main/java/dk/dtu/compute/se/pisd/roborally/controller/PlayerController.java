@@ -1,5 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
@@ -290,5 +291,19 @@ public class PlayerController implements ILaser {
         } else {
             return false;
         }
+    }
+
+    /**
+     * <p>Returns the activation priority of the player's laser.</p>
+     * @return an integer representing the activation priority of the player's laser
+     * @see IActivateable#getPriority()
+     */
+    @Override
+    public int getPriority() {
+        //Todo: This really shouldn't be here.
+        // Given the fact that the BoardLaserController has basically the same implementation
+        // of fire, ILaser probably should not be an interface and instead a class, an instance
+        // of which is possessed by PlayerController and by BoardLaserController.
+        return 6; //todo: This value should not be hardcoded.
     }
 }
