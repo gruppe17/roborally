@@ -275,6 +275,11 @@ public class GameController {
 
 				}
 			}
+			for (Player player : game.getPlayers()) {
+				if (player.playerController.getPriority() > lastPriority) lastPriority = player.playerController.getPriority();
+				//todo: player.playerController.activate() crashes the game!
+				//if(player.playerController.getPriority() == i) player.playerController.activate();
+			}
 		}
 
 		/*
