@@ -1,5 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.BoardLaserController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.MoveHazardController;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
@@ -15,10 +18,13 @@ public class BoardLaser extends ActivationElement {
 
     }
 
-    /**
-     * <p>Represents the start and end points of the laser.</p>
-     * <p>{start x, start y, end x, end y}</p>
-     */
-    int[] endPoints;
+    @Override
+    public BoardLaserController getController() {
+        return (BoardLaserController) super.getController();
+    }
 
+    @Override
+    protected BoardLaserController createContoller() {
+        return new BoardLaserController(this);
+    }
 }

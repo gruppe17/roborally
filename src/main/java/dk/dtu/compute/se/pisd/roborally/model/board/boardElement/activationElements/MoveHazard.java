@@ -1,5 +1,8 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.EnergySpaceController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.MoveHazardController;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
@@ -29,4 +32,13 @@ public class MoveHazard extends ActivationElement {
         this.distance = distance;
     }
 
+    @Override
+    public MoveHazardController getController() {
+        return (MoveHazardController) super.getController();
+    }
+
+    @Override
+    protected MoveHazardController createContoller() {
+        return new MoveHazardController(this);
+    }
 }

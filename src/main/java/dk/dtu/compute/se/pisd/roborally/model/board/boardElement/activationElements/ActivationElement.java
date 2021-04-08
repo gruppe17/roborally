@@ -19,6 +19,12 @@ public abstract class ActivationElement extends BoardElement {
      */
     protected int priority;
 
+    /**
+     * <p>The controller of the {@link ActivationElement}.</p>
+     * <p>This is intentionally {@code private}.</p>
+     */
+    private IBoardElementController controller;
+
     protected ActivationElement(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
         super(position, impassableFrom, opaqueFrom, direction);
         this.space = space;
@@ -34,4 +40,16 @@ public abstract class ActivationElement extends BoardElement {
     }
 
     public int getPriority() {return priority;}
+
+    public IBoardElementController getController() {
+        if (controller == null) controller = createContoller();
+        return controller;
+    }
+
+    /**
+     * <p>Creates a new {@link IBoardElementController}
+     * for this {@link ActivationElement}.</p>
+     */
+    abstract protected IBoardElementController createContoller();
+
 }

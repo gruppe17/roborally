@@ -1,5 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.EnergySpaceController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
@@ -16,5 +18,15 @@ public class EnergySpace extends ActivationElement {
 
     public void setHasEnergyCube(boolean b) {
         hasEnergyCube = b;
+    }
+
+    @Override
+    public EnergySpaceController getController() {
+        return (EnergySpaceController) super.getController();
+    }
+
+    @Override
+    protected EnergySpaceController createContoller() {
+        return new EnergySpaceController(this);
     }
 }
