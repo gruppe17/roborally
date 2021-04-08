@@ -1,11 +1,14 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
+import org.jetbrains.annotations.NotNull;
 
 public class BoardLaserController implements IBoardElementController, ILaser {
     private BoardLaser model;
@@ -66,5 +69,15 @@ public class BoardLaserController implements IBoardElementController, ILaser {
                 break;
             }
         }
+    }
+
+    @Override
+    public int getPriority() {
+        return model.getPriority();
+    }
+
+    @Override
+    public @NotNull BoardLaser getBoardElement() {
+        return model;
     }
 }
