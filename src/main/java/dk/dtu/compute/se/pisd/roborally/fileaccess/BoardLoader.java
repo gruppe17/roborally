@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
@@ -165,8 +166,8 @@ public class BoardLoader {
 				for (int j = 0; j < board.height; j++) {
 					Space space = board.getSpace(i, j);
 					if (space == null) continue;
-					for (ActivationElement boardElement: space.getActivationElements()) {
-						boardElement.setSpace(space);
+					for (IBoardElementController aEController: space.getActivationElementControllers()) {
+						aEController.getBoardElement().setSpace(space);
 					}
 				}
 			}
@@ -240,8 +241,8 @@ public class BoardLoader {
         }
          */
 		spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
-		for (ActivationElement boardElement: space.getActivationElements()) {
-			boardElement.setSpace(null);
+		for (IBoardElementController aEController: space.getActivationElementControllers()) {
+			aEController.getBoardElement().setSpace(null);
 		}
 		return spaceTemplate;
 	}
