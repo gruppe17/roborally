@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,6 +185,7 @@ public class BoardLoader {
 	@NotNull
 	private static Board boardFromBoardTemplate(BoardTemplate template) {
 		Board board = new Board(template.width, template.height, template.name);
+		int amountCheckpoints = 0;
 		for (SpaceTemplate spaceTemplate : template.spaces) {
 			Space space = board.getSpace(spaceTemplate.x, spaceTemplate.y);
 			if (space == null) continue;
@@ -191,9 +193,14 @@ public class BoardLoader {
 			for (BoardElement boardElement : spaceTemplate.boardElements) {
 				space.addBoardElement(boardElement);
 				if (boardElement instanceof ActivationElement) ((ActivationElement) boardElement).setSpace(space);
+				if(boardElement instanceof Checkpoint) amountCheckpoints++;
 			}
 
 		}
+
+
+		board.setCheckpointAmount(amountCheckpoints);
+
 		return board;
 	}
 
