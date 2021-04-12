@@ -22,8 +22,11 @@
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.enums.MoveHazardType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -61,18 +64,7 @@ public class Board {
 				spaces[x][y] = space;
 			}
 		}
-/*
-        spaces[0][0].addBoardElement(new Wall(Heading.NORTH));
-        spaces[1][2].addBoardElement(new Wall(Heading.SOUTH));
-        spaces[2][6].addBoardElement(new Wall(Heading.SOUTH));
-        spaces[2][6].addBoardElement(new Wall(Heading.EAST));
-        spaces[3][1].addBoardElement(new Wall(Heading.EAST));
-        spaces[4][2].addBoardElement(new Wall(Heading.NORTH));
-        spaces[4][3].addBoardElement(new EnergySpace(spaces[4][3]));
-        spaces[4][3].addBoardElement(new Wall(Heading.SOUTH));
-        spaces[5][5].addBoardElement(new Wall(Heading.EAST));
-        spaces[7][0].addBoardElement(new Wall(Heading.WEST));
-*/
+		
 		//TODO: implement this for real
 		prioritySpace = spaces[1][1];
 	}
