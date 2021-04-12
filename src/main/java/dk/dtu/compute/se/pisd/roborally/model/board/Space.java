@@ -269,7 +269,8 @@ public class Space extends Subject {
 	 * @return  a space reachable by either light or physical objects
 	 *          neighboring the space in the specified direction
 	 *          or null if no such space exists
-	 *
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @see Board#getNeighbour(Space, Heading) 
 	 */
 	public Space getNeighbor(Heading direction, boolean isLight){
 		//todo: this does not play nice with light; it is assumed that containsObstacleTo
@@ -284,6 +285,8 @@ public class Space extends Subject {
 	 * @param direction the direction in which to search for a neighbor
 	 * @return  a space reachable by physical objects neighboring
 	 *          the space or null if no such space exists.
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @see #getNeighbor(Heading, boolean) 
 	 */
 	public Space getNeighbor(Heading direction){
 		return getNeighbor(direction, false);
