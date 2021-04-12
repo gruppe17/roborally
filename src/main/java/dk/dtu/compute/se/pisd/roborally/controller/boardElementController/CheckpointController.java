@@ -19,7 +19,9 @@ public class CheckpointController implements IBoardElementController {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
 
-
+        if(player.getLastCheckpoint() == model.getNumber()-1){
+            player.setLastCheckpoint(player.getLastCheckpoint() + 1);
+        }
 
     }
 
