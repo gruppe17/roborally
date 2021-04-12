@@ -20,8 +20,8 @@ public class MoveHazardController implements IBoardElementController {
     public void activate() {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
-        player.playerController.move(model.getDirection(), model.distance);
-        player.playerController.turn(model.rotation);
+        player.playerController.move(model.getDirection(), model.getDistance());
+        player.playerController.turn(model.getRotation());
     }
 
     @Override
