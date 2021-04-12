@@ -1,7 +1,10 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Represents a controller for a {@link MoveHazard}.</p>
@@ -17,7 +20,25 @@ public class MoveHazardController implements IBoardElementController {
     public void activate() {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
-        player.playerController.move(model.getDirection(), model.distance);
-        player.playerController.turn(model.rotation);
+        player.playerController.move(model.getDirection(), model.getDistance());
+        player.playerController.turn(model.getRotation());
+    }
+
+    @Override
+    public int getPriority() {
+        return model.getPriority();
+    }
+
+    @Override
+    public @NotNull MoveHazard getBoardElement() {
+        return model;
+    }
+
+    /**
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void readyToSave(){
+        model.setSpace(null);
+        model.setControllerNull();
     }
 }

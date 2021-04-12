@@ -1,13 +1,14 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
-import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
-import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
+import org.jetbrains.annotations.NotNull;
 
-public class BoardLaserController implements IBoardElementController, ILaser {
+/**
+ * ...
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
+public class BoardLaserController implements IBoardElementController {
     private BoardLaser model;
     public BoardLaserController(BoardLaser model){
         this.model = model;
@@ -22,49 +23,25 @@ public class BoardLaserController implements IBoardElementController, ILaser {
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     @Override
-    public void fire() {
-        Space currentSpace = model.getSpace();
-        Space lastSpace = currentSpace;
+    public void activate() {
+        getBoardElement().getLaser().activate();
+    }
 
-        /* Abort if player is not in a space*/
-        if (lastSpace == null)
-            return;
-        while (true) {
-            /* get next space */
-            lastSpace = currentSpace.board.getNeighbour(lastSpace, model.getDirection());
-            Player playerAtSpace = lastSpace.getPlayer();
-            /* remember to add the right elements to prevent hitting walls and stuff here */
-           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
-                break;
-            }*/
+    @Override
+    public int getPriority() {
+        return model.getPriority();
+    }
 
-            /* exit if nothing is hit */
-            if (lastSpace == null) {
-                break;
-            }
-            /* We should add fx to the spaces that are hit*/
+    @Override
+    public @NotNull BoardLaser getBoardElement() {
+        return model;
+    }
 
-            /* If player is hit, then damage it and do stuff. */
-            if (playerAtSpace != null) {
-
-                // Change this to SPAM Command Card
-                playerAtSpace.playerController.addCard(new CommandCard(Command.FORWARD));
-
-                break;
-            }
-        }
-
-        /* Reset last space*/
-        currentSpace = model.getSpace();
-        lastSpace = currentSpace;
-
-        /*Maybe do some cleanup of fx here?*/
-        while (true) {
-            /* get next space */
-            lastSpace = currentSpace.board.getNeighbour(lastSpace, model.getDirection());
-            if (lastSpace == null) {
-                break;
-            }
-        }
+    /**
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void readyToSave(){
+        model.setSpace(null);
+        model.setControllerNull();
     }
 }

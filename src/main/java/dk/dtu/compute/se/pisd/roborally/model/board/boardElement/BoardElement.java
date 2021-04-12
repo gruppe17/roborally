@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.interfaces.Directional;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents the element on the board, e.g. walls, push panels, the priority antenna, etc.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public abstract class BoardElement extends Subject {
+public abstract class BoardElement extends Subject implements Directional {
     /**
      * <p>Whether this element is passable by robots
      * coming from a certain direction. If a direction is
@@ -26,11 +27,6 @@ public abstract class BoardElement extends Subject {
     protected Heading[] opaqueFrom;
 
     /**
-     * <p>Which way the element is pointing. May be null if the element has no direction.</p>
-     */
-    protected Heading direction;
-
-    /**
      * <p>Represents the position of the element.
      * I.e. an element with position {{@link Heading#NORTH},
      * {@link Heading#EAST}} could potentially block
@@ -38,6 +34,12 @@ public abstract class BoardElement extends Subject {
      * east or both.</p>
      */
     protected Heading[] position;
+
+    /**
+     * <p>Which way the element is pointing. May be null if the element has no direction.</p>
+     */
+    protected Heading direction;
+
 
     /*Getters and setters*/
 

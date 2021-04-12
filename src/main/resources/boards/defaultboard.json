@@ -1,0 +1,461 @@
+{
+  "name": "defaultboard",
+  "width": 8,
+  "height": 8,
+  "spaces": [
+    {
+      "x": 0,
+      "y": 0,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "NORTH",
+              "SOUTH"
+            ],
+            "opaqueFrom": [
+              "NORTH",
+              "SOUTH"
+            ],
+            "position": [
+              "NORTH"
+            ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 1,
+            "distance": 1,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "opaqueFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "position": [
+              "SOUTH"
+            ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 1,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 1,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 1,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser",
+          "INSTANCE": {
+            "laser": {
+              "priority": 6,
+              "isEM": true,
+              "damageType": "LASER",
+              "direction": "NORTH"
+            },
+            "priority": 6,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "NORTH",
+            "observers": [
+              {
+                "priority": 6,
+                "isEM": true,
+                "damageType": "LASER",
+                "direction": "NORTH"
+              }
+            ]
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "opaqueFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "position": [
+              "SOUTH"
+            ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "opaqueFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "position": [
+              "EAST"
+            ],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "opaqueFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "position": [
+              "EAST"
+            ],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 2,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "WEST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "NORTH",
+              "SOUTH"
+            ],
+            "opaqueFrom": [
+              "NORTH",
+              "SOUTH"
+            ],
+            "position": [
+              "NORTH"
+            ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace",
+          "INSTANCE": {
+            "hasEnergyCube": true,
+            "priority": 7,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "opaqueFrom": [
+              "SOUTH",
+              "NORTH"
+            ],
+            "position": [
+              "SOUTH"
+            ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 2,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "WEST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 2,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "WEST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 1,
+            "distance": 0,
+            "moveHazardType": "GEAR",
+            "priority": 7,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "opaqueFrom": [
+              "EAST",
+              "WEST"
+            ],
+            "position": [
+              "EAST"
+            ],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": -1,
+            "distance": 0,
+            "moveHazardType": "GEAR",
+            "priority": 7,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "SOUTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 2,
+            "moveHazardType": "CONVEYOR",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "WEST",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 1,
+            "moveHazardType": "PUSH_PANEL",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "EAST",
+            "observers": []
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "WEST",
+              "EAST"
+            ],
+            "opaqueFrom": [
+              "WEST",
+              "EAST"
+            ],
+            "position": [
+              "WEST"
+            ],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
+    }
+  ]
+}

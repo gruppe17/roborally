@@ -1,0 +1,50 @@
+{
+  "width" : 8,
+  "height" : 8,
+  "spaces" : [
+    {
+      "x" : 0,
+      "y" : 0,
+      "boardElements" : [
+        {"walls" : ["NORTH"]}
+      ]
+    },
+    {
+      "x" : 1,
+      "y" : 2,
+      "boardElements" : [
+        {"walls" : ["SOUTH"]}
+      ]
+    },
+    {
+      "x" : 3,
+      "y" : 1,
+      "boardElements" : [
+        {"walls" : ["EAST"]}
+      ]
+    },
+    {
+      "x" : 4,
+      "y" : 3,
+      "boardElements" : [
+        {"walls" : []},
+        "EnergySpace"
+      ]
+    },
+    {
+      "x" : 5,
+      "y" : 5,
+      "boardElements" : [
+        {"walls" : ["NORTH", "SOUTH"]},
+        "EnergySpace"
+      ]
+    },
+    {
+      "x" : 7,
+      "y" : 0,
+      "boardElements" : [
+        {"walls" : ["WEST"]}
+      ]
+    }
+  ]
+}

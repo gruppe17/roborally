@@ -22,9 +22,13 @@
 package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Laser;
 import dk.dtu.compute.se.pisd.roborally.controller.PlayerController;
+import dk.dtu.compute.se.pisd.roborally.interfaces.Directional;
+import dk.dtu.compute.se.pisd.roborally.interfaces.Spacebound;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,11 +41,15 @@ import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
-public class Player extends Subject {
+public class Player extends Subject implements Spacebound, Directional {
     final public static int NO_REGISTERS = 5;
     final public static int NO_CARDS = 8;
     final public PlayerController playerController;
     final public Game game;
+    /**
+     * <p>The robot laser of this player.</p>
+     */
+    private Laser laser;
 
     private String name;
     private String color;
@@ -83,6 +91,9 @@ public class Player extends Subject {
         for (int i = 0; i < hand.length; i++) {
             hand[i] = new CommandCardField(this);
         }
+
+        //// TODO: this should probably be done somewhere else
+        this.laser = new Laser(6, true, DamageType.LASER, this);
     }
 
     public String getName() {
@@ -151,11 +162,11 @@ public class Player extends Subject {
         notifyChange();
     }
 
-    public Heading getHeading() {
+    public Heading getDirection() {
         return heading;
     }
 
-    public void setHeading(@NotNull Heading heading) {
+    public void setDirection(@NotNull Heading heading) {
         if (heading == this.heading) return;
 
         this.heading = heading;
@@ -164,6 +175,14 @@ public class Player extends Subject {
         if (space != null) {
             space.playerChanged();
         }
+    }
+
+    public Laser getLaser() {
+        return laser;
+    }
+
+    public void setLaser(Laser laser) {
+        this.laser = laser;
     }
 
     /**

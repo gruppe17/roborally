@@ -3,6 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.view.board.space;
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.Utils.imageFinder.BoardElementImageFinder;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -63,7 +64,7 @@ public class BoardElementView extends StackPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     protected void updateRotation(BoardElement boardElement) {
-        if (boardElement.getDirection() != null) rotation = boardElement.getDirection().ordinal();
+        if (boardElement.getDirection() != null) rotation = boardElement.getDirection().ordinal() - Heading.NORTH.ordinal();
         imageView.setRotate(rotation * 90);
     }
 

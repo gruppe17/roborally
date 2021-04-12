@@ -6,7 +6,10 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -54,9 +57,14 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      */
     public SpaceBoardElementsView(Space space) {
         this.space = space;
+
+        nonWallPane = new StackPane();
+        //RoboRally.bindSize(nonWallPane, this, 1 - (WallPane.WALL_DEPTH_PERCENT), 1 - (WallPane.WALL_DEPTH_PERCENT));
+        RoboRally.bindSize(nonWallPane, this, 1, 1);
+        this.getChildren().add(nonWallPane);
+
         initWallView();
         this.getChildren().add(wallPane);
-
 
         initBoardElementViews();
         space.attach(this);
@@ -116,8 +124,9 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
         BoardElementView boardElementView = new BoardElementView(boardElement);
 
         boardElementViews.add(boardElementView);
-        this.getChildren().add(boardElementView);
-        RoboRally.bindSize(boardElementView, this, 1, 1);
+        nonWallPane.getChildren().add(boardElementView);
+        RoboRally.bindSize(boardElementView, nonWallPane, 1, 1);
+
     }
 
 
@@ -140,9 +149,8 @@ public class SpaceBoardElementsView extends StackPane implements ViewObserver {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     private void clearView() {
-        this.getChildren().clear();
         wallPane.clearWalls();
-        this.getChildren().add(wallPane);
+        nonWallPane.getChildren().clear();
     }
 
 

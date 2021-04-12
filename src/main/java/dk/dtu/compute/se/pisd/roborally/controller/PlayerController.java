@@ -1,9 +1,11 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
-public class PlayerController implements ILaser {
+public class PlayerController {
     Player player;
 
     public PlayerController(Player player) {
@@ -76,7 +78,7 @@ public class PlayerController implements ILaser {
      * @see #move(Heading, int)
      */
     public void moveForward(int distance) {
-        move(player.getHeading(), distance);
+        move(player.getDirection(), distance);
     }
 
     /**
@@ -109,12 +111,12 @@ public class PlayerController implements ILaser {
     public void turn(int numTimes) {
         numTimes %= 4;
         if (numTimes < 0) numTimes += 4;
-        Heading heading = player.getHeading();
+        Heading heading = player.getDirection();
         for (int i = 0; i < numTimes; i++) {
             heading = heading.next();
         }
 
-        player.setHeading(heading);
+        player.setDirection(heading);
     }
 
     /**
@@ -128,7 +130,7 @@ public class PlayerController implements ILaser {
      * <p>Turns player/robot by -π/4</p>
      */
     public void turnLeft() {
-        player.setHeading(player.getHeading().prev());
+        player.setDirection(player.getDirection().prev());
     }
 
     /**
@@ -219,64 +221,6 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * <p>Fire in the direction the owner
-     * robot is facing. Their range has no
-     * limit. Any robot in the line of sight is
-     * shot. Robot lasers cannot fire through
-     * walls or shoot more than one robot.</p>
-     *
-     * @author Tobias Maneschijn, s205422@student.dtu.dk
-     */
-    @Override
-    public void fire() {
-        Space currentSpace = player.getSpace();
-        Space lastSpace = currentSpace;
-
-        /* Abort if player is not in a space*/
-        if (lastSpace == null)
-            return;
-        while (true) {
-            /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
-            Player playerAtSpace = lastSpace.getPlayer();
-            /* remember to add the right elements to prevent hitting walls and stuff here */
-           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
-                break;
-            }*/
-
-            /* exit if nothing is hit */
-            if (lastSpace == null) {
-                break;
-            }
-            /* We should add fx to the spaces that are hit*/
-
-            /* If player is hit, then damage it and do stuff. */
-            if (playerAtSpace != null && playerAtSpace != player) {
-
-                // hit player should take a SPAM damage card.
-
-                // Change this to SPAM Command Card
-                playerAtSpace.playerController.addCard(new CommandCard(Command.FORWARD));
-
-                break;
-            }
-        }
-
-        /* Reset last space*/
-        currentSpace = player.getSpace();
-        lastSpace = currentSpace;
-
-        /*Maybe do some cleanup of fx here?*/
-        while (true) {
-            /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
-            if (lastSpace == null) {
-                break;
-            }
-        }
-    }
-
-    /**
      * Try to pay with energy cubes
      *
      * @param amount the amount of cubes to pay with
@@ -290,5 +234,14 @@ public class PlayerController implements ILaser {
         } else {
             return false;
         }
+    }
+
+    /**
+     *
+     * @param damageType
+     * @return
+     */
+    public int damage(DamageType damageType){
+        return -1;
     }
 }
