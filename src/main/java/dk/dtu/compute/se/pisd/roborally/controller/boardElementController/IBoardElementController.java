@@ -20,4 +20,11 @@ public interface IBoardElementController extends IActivateable {
 	 * @return the ActivationElement which this is controller for
 	 */
 	public @NotNull ActivationElement getBoardElement();
+
+
+	/**
+	 * <p>Readies the {@link ActivationElement} for being
+	 * saved to file.</p>
+	 */
+	public void readyToSave();
 }

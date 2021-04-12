@@ -242,7 +242,8 @@ public class BoardLoader {
          */
 		spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
 		for (IBoardElementController aEController: space.getActivationElementControllers()) {
-			aEController.getBoardElement().setSpace(null);
+			//todo: maybe readyToSave and restoreAfterSave should be methods in Space?
+			aEController.readyToSave();
 		}
 		return spaceTemplate;
 	}

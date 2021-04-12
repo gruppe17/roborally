@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.model.Player;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,5 +33,13 @@ public class EnergySpaceController implements IBoardElementController {
     @Override
     public @NotNull EnergySpace getBoardElement() {
         return model;
+    }
+
+    /**
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void readyToSave(){
+        model.setSpace(null);
+        model.setControllerNull();
     }
 }

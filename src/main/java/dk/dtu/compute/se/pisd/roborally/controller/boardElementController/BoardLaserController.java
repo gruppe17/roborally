@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * ...
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public class BoardLaserController implements IBoardElementController, ILaser {
+public class BoardLaserController implements IBoardElementController {
     private BoardLaser model;
     public BoardLaserController(BoardLaser model){
         this.model = model;
@@ -23,7 +23,7 @@ public class BoardLaserController implements IBoardElementController, ILaser {
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
     @Override
-    public void fire() {
+    public void activate() {
         getBoardElement().getLaser().activate();
     }
 
@@ -35,5 +35,13 @@ public class BoardLaserController implements IBoardElementController, ILaser {
     @Override
     public @NotNull BoardLaser getBoardElement() {
         return model;
+    }
+
+    /**
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void readyToSave(){
+        model.setSpace(null);
+        model.setControllerNull();
     }
 }

@@ -52,4 +52,8 @@ public abstract class ActivationElement extends BoardElement implements Spacebou
      */
     abstract protected IBoardElementController createContoller();
 
+    public void setControllerNull(){
+        this.controller = null;
+    }
+
 }
