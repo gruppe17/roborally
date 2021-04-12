@@ -26,9 +26,8 @@ public abstract class ActivationElement extends BoardElement implements Spacebou
      */
     private IBoardElementController controller;
 
-    protected ActivationElement(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
+    protected ActivationElement(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority){
         super(position, impassableFrom, opaqueFrom, direction);
-        this.space = space;
         this.priority = priority;
     }
 

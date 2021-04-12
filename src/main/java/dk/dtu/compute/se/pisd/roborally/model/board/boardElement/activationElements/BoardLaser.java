@@ -18,13 +18,13 @@ public class BoardLaser extends ActivationElement {
      */
     private Laser laser;
 
-    public BoardLaser(Heading direction, Space space, int priority){
-        this(new Heading[0], new Heading[0], direction, space, priority);
+    public BoardLaser(Heading direction, int priority){
+        this(new Heading[0], new Heading[0], direction, priority);
 
     }
 
-    protected BoardLaser(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority){
-        super(new Heading[0], impassableFrom, opaqueFrom, direction, space, priority);
+    protected BoardLaser(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority){
+        super(new Heading[0], impassableFrom, opaqueFrom, direction, priority);
         laser = new Laser(priority, true, DamageType.LASER, this);
     }
 

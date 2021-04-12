@@ -126,6 +126,7 @@ public class Space extends Subject {
 		if (boardElement == null) return;
 		elements.add(boardElement);
 		if (boardElement instanceof ActivationElement) {
+			((ActivationElement) boardElement).setSpace(this);
 			addActivationElementControllers(((ActivationElement) boardElement).getController());
 		}
 		notifyChange();

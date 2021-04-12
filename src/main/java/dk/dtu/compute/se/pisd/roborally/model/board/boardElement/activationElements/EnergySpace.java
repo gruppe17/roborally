@@ -12,8 +12,8 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 public class EnergySpace extends ActivationElement {
     private boolean hasEnergyCube = true;
 
-    public EnergySpace( Space space) {
-        super(new Heading[0], new Heading[0], new Heading[0], Heading.SOUTH, space, 7);
+    public EnergySpace() {
+        super(new Heading[0], new Heading[0], new Heading[0], Heading.SOUTH,  7);
     }
 
     public boolean getHasEnergyCube() {

@@ -31,12 +31,12 @@ public class MoveHazard extends ActivationElement {
 
 
 
-    public MoveHazard(Heading direction, Space space, int priority, int rotation, int distance, MoveHazardType moveHazardType){
-        this(new Heading[0], new Heading[0], direction, space, priority, rotation, distance, moveHazardType);
+    public MoveHazard(Heading direction, int priority, int rotation, int distance, MoveHazardType moveHazardType){
+        this(new Heading[0], new Heading[0], direction, priority, rotation, distance, moveHazardType);
     }
 
-    protected MoveHazard(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, Space space, int priority, int rotation, int distance, MoveHazardType moveHazardType){
-        super(new Heading[0], impassableFrom, opaqueFrom, direction, space, priority);
+    protected MoveHazard(Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority, int rotation, int distance, MoveHazardType moveHazardType){
+        super(new Heading[0], impassableFrom, opaqueFrom, direction, priority);
         this.rotation = rotation;
         this.distance = distance;
         this.moveHazardType = moveHazardType;
