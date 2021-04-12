@@ -1,9 +1,14 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.CheckpointController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.MoveHazardController;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-public class Checkpoint extends ActivationElement{
+public class Checkpoint extends ActivationElement {
+
 
     private int number = 1;
 
@@ -11,8 +16,19 @@ public class Checkpoint extends ActivationElement{
         return number;
     }
 
-    public Checkpoint(@NotNull Heading[] position, @NotNull Heading[] impassableFrom, @NotNull Heading[] opaqueFrom, Heading direction) {
-        super(position, impassableFrom, opaqueFrom, direction);
-
+    public Checkpoint(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority) {
+        super(position, impassableFrom, opaqueFrom, direction, priority);
     }
+
+    @Override
+    public CheckpointController getController() {
+        return (CheckpointController) super.getController();
+    }
+
+    @Override
+    protected CheckpointController createContoller() {
+        return new CheckpointController(this);
+    }
+
+
 }

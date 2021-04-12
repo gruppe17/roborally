@@ -29,7 +29,7 @@ public class CheckpointController implements IBoardElementController {
     }
 
     @Override
-    public @NotNull EnergySpace getBoardElement() {
+    public @NotNull Checkpoint getBoardElement() {
         return model;
     }
 
