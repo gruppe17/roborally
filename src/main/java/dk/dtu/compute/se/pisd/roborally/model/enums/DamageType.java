@@ -15,5 +15,5 @@ public enum DamageType {
 	/**
 	 * <p>Represents damage of a standard red laser.</p>
 	 */
-	RED_LASER,
+	LASER,
 }

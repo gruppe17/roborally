@@ -5,6 +5,7 @@ import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
+import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -305,5 +306,14 @@ public class PlayerController implements ILaser {
         // of fire, ILaser probably should not be an interface and instead a class, an instance
         // of which is possessed by PlayerController and by BoardLaserController.
         return 6; //todo: This value should not be hardcoded.
+    }
+
+    /**
+     *
+     * @param damageType
+     * @return
+     */
+    public int damage(DamageType damageType){
+        return -1;
     }
 }
