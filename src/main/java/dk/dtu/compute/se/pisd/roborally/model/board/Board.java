@@ -21,12 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
-import dk.dtu.compute.se.pisd.roborally.model.enums.MoveHazardType;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -64,7 +59,7 @@ public class Board {
 				spaces[x][y] = space;
 			}
 		}
-		
+
 		//TODO: implement this for real
 		prioritySpace = spaces[1][1];
 	}
