@@ -18,6 +18,7 @@ public class BoardElementImageFinder {
     final private static String BASE_DIRECTORY = "images/tiles/boardElements/";
     final private static String WALLS = "walls/";
     final private static String MOVEHAZARD = "movement/";
+    final private static String CHECKPOINTS = "checkpoints/";
 
     /**
      * <p>Determines the correct image for a given {@link BoardElement} and
