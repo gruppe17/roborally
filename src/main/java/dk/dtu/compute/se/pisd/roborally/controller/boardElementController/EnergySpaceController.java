@@ -1,8 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.controller.boardElementController;
 
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
 import org.jetbrains.annotations.NotNull;
 

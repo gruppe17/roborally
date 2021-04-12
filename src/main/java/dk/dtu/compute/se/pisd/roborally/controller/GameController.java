@@ -263,22 +263,28 @@ public class GameController {
 		// conveyor belts simultaneously and not interact at all.
 		int lastPriority = 0;
 		Board board = game.getBoard();
+
 		for (int i = 0; i <= lastPriority ; i++) {
+			int priority;
 			for (int x = 0; x < board.width; x++) {
 				for (int y = 0; y < board.height; y++) {
 
 					IBoardElementController[] aEControllers = board.getSpace(x, y).getActivationElementControllers();
 					for (IBoardElementController aEController: aEControllers) {
-						if (aEController.getPriority() > lastPriority) lastPriority = aEController.getPriority();
-						if (aEController.getPriority() == i) aEController.activate();
+						priority = aEController.getPriority();
+						if (priority > lastPriority) lastPriority = priority;
+						if (priority == i) aEController.activate();
 					}
 
 				}
 			}
 			for (Player player : game.getPlayers()) {
-				if (player.playerController.getPriority() > lastPriority) lastPriority = player.playerController.getPriority();
-				//todo: player.playerController.activate() crashes the game!
-				//if(player.playerController.getPriority() == i) player.playerController.activate();
+				Laser roboLaser = player.getLaser();
+				if (roboLaser == null) continue;
+				priority = roboLaser.getPriority();
+				if (priority > lastPriority) lastPriority = priority;
+				if (priority == i)
+					roboLaser.activate();
 			}
 		}
 
