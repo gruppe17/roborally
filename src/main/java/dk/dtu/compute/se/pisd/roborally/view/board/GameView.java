@@ -147,6 +147,8 @@ public class GameView extends VBox implements ViewObserver {
     private String getStatusMessage() {
         return "Phase: " + game.getPhase().name() +
                 ", Player = " + game.getCurrentPlayer().getName() +
-                ", Step: " + game.getStep();
+                ", Step: " + game.getStep() +
+                ", Energy Cubes: " + game.getCurrentPlayer().getEnergyCubes() +
+                ", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint();
     }
 }
