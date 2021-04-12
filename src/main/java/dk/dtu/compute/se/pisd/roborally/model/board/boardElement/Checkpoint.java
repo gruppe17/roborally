@@ -3,7 +3,7 @@ package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-public class Checkpoint extends BoardElement{
+public class Checkpoint extends ActivationElement{
 
     private int number = 1;
 
