@@ -5,6 +5,10 @@ import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoard
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 
+/**
+ * ...
+ * @author Rasmus Nylander, s205418@student.dtu.dk
+ */
 public class EnergySpace extends ActivationElement {
     private boolean hasEnergyCube = true;
 
