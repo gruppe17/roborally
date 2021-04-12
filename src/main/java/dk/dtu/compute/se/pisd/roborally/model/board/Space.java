@@ -259,6 +259,36 @@ public class Space extends Subject {
 		return false;
 	}
 
+
+	/**
+	 * <p>Returns the neighbor of the space in the specified
+	 * direction reachable by either physical objects or light.
+	 * f no such space exists, returns null.</p>
+	 * @param direction the direction in which to search for a neighbor
+	 * @param isLight whether the neighbor only needs to be reachable by light
+	 * @return  a space reachable by either light or physical objects
+	 *          neighboring the space in the specified direction
+	 *          or null if no such space exists
+	 *
+	 */
+	public Space getNeighbor(Heading direction, boolean isLight){
+		//todo: this does not play nice with light; it is assumed that containsObstacleTo
+		// indicates whether light is blocked (It does not).
+		return board.getNeighbour(this, direction);
+	}
+
+	/**
+	 * <p>Returns the neighbor of the space in
+	 * the specified direction reachable by physical
+	 * objects. If no such space exists, returns null.</p>
+	 * @param direction the direction in which to search for a neighbor
+	 * @return  a space reachable by physical objects neighboring
+	 *          the space or null if no such space exists.
+	 */
+	public Space getNeighbor(Heading direction){
+		return getNeighbor(direction, false);
+	}
+
 	public void playerChanged() {
 		// This is a minor hack; since some views that are registered with the space
 		// also need to update when some player attributes change, the player can
