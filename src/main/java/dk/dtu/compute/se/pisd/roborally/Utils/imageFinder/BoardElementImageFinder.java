@@ -2,7 +2,9 @@ package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.scene.image.Image;
 
@@ -15,6 +17,7 @@ import javafx.scene.image.Image;
 public class BoardElementImageFinder {
     final private static String BASE_DIRECTORY = "images/tiles/boardElements/";
     final private static String WALLS = "walls/";
+    final private static String MOVEHAZARD = "movement/";
 
     /**
      * <p>Determines the correct image for a given {@link BoardElement} and
@@ -42,8 +45,34 @@ public class BoardElementImageFinder {
             return BASE_DIRECTORY + "energySpace.png";
         }
 
+        if (boardElement instanceof BoardLaser){
+            return BASE_DIRECTORY + "laserEmitter.png";
+        }
+
+        if (boardElement instanceof MoveHazard){
+            String moveHazardName = moveHazardName((MoveHazard) boardElement);
+            if (moveHazardName == null) return "";
+            return BASE_DIRECTORY + MOVEHAZARD + moveHazardName;
+        }
+
         return "";
 
+    }
+
+    private String moveHazardName (MoveHazard moveHazard){
+        if (moveHazard.getDistance() == 0 && moveHazard.getRotation() == 0) return null;
+        switch (moveHazard.getMoveHazardType()){
+            case CONVEYOR -> {
+                return "conveyorBelts/conveyor" + (moveHazard.getDistance() == 1 ? "Green" : "Blue") + ".png";
+            }
+            case GEAR -> {
+                return "gears/gear" + (moveHazard.getRotation() < 0 ? "Anti" : "") + ".png";
+            }
+            case PUSH_PANEL -> {
+                return "pushPanel.png";
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + moveHazard.getMoveHazardType());
+        }
     }
 
     /**
