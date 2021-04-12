@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  * @author Tobias Maneschijn, s205422@student.dtu.dk
  */
-public class PlayerController implements ILaser {
+public class PlayerController {
     Player player;
 
     public PlayerController(Player player) {
@@ -221,64 +221,6 @@ public class PlayerController implements ILaser {
     }
 
     /**
-     * <p>Fire in the direction the owner
-     * robot is facing. Their range has no
-     * limit. Any robot in the line of sight is
-     * shot. Robot lasers cannot fire through
-     * walls or shoot more than one robot.</p>
-     *
-     * @author Tobias Maneschijn, s205422@student.dtu.dk
-     */
-    @Override
-    public void fire() {
-        Space currentSpace = player.getSpace();
-        Space lastSpace = currentSpace;
-
-        /* Abort if player is not in a space*/
-        if (lastSpace == null)
-            return;
-        while (true) {
-            /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getDirection());
-            Player playerAtSpace = lastSpace.getPlayer();
-            /* remember to add the right elements to prevent hitting walls and stuff here */
-           /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
-                break;
-            }*/
-
-            /* exit if nothing is hit */
-            if (lastSpace == null) {
-                break;
-            }
-            /* We should add fx to the spaces that are hit*/
-
-            /* If player is hit, then damage it and do stuff. */
-            if (playerAtSpace != null && playerAtSpace != player) {
-
-                // hit player should take a SPAM damage card.
-
-                // Change this to SPAM Command Card
-                playerAtSpace.playerController.addCard(new CommandCard(Command.FORWARD));
-
-                break;
-            }
-        }
-
-        /* Reset last space*/
-        currentSpace = player.getSpace();
-        lastSpace = currentSpace;
-
-        /*Maybe do some cleanup of fx here?*/
-        while (true) {
-            /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getDirection());
-            if (lastSpace == null) {
-                break;
-            }
-        }
-    }
-
-    /**
      * Try to pay with energy cubes
      *
      * @param amount the amount of cubes to pay with
@@ -292,20 +234,6 @@ public class PlayerController implements ILaser {
         } else {
             return false;
         }
-    }
-
-    /**
-     * <p>Returns the activation priority of the player's laser.</p>
-     * @return an integer representing the activation priority of the player's laser
-     * @see IActivateable#getPriority()
-     */
-    @Override
-    public int getPriority() {
-        //Todo: This really shouldn't be here.
-        // Given the fact that the BoardLaserController has basically the same implementation
-        // of fire, ILaser probably should not be an interface and instead a class, an instance
-        // of which is possessed by PlayerController and by BoardLaserController.
-        return 6; //todo: This value should not be hardcoded.
     }
 
     /**
