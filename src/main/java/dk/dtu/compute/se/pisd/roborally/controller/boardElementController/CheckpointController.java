@@ -21,7 +21,11 @@ public class CheckpointController implements IBoardElementController {
 
         if(player.getLastCheckpoint() == model.getNumber()-1){
             player.setLastCheckpoint(player.getLastCheckpoint() + 1);
+            if(model.getSpace().board.getCheckpointAmount() == player.getLastCheckpoint()){
+                player.game.TriggerWin();
+            }
         }
+
 
     }
 
