@@ -42,6 +42,9 @@ public class Board {
 
 	private final Space[][] spaces;
 
+	private int checkpointAmount = 0;
+
+
 	/**
 	 * <p>The space containing the priority antenna</p>
 	 */
@@ -148,5 +151,13 @@ public class Board {
 
 	public String getBoardName() {
 		return boardName;
+	}
+
+	public void setCheckpointAmount(int amountCheckpoints) {
+  		checkpointAmount = amountCheckpoints;
+	}
+
+	public int getCheckpointAmount() {
+		return checkpointAmount;
 	}
 }
