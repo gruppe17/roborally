@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
+import dk.dtu.compute.se.pisd.roborally.interfaces.Spacebound;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
@@ -9,7 +10,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
  * Represents {@link BoardElement}s that can be activated in the activation phase.
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
-public abstract class ActivationElement extends BoardElement {
+public abstract class ActivationElement extends BoardElement implements Spacebound {
     /**
      * <p>The space this {@link ActivationElement} is occupying</p>
      */

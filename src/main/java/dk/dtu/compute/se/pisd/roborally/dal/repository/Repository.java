@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 
 /**
  * ...
@@ -280,7 +279,7 @@ class Repository implements IRepository {
 			rs.updateString(DatabaseConstants.PLAYER_COLOUR, player.getColor());
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
-			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getDirection().ordinal());
 			rs.updateInt(DatabaseConstants.PLAYER_ENERGY_CUBES, player.getEnergyCubes());
 			rs.insertRow();
 		}
@@ -307,7 +306,7 @@ class Repository implements IRepository {
 				int y = rs.getInt(DatabaseConstants.PLAYER_POSITION_Y);
 				player.setSpace(game.getBoard().getSpace(x, y));
 				int heading = rs.getInt(DatabaseConstants.PLAYER_HEADING);
-				player.setHeading(Heading.values()[heading]);
+				player.setDirection(Heading.values()[heading]);
 				player.setEnergyCubes(rs.getInt(DatabaseConstants.PLAYER_ENERGY_CUBES));
 
 				// TODO  should also load players program and hand here
@@ -333,7 +332,7 @@ class Repository implements IRepository {
 			// rs.updateString(PLAYER_NAME, player.getName()); // not needed: player's names does not change
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_X, player.getSpace().x);
 			rs.updateInt(DatabaseConstants.PLAYER_POSITION_Y, player.getSpace().y);
-			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getHeading().ordinal());
+			rs.updateInt(DatabaseConstants.PLAYER_HEADING, player.getDirection().ordinal());
 			rs.updateInt(DatabaseConstants.PLAYER_ENERGY_CUBES, player.getEnergyCubes());
 			// TODO error handling
 			// TODO take care of case when number of players changes, etc

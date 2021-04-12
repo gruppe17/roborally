@@ -77,7 +77,7 @@ public class PlayerController implements ILaser {
      * @see #move(Heading, int)
      */
     public void moveForward(int distance) {
-        move(player.getHeading(), distance);
+        move(player.getDirection(), distance);
     }
 
     /**
@@ -110,12 +110,12 @@ public class PlayerController implements ILaser {
     public void turn(int numTimes) {
         numTimes %= 4;
         if (numTimes < 0) numTimes += 4;
-        Heading heading = player.getHeading();
+        Heading heading = player.getDirection();
         for (int i = 0; i < numTimes; i++) {
             heading = heading.next();
         }
 
-        player.setHeading(heading);
+        player.setDirection(heading);
     }
 
     /**
@@ -129,7 +129,7 @@ public class PlayerController implements ILaser {
      * <p>Turns player/robot by -π/4</p>
      */
     public void turnLeft() {
-        player.setHeading(player.getHeading().prev());
+        player.setDirection(player.getDirection().prev());
     }
 
     /**
@@ -238,7 +238,7 @@ public class PlayerController implements ILaser {
             return;
         while (true) {
             /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getDirection());
             Player playerAtSpace = lastSpace.getPlayer();
             /* remember to add the right elements to prevent hitting walls and stuff here */
            /* if(lastSpace.element == WallBoardElement || lastSpace.element == PriorityAntennaBoardElement){
@@ -270,7 +270,7 @@ public class PlayerController implements ILaser {
         /*Maybe do some cleanup of fx here?*/
         while (true) {
             /* get next space */
-            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getHeading());
+            lastSpace = player.game.getBoard().getNeighbour(lastSpace, player.getDirection());
             if (lastSpace == null) {
                 break;
             }
