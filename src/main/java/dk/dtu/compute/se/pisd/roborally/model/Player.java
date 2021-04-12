@@ -54,6 +54,10 @@ public class Player extends Subject implements Spacebound, Directional {
     private String name;
     private String color;
 
+      /**
+    *   <p>The last checkpoint landed on. If 0, then player has not landed on any checkpoints yet.</p>
+    */
+    private int lastCheckpoint = 0;
     /**
      * The space the player currently is on.
      */
@@ -263,6 +267,14 @@ public class Player extends Subject implements Spacebound, Directional {
      */
     public void addEnergyCubes(int amount) {
         setEnergyCubes(this.energyCubes + amount);
+    }
+
+    public int getLastCheckpoint() {
+        return lastCheckpoint;
+    }
+
+    public void setLastCheckpoint(int lastCheckpoint) {
+        this.lastCheckpoint = lastCheckpoint;
     }
 
 
