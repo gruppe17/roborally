@@ -7,14 +7,15 @@ import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.MoveHa
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * ...
+ * <p>Represents a board laser.</p>
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public class BoardLaser extends ActivationElement {
     /**
-     * <p>The laser of this board laser</p>
+     * <p>The laser of this board laser.</p>
      */
     private Laser laser;
 
@@ -32,11 +33,13 @@ public class BoardLaser extends ActivationElement {
     }
 
     @Override
+    @NotNull
     public BoardLaserController getController() {
         return (BoardLaserController) super.getController();
     }
 
     @Override
+    @NotNull
     protected BoardLaserController createContoller() {
         return new BoardLaserController(this);
     }

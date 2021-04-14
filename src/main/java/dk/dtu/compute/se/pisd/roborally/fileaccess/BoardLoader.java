@@ -162,15 +162,6 @@ public class BoardLoader {
 				} catch (IOException e2) {
 				}
 			}
-			for (int i = 0; i < board.width; i++) {
-				for (int j = 0; j < board.height; j++) {
-					Space space = board.getSpace(i, j);
-					if (space == null) continue;
-					for (IBoardElementController aEController: space.getActivationElementControllers()) {
-						aEController.getBoardElement().setSpace(space);
-					}
-				}
-			}
 		}
 	}
 
@@ -190,7 +181,6 @@ public class BoardLoader {
 			//todo add all method in space?
 			for (BoardElement boardElement : spaceTemplate.boardElements) {
 				space.addBoardElement(boardElement);
-				if (boardElement instanceof ActivationElement) ((ActivationElement) boardElement).setSpace(space);
 			}
 
 		}
@@ -235,16 +225,7 @@ public class BoardLoader {
 		SpaceTemplate spaceTemplate = new SpaceTemplate();
 		spaceTemplate.x = space.x;
 		spaceTemplate.y = space.y;
-        /*
-        for (BoardElement boardElement: space.getElements()) {
-            spaceTemplate.boardElements.add(boardElementToBoardElementTemplate(boardElement));
-        }
-         */
 		spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
-		for (IBoardElementController aEController: space.getActivationElementControllers()) {
-			//todo: maybe readyToSave and restoreAfterSave should be methods in Space?
-			aEController.readyToSave();
-		}
 		return spaceTemplate;
 	}
 
