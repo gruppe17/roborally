@@ -147,29 +147,27 @@ public class GameView extends VBox implements ViewObserver {
     public void updateView(Subject subject) {
         if (subject != game) return;
 
-        if(game.getPhase() == Phase.GAME_FINISHED && gameController.getAppController().isGameRunning())
-        {
-            Player winner = game.getPlayer(0);
+        statusLabel.setText(getStatusMessage());
 
-
-            for (Player player : game.getPlayers()) {
-                if(player.getLastCheckpoint() > winner.getLastCheckpoint())
-                    winner = player;
-            }
-
-
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setTitle("Game Finished!");
-            a.setContentText(String.format("%s has won", winner.getName()));
-
-            Optional<ButtonType> result = a.showAndWait();
-            if(!result.isPresent() || result.get() == ButtonType.OK){
-                gameController.getAppController().stopGame();
-            }
-
+        if (game.getPhase() != Phase.GAME_FINISHED || !gameController.getAppController().isGameRunning()) {
+            return;
         }
 
-        statusLabel.setText(getStatusMessage());
+        Player winner = game.getPlayer(0);
+
+        for (Player player : game.getPlayers()) {
+            if(player.getLastCheckpoint() > winner.getLastCheckpoint())
+                winner = player;
+        }
+
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Game Finished!");
+        a.setContentText(String.format("%s has won", winner.getName()));
+
+        Optional<ButtonType> result = a.showAndWait();
+        if(!result.isPresent() || result.get() == ButtonType.OK){
+            gameController.getAppController().stopGame();
+        }
     }
 
     /**
