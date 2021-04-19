@@ -147,19 +147,6 @@ public class PlayerController {
 	}
 
 	/**
-	 * adds a card to an empty card field if possible
-	 *
-	 * @author Tobias Maneschijn, s205422@student.dtu.dk
-	 * @deprecated
-	 */
-	public void addCard(CommandCard card) {
-		CommandCardField emptyCardField = player.getEmptyCardField();
-
-		if (emptyCardField == null || card == null) return;
-		emptyCardField.setCard(card);
-	}
-
-	/**
 	 * <p>Adds a {@link CommandCard} to the player's deck</p>
 	 *
 	 * @param card the card to be added to the player's deck
