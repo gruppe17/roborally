@@ -33,7 +33,7 @@
       "y": 1,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.Checkpoint",
           "INSTANCE": {
             "number": 1,
             "priority": 7,
@@ -51,7 +51,7 @@
       "y": 0,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 1,
             "distance": 1,
@@ -95,7 +95,7 @@
       "y": 0,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 1,
@@ -115,7 +115,7 @@
       "y": 1,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 1,
@@ -135,7 +135,7 @@
       "y": 2,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 1,
@@ -155,7 +155,7 @@
       "y": 6,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.BoardLaser",
           "INSTANCE": {
             "laser": {
               "priority": 6,
@@ -238,7 +238,7 @@
       "y": 4,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 2,
@@ -282,7 +282,7 @@
       "y": 3,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.EnergySpace",
           "INSTANCE": {
             "hasEnergyCube": true,
             "priority": 7,
@@ -318,7 +318,7 @@
       "y": 4,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 2,
@@ -338,7 +338,7 @@
       "y": 4,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 2,
@@ -358,7 +358,7 @@
       "y": 5,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 1,
             "distance": 0,
@@ -396,7 +396,7 @@
       "y": 6,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": -1,
             "distance": 0,
@@ -416,7 +416,7 @@
       "y": 4,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 2,
@@ -436,7 +436,7 @@
       "y": 0,
       "boardElements": [
         {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard",
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard",
           "INSTANCE": {
             "rotation": 0,
             "distance": 1,
