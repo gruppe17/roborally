@@ -29,52 +29,52 @@ package dk.dtu.compute.se.pisd.roborally.model.enums;
  *
  */
 public enum Heading {
-    /**
-     * <p>Represents the vector (0, -1)</p>
-     */
-    SOUTH,
-    /**
-     * Represents the vector (-1, 0)
-     */
-    WEST,
-    /**
-     * Represents the vector (0, 1)
-     */
-    NORTH,
-    /**
-     * Represents the vector (1, 0)
-     */
-    EAST;
+	/**
+	 * <p>Represents the vector (0, -1)</p>
+	 */
+	SOUTH,
+	/**
+	 * Represents the vector (-1, 0)
+	 */
+	WEST,
+	/**
+	 * Represents the vector (0, 1)
+	 */
+	NORTH,
+	/**
+	 * Represents the vector (1, 0)
+	 */
+	EAST;
 
-    /**
-     * <p>Returns the {@link Heading} resulting from a turn of -π/4, i.e. 90° clockwise.</p>
-     * <p><pre>
-     *         NORTH
-     *      ↗         ↘
-     *  WEST           EAST
-     *      ↖         ↙
-     *         SOUTH
-     * </pre></p>
-     *
-     * @return A heading turned -π/4, i.e. 90° clockwise, from this one
-     */
-    public Heading next() {
-        return values()[(this.ordinal() + 1) % values().length];
-    }
+	/**
+	 * <p>Returns the {@link Heading} resulting from a turn of -π/4, i.e. 90° clockwise.</p>
+	 * <p><pre>
+	 *         NORTH
+	 *      ↗         ↘
+	 *  WEST           EAST
+	 *      ↖         ↙
+	 *         SOUTH
+	 * </pre></p>
+	 *
+	 * @return A heading turned -π/4, i.e. 90° clockwise, from this one
+	 */
+	public Heading next() {
+		return values()[(this.ordinal() + 1) % values().length];
+	}
 
-    /**
-     * <p>Returns the {@link Heading} resulting from a turn of π/4, i.e. 90° anti-clockwise.</p>
-     * <p><pre>
-     *         NORTH
-     *      ↙         ↖
-     *  WEST           EAST
-     *      ↘         ↗
-     *         SOUTH
-     * </pre></p>
-     *
-     * @return A heading turned π/4, i.e. 90° anti-clockwise, from this one
-     */
-    public Heading prev() {
-        return values()[(this.ordinal() + values().length - 1) % values().length];
-    }
+	/**
+	 * <p>Returns the {@link Heading} resulting from a turn of π/4, i.e. 90° anti-clockwise.</p>
+	 * <p><pre>
+	 *         NORTH
+	 *      ↙         ↖
+	 *  WEST           EAST
+	 *      ↘         ↗
+	 *         SOUTH
+	 * </pre></p>
+	 *
+	 * @return A heading turned π/4, i.e. 90° anti-clockwise, from this one
+	 */
+	public Heading prev() {
+		return values()[(this.ordinal() + values().length - 1) % values().length];
+	}
 }

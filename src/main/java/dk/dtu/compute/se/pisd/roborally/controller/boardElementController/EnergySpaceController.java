@@ -7,31 +7,31 @@ import org.jetbrains.annotations.NotNull;
 
 public class EnergySpaceController implements IBoardElementController {
 
-    private final EnergySpace model;
+	private final EnergySpace model;
 
-    public EnergySpaceController(@NotNull EnergySpace model) {
-        this.model = model;
-    }
+	public EnergySpaceController(@NotNull EnergySpace model) {
+		this.model = model;
+	}
 
 
-    @Override
-    public void activate() {
-        Player player = model.getSpace().getPlayer();
-        if (player == null) return;
+	@Override
+	public void activate() {
+		Player player = model.getSpace().getPlayer();
+		if (player == null) return;
 
-        if (model.getHasEnergyCube() || player.game.getStep() == 5) {
-            player.addEnergyCubes(1);
-            model.setHasEnergyCube(false);
-        }
-    }
+		if (model.getHasEnergyCube() || player.game.getStep() == 5) {
+			player.addEnergyCubes(1);
+			model.setHasEnergyCube(false);
+		}
+	}
 
-    @Override
-    public int getPriority() {
-        return model.getPriority();
-    }
+	@Override
+	public int getPriority() {
+		return model.getPriority();
+	}
 
-    @Override
-    public @NotNull EnergySpace getBoardElement() {
-        return model;
-    }
+	@Override
+	public @NotNull EnergySpace getBoardElement() {
+		return model;
+	}
 }

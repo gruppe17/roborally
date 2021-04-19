@@ -48,139 +48,139 @@ import java.util.Optional;
 public class GameView extends VBox implements ViewObserver {
 
 
-    /**
-     * <p>The {@link Game} this is a view of.</p>
-     */
-    private Game game;
+	/**
+	 * <p>The {@link Game} this is a view of.</p>
+	 */
+	private Game game;
 
-    /**
-     * <p>The {@link GameController} this is a view of.</p>
-     */
-    private GameController gameController;
+	/**
+	 * <p>The {@link GameController} this is a view of.</p>
+	 */
+	private GameController gameController;
 
-    /**
-     * <p>The view of the {@link Board}</p>
-     */
-    private BoardView boardView;
-
-
-    /**
-     * <p>The view of the player mats.</p>
-     */
-    private PlayerMatsView playerMatsView;
-
-    /**
-     * <p>Displays the current status of the game.</p>
-     */
-    private Label statusLabel;
-
-    /**
-     * <p>The height of the board view relative to the
-     * whole view. Note that the size of the the actual
-     * view of the board itself, may be smaller than this.</p>
-     */
-    private static final double BOARD_VIEW_HEIGHT_PERCENT = 0.59;
-    /**
-     * <p>The height of the {@link #playerMatsView} relative
-     * to the height of the whole view.</p>
-     */
-    private static final double PLAYER_MATS_HEIGHT_PERCENT = 0.38;
-    /**
-     * <p>The height of the {@link #statusLabel} relative
-     * to the height of the whole view.</p>
-     */
-    private static final double STATUS_HEIGHT_PERCENT = 0.03;
+	/**
+	 * <p>The view of the {@link Board}</p>
+	 */
+	private BoardView boardView;
 
 
-    /**
-     * <p>Create a new view for a game.</p>
-     * @param gameController the game controller of the game that is to be displayed
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    public GameView(@NotNull GameController gameController) {
-        game = gameController.game;
-        this.gameController = gameController;
-        initBoardView(gameController.game.getBoard());
-        initPlayerMatsView(gameController);
-        initStatusLabel();
-        this.getChildren().add(boardView);
-        this.getChildren().add(playerMatsView);
-        this.getChildren().add(statusLabel);
+	/**
+	 * <p>The view of the player mats.</p>
+	 */
+	private PlayerMatsView playerMatsView;
+
+	/**
+	 * <p>Displays the current status of the game.</p>
+	 */
+	private Label statusLabel;
+
+	/**
+	 * <p>The height of the board view relative to the
+	 * whole view. Note that the size of the the actual
+	 * view of the board itself, may be smaller than this.</p>
+	 */
+	private static final double BOARD_VIEW_HEIGHT_PERCENT = 0.59;
+	/**
+	 * <p>The height of the {@link #playerMatsView} relative
+	 * to the height of the whole view.</p>
+	 */
+	private static final double PLAYER_MATS_HEIGHT_PERCENT = 0.38;
+	/**
+	 * <p>The height of the {@link #statusLabel} relative
+	 * to the height of the whole view.</p>
+	 */
+	private static final double STATUS_HEIGHT_PERCENT = 0.03;
 
 
-        game.attach(this);
-        update(game);
-    }
+	/**
+	 * <p>Create a new view for a game.</p>
+	 * @param gameController the game controller of the game that is to be displayed
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	public GameView(@NotNull GameController gameController) {
+		game = gameController.game;
+		this.gameController = gameController;
+		initBoardView(gameController.game.getBoard());
+		initPlayerMatsView(gameController);
+		initStatusLabel();
+		this.getChildren().add(boardView);
+		this.getChildren().add(playerMatsView);
+		this.getChildren().add(statusLabel);
 
-    /**
-     * <p>Initialize the {@link #boardView}.</p>
-     * @param board the board of the game
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private void initBoardView(Board board){
-        boardView = new BoardView(board);
-        RoboRally.bindSize(boardView, this, 1, BOARD_VIEW_HEIGHT_PERCENT);
-    }
+
+		game.attach(this);
+		update(game);
+	}
+
+	/**
+	 * <p>Initialize the {@link #boardView}.</p>
+	 * @param board the board of the game
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void initBoardView(Board board){
+		boardView = new BoardView(board);
+		RoboRally.bindSize(boardView, this, 1, BOARD_VIEW_HEIGHT_PERCENT);
+	}
 
 
-    /**
-     * <p>Initializes the {@link #playerMatsView}.</p>
-     * @param gameController the controller of the game the player mats belongs to
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private void initPlayerMatsView(@NotNull GameController gameController) {
-        playerMatsView = new PlayerMatsView(gameController);
-        RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
-    }
+	/**
+	 * <p>Initializes the {@link #playerMatsView}.</p>
+	 * @param gameController the controller of the game the player mats belongs to
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void initPlayerMatsView(@NotNull GameController gameController) {
+		playerMatsView = new PlayerMatsView(gameController);
+		RoboRally.bindSize(playerMatsView, this, 1, PLAYER_MATS_HEIGHT_PERCENT);
+	}
 
-    /**
-     * <p>Initializes the {@link #statusLabel}.</p>
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    private void initStatusLabel() {
-        statusLabel = new Label("<no status>");
-        RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
+	/**
+	 * <p>Initializes the {@link #statusLabel}.</p>
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void initStatusLabel() {
+		statusLabel = new Label("<no status>");
+		RoboRally.bindSize(statusLabel, this, 1, STATUS_HEIGHT_PERCENT);
 
-    }
+	}
 
-    @Override
-    public void updateView(Subject subject) {
-        if (subject != game) return;
+	@Override
+	public void updateView(Subject subject) {
+		if (subject != game) return;
 
-        statusLabel.setText(getStatusMessage());
+		statusLabel.setText(getStatusMessage());
 
-        if (game.getPhase() != Phase.GAME_FINISHED || !gameController.getAppController().isGameRunning()) {
-            return;
-        }
+		if (game.getPhase() != Phase.GAME_FINISHED || !gameController.getAppController().isGameRunning()) {
+			return;
+		}
 
-        Player winner = game.getPlayer(0);
+		Player winner = game.getPlayer(0);
 
-        for (Player player : game.getPlayers()) {
-            if(player.getLastCheckpoint() > winner.getLastCheckpoint())
-                winner = player;
-        }
+		for (Player player : game.getPlayers()) {
+			if(player.getLastCheckpoint() > winner.getLastCheckpoint())
+				winner = player;
+		}
 
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle("Game Finished!");
-        a.setContentText(String.format("%s has won", winner.getName()));
+		Alert a = new Alert(Alert.AlertType.INFORMATION);
+		a.setTitle("Game Finished!");
+		a.setContentText(String.format("%s has won", winner.getName()));
 
-        Optional<ButtonType> result = a.showAndWait();
-        if(!result.isPresent() || result.get() == ButtonType.OK){
-            gameController.getAppController().stopGame();
-        }
-    }
+		Optional<ButtonType> result = a.showAndWait();
+		if(!result.isPresent() || result.get() == ButtonType.OK){
+			gameController.getAppController().stopGame();
+		}
+	}
 
-    /**
-     * <p>Returns a string describing the status of the
-     * game.</p>
-     * @return a string describing the status of the game
-     */
-    private String getStatusMessage() {
-        return "Phase: " + game.getPhase().name() +
-                ", Player = " + game.getCurrentPlayer().getName() +
-                ", Step: " + game.getStep() +
-                ", Energy Cubes: " + game.getCurrentPlayer().getEnergyCubes() +
-                ", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint() ;
+	/**
+	 * <p>Returns a string describing the status of the
+	 * game.</p>
+	 * @return a string describing the status of the game
+	 */
+	private String getStatusMessage() {
+		return "Phase: " + game.getPhase().name() +
+				", Player = " + game.getCurrentPlayer().getName() +
+				", Step: " + game.getStep() +
+				", Energy Cubes: " + game.getCurrentPlayer().getEnergyCubes() +
+				", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint() ;
 
-    }
+	}
 }

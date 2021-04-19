@@ -34,10 +34,10 @@ import java.util.List;
  */
 public class SpaceTemplate {
 
-    public int x;
-    public int y;
+	public int x;
+	public int y;
 
 
-    public List<BoardElement> boardElements = new ArrayList<>();
+	public List<BoardElement> boardElements = new ArrayList<>();
 
 }
