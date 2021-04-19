@@ -64,9 +64,9 @@ public class PlayerController {
 	 */
 	private boolean pushRobots(@NotNull Space space, @NotNull Heading direction, int distance) {
 		if (space.getPlayer() == null) return true;
+
 		space.getPlayer().playerController.move(direction, distance);
-		if (space.getPlayer() == null) return true;
-		return false;
+		return space.getPlayer() == null;
 	}
 
 	/**
