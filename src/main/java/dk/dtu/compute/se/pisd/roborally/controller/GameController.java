@@ -387,11 +387,5 @@ public class GameController {
 		assert false;
 	}
 
-	/**
-	 * <p>Ends the game while announcing that the given player has won.</p>
-	 *  @author Tobias Maneschijn, s205422@student.dtu.dk
-	 */
-	public void TriggerWin(Player player) {
 
-	}
 }

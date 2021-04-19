@@ -25,9 +25,12 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.view.PlayerMatsView;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +139,25 @@ public class GameView extends VBox implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject != game) return;
+
+        if(game.getPhase() == Phase.GAME_FINISHED)
+        {
+            Player winner = game.getPlayer(0);
+
+
+            for (Player player : game.getPlayers()) {
+                if(player.getLastCheckpoint() > winner.getLastCheckpoint())
+                    winner = player;
+            }
+
+
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setTitle("Game Finished!");
+            a.setContentText(String.format("Player %s has won", winner));
+            a.showAndWait();
+
+        }
+
         statusLabel.setText(getStatusMessage());
     }
 
