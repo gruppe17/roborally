@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
+import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
@@ -30,6 +31,9 @@ import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationEleme
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
 /**
  * <p>The controller for a {@link Game}.</p>
@@ -251,7 +255,7 @@ public class GameController {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void activateElements() {
-		//todo: This is extremely inefficient and should be done much better.
+		//todo: This is very inefficient and should be done much better.
 		// For starters it should not loop over the entire board; only the
 		// spaces with players or lasers (which would hit something) will
 		// be activated.
@@ -262,44 +266,25 @@ public class GameController {
 		// of another conveyor belt element (of same priority). In reality
 		// what should happen is that they should both be moved by their
 		// conveyor belts simultaneously and not interact at all.
-		int lastPriority = 0;
 		Board board = game.getBoard();
 
-		for (int i = 0; i <= lastPriority ; i++) {
-			int priority;
-			for (int x = 0; x < board.width; x++) {
-				for (int y = 0; y < board.height; y++) {
-
-					IBoardElementController[] aEControllers = board.getSpace(x, y).getActivationElementControllers();
-					for (IBoardElementController aEController: aEControllers) {
-						priority = aEController.getPriority();
-						if (priority > lastPriority) lastPriority = priority;
-						if (priority == i) aEController.activate();
-					}
-
-				}
-			}
-			for (Player player : game.getPlayers()) {
-				Laser roboLaser = player.getLaser();
-				if (roboLaser == null) continue;
-				priority = roboLaser.getPriority();
-				if (priority > lastPriority) lastPriority = priority;
-				if (priority == i)
-					roboLaser.activate();
-			}
-		}
-
-		/*
 		PriorityQueue<IActivateable> elementActivationQueue = new PriorityQueue<>();
-		for (Player player: game.getPlayers()) {
-			elementActivationQueue.add(player.getLaser());
-			elementActivationQueue.addAll(player.getSpace().getActivationElementControllers());
+		for (int x = 0; x < board.width; x++) {
+			for (int y = 0; y < board.height; y++) {
+				IActivateable[] activateables = board.getSpace(x, y).getActivationElementControllers();
+				elementActivationQueue.addAll(Arrays.asList(activateables));
+			}
 		}
+		for (Player player: game.getPlayers()) {
+			Laser roboLaser = player.getLaser();
+			if (roboLaser == null) continue;
+			elementActivationQueue.add(roboLaser);
+		}
+
 		while (!elementActivationQueue.isEmpty()){
 			elementActivationQueue.remove().activate();
 		}
 
-*/
 	}
 
 	/**
