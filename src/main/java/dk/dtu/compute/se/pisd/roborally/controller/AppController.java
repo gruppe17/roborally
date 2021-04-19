@@ -33,6 +33,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -189,6 +190,8 @@ public class AppController implements Observer {
 		if (gameController == null) return false;
 
 		// here we save the game (without asking the user).
+
+		if(gameController.game.getPhase() != Phase.GAME_FINISHED)
 		saveGame();
 
 		gameController = null;

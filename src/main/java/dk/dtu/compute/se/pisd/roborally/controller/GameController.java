@@ -45,6 +45,8 @@ public class GameController {
 
 	final public Game game;
 
+
+
 	final AppController appController;
 
 	public GameController(@NotNull Game game, AppController appController) {
@@ -375,5 +377,8 @@ public class GameController {
 		assert false;
 	}
 
+	public AppController getAppController() {
+		return appController;
+	}
 
 }

@@ -31,9 +31,12 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.view.PlayerMatsView;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * <p>The view for a {@link Game}. Contains a {@link BoardView},
@@ -49,6 +52,11 @@ public class GameView extends VBox implements ViewObserver {
      * <p>The {@link Game} this is a view of.</p>
      */
     private Game game;
+
+    /**
+     * <p>The {@link GameController} this is a view of.</p>
+     */
+    private GameController gameController;
 
     /**
      * <p>The view of the {@link Board}</p>
@@ -91,7 +99,7 @@ public class GameView extends VBox implements ViewObserver {
      */
     public GameView(@NotNull GameController gameController) {
         game = gameController.game;
-
+        this.gameController = gameController;
         initBoardView(gameController.game.getBoard());
         initPlayerMatsView(gameController);
         initStatusLabel();
@@ -139,7 +147,7 @@ public class GameView extends VBox implements ViewObserver {
     public void updateView(Subject subject) {
         if (subject != game) return;
 
-        if(game.getPhase() == Phase.GAME_FINISHED)
+        if(game.getPhase() == Phase.GAME_FINISHED && gameController.getAppController().isGameRunning())
         {
             Player winner = game.getPlayer(0);
 
@@ -153,7 +161,11 @@ public class GameView extends VBox implements ViewObserver {
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Game Finished!");
             a.setContentText(String.format("%s has won", winner.getName()));
-            a.showAndWait();
+
+            Optional<ButtonType> result = a.showAndWait();
+            if(!result.isPresent() || result.get() == ButtonType.OK){
+                gameController.getAppController().stopGame();
+            }
 
         }
 
