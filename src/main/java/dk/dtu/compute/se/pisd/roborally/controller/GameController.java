@@ -314,7 +314,7 @@ public class GameController {
 					player.playerController.turnLeft();
 					break;
 				case FAST_FORWARD:
-					player.playerController.fastForward();
+					player.playerController.moveForward(2);
 					break;
 				default:
 					// DO NOTHING (for now)
