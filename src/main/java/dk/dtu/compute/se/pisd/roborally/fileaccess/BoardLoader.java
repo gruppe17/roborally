@@ -21,8 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.fileaccess;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.BoardLaserController;
@@ -32,7 +31,6 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,7 +71,6 @@ public class BoardLoader {
 			// TODO these constants should be defined somewhere
 			return new Board(8, 8);
 		}
-
 
 		// In simple cases, we can create a Gson object with: new Gson()
 		GsonBuilder simpleBuilder = new GsonBuilder().registerTypeAdapter(
@@ -128,7 +125,6 @@ public class BoardLoader {
 		//       when the folder "resources" does not exist! But, it does not need
 		//       the file "simpleCards.json" to exist!
 		String filename = classLoader.getResource(BOARDSFOLDER + "/" + name  + JSON_EXT).getPath();
-
 
 		// In simple cases, we can create a Gson object with new:
 		//
