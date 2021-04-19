@@ -177,6 +177,16 @@ public class Game extends Subject {
 	}
 
 	/**
+	 * <p>Returns a safe array of the players currently
+	 * in the activation queue in the correct order.</p>
+	 * @return a new array of the players in the activation queue in order
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	public Player[] getPlayerActivationQueue(){
+		return playerActivationQueue.toArray(new Player[0]);
+	}
+
+	/**
 	 * <p>Returns a boolean indicating whether {@link #playerActivationQueue}
 	 * is empty or the next element is null.</p>
 	 *
@@ -200,4 +210,6 @@ public class Game extends Subject {
 	public void setPlayerActivationQueue(PriorityQueue<Player> activationQueue){
 		this.playerActivationQueue = activationQueue;
 	}
+
+
 }

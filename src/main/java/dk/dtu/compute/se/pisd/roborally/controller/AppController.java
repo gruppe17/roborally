@@ -33,6 +33,7 @@ import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -78,13 +79,16 @@ public class AppController implements Observer {
 		//     here we just create an empty board with the required number of players.
 		//Todo: players choose board
 		Board board = BoardLoader.loadBoard("defaultboard");
-		//BoardLoader.saveBoard(board, "defaultboard");
+		BoardLoader.saveBoard(board, "test");
 		Game game = new Game(board);
-		gameController = new GameController(game);
+		gameController = new GameController(game, this);
 		int no = result.get();
 		for (int i = 0; i < no; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
 			game.addPlayer(player);
+			for (int j = 0; j < 20; j++) {
+				player.playerController.addCardToDeck(player.playerController.generateRandomCommandCard());
+			}
 			player.setSpace(board.getSpace(i % board.width, i));
 		}
 
@@ -172,7 +176,7 @@ public class AppController implements Observer {
 		String choice = game.get();
 		choice = choice.substring(0, choice.indexOf('.'));
 
-		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id));
+		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id), this);
 		roboRally.createGameView(gameController);
 	}
 
@@ -189,6 +193,8 @@ public class AppController implements Observer {
 		if (gameController == null) return false;
 
 		// here we save the game (without asking the user).
+
+		if(gameController.game.getPhase() != Phase.GAME_FINISHED)
 		saveGame();
 
 		gameController = null;

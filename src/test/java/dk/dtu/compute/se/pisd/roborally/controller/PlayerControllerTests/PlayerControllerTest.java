@@ -21,7 +21,7 @@ class PlayerControllerTest {
     void setUp() {
         Board board = new Board(TEST_WIDTH, TEST_HEIGHT);
         Game game = new Game(board);
-        gameController = new GameController(game);
+        gameController = new GameController(game, null);
         for (int i = 0; i < 6; i++) {
             Player player = new Player(game, null,"Player " + i);
             game.addPlayer(player);

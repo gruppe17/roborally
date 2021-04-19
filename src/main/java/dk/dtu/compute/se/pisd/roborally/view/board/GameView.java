@@ -25,12 +25,18 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import dk.dtu.compute.se.pisd.roborally.view.PlayerMatsView;
 import dk.dtu.compute.se.pisd.roborally.view.ViewObserver;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * <p>The view for a {@link Game}. Contains a {@link BoardView},
@@ -46,6 +52,11 @@ public class GameView extends VBox implements ViewObserver {
      * <p>The {@link Game} this is a view of.</p>
      */
     private Game game;
+
+    /**
+     * <p>The {@link GameController} this is a view of.</p>
+     */
+    private GameController gameController;
 
     /**
      * <p>The view of the {@link Board}</p>
@@ -88,11 +99,10 @@ public class GameView extends VBox implements ViewObserver {
      */
     public GameView(@NotNull GameController gameController) {
         game = gameController.game;
-
+        this.gameController = gameController;
         initBoardView(gameController.game.getBoard());
         initPlayerMatsView(gameController);
         initStatusLabel();
-
         this.getChildren().add(boardView);
         this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
@@ -136,7 +146,28 @@ public class GameView extends VBox implements ViewObserver {
     @Override
     public void updateView(Subject subject) {
         if (subject != game) return;
+
         statusLabel.setText(getStatusMessage());
+
+        if (game.getPhase() != Phase.GAME_FINISHED || !gameController.getAppController().isGameRunning()) {
+            return;
+        }
+
+        Player winner = game.getPlayer(0);
+
+        for (Player player : game.getPlayers()) {
+            if(player.getLastCheckpoint() > winner.getLastCheckpoint())
+                winner = player;
+        }
+
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Game Finished!");
+        a.setContentText(String.format("%s has won", winner.getName()));
+
+        Optional<ButtonType> result = a.showAndWait();
+        if(!result.isPresent() || result.get() == ButtonType.OK){
+            gameController.getAppController().stopGame();
+        }
     }
 
     /**
@@ -147,6 +178,9 @@ public class GameView extends VBox implements ViewObserver {
     private String getStatusMessage() {
         return "Phase: " + game.getPhase().name() +
                 ", Player = " + game.getCurrentPlayer().getName() +
-                ", Step: " + game.getStep();
+                ", Step: " + game.getStep() +
+                ", Energy Cubes: " + game.getCurrentPlayer().getEnergyCubes() +
+                ", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint() ;
+
     }
 }

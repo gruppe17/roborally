@@ -53,13 +53,13 @@ public class SpaceView extends StackPane implements ViewObserver {
     /**
      * <p>The {@link Space} this is a view of.</p>
      */
-    public final Space space;
+    private final Space space;
 
     /**
      * <p>The {@link ImageView} on which the image of
      * the {@link #space} is drawn.</p>
      */
-    public final ImageView imageView;
+    private final ImageView imageView;
 
     /**
      * <p>The view of all the {@link BoardElement}s</p>
@@ -106,7 +106,6 @@ public class SpaceView extends StackPane implements ViewObserver {
      */
     private void initBoardElementsView() {
         boardElementsView = new SpaceBoardElementsView(space);
-        //RoboRally.bindSize(boardElementsView, imageView.fitWidthProperty(), imageView.fitHeightProperty(), 1, 1);
         RoboRally.bindSize(boardElementsView, this, 1, 1);
     }
 
