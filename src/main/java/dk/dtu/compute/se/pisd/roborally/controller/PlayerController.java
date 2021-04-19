@@ -1,13 +1,14 @@
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
-import dk.dtu.compute.se.pisd.roborally.interfaces.ILaser;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * <p>The controller for a {@link Player}.</p>
@@ -152,7 +153,6 @@ public class PlayerController {
      * @deprecated
      */
     public void addCard(CommandCard card) {
-        //Seems identical to drawCard? I assume it was just partially renamed, but not done automatically?
         CommandCardField emptyCardField = player.getEmptyCardField();
 
         if (emptyCardField == null || card == null) return;
@@ -166,20 +166,45 @@ public class PlayerController {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void addCardToDeck(CommandCard card) {
-        //Todo: Should be moved to different class.
-        // maybe like a deck class or something.
+        player.getDeck().add(card);
+    }
+
+    /**
+     * <p>Adds a {@link CommandCard} to the player's discard pile</p>
+     *
+     * @param card the card to be added to the player's discard pile
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public void addCardToDiscardPile(CommandCard card) {
+        player.getDiscardPile().add(card);
     }
 
     /**
      * Adds a random card to an empty card field if possible
      *
      * @author Tobias Maneschijn, s205422@student.dtu.dk
+     * @author Rasmus Nylander, s205418@student.dtu.dk
      */
-    public void drawCard() {
+    public boolean drawCard() {
         CommandCardField emptyCardField = player.getEmptyCardField();
-        if (emptyCardField == null) return;
+        if (emptyCardField == null) return false;
+        LinkedList<CommandCard> deck = player.getDeck();
+        if (deck.size() == 0) shuffleDeck();
+        emptyCardField.setCard(deck.remove());
+        return true;
+    }
 
-        emptyCardField.setCard(generateRandomCommandCard());
+    /**
+     * <p>Empties the discard pile into the player's deck
+     * and shuffles the list.</p>
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    private void shuffleDeck() {
+        LinkedList<CommandCard> deck = player.getDeck();
+        LinkedList<CommandCard> discardPile = player.getDiscardPile();
+        deck.addAll(discardPile);
+        discardPile.clear();
+        Collections.shuffle(deck);
     }
 
     /**
@@ -188,12 +213,7 @@ public class PlayerController {
      * @author Rasmus Nylander, s205418@student.dtu.dk
      */
     public void fillHand() {
-        //todo: The player should probably keep track of their hand.
-        //      If this is called while the player is programming their robot
-        //      the cards in the registers are not counted.
-        while (player.getEmptyCardField() != null) {
-            drawCard();
-        }
+        while (drawCard());
     }
 
     /**
@@ -203,6 +223,7 @@ public class PlayerController {
      */
     public void discardHand() {
         for (CommandCardField cCField : player.getHand()) {
+            player.getDiscardPile().add(cCField.getCard());
             cCField.setCard(null);
         }
     }
@@ -216,6 +237,7 @@ public class PlayerController {
      */
     public void discardProgram() {
         for (CommandCardField cCField : player.getProgram()) {
+            player.getDiscardPile().add(cCField.getCard());
             cCField.setCard(null);
         }
     }
