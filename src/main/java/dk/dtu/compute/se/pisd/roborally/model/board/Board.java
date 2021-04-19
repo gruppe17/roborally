@@ -63,11 +63,10 @@ public class Board {
 			}
 		}
 
+
+
 		//TODO: implement this for real
 		prioritySpace = spaces[1][1];
-
-
-
 	}
 
 

@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -172,6 +173,18 @@ public class PlayerController {
 	}
 
 	/**
+	 * <p>Adds a {@link Collection} of {@link CommandCard}s
+	 * to the player's deck</p>
+	 *
+	 * @param cards the cards to be added to the player's deck
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @return true if the deck changed
+	 */
+	public boolean addCardsToDeck(Collection<CommandCard> cards){
+		return player.getDeck().addAll(cards);
+	}
+
+	/**
 	 * <p>Adds a {@link CommandCard} to the player's discard pile</p>
 	 *
 	 * @param card the card to be added to the player's discard pile
@@ -180,6 +193,18 @@ public class PlayerController {
 	 */
 	public boolean addCardToDiscardPile(CommandCard card) {
 		return player.getDiscardPile().add(card);
+	}
+
+	/**
+	 * <p>Adds a {@link Collection} of {@link CommandCard}s
+	 * to the player's discard pile</p>
+	 *
+	 * @param cards the cards to be added to the player's discard pile
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @return true if the deck changed
+	 */
+	public boolean addCardsToDiscardPile(Collection<CommandCard> cards){
+		return player.getDiscardPile().addAll(cards);
 	}
 
 	/**
