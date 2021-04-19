@@ -59,7 +59,7 @@ public class BoardElementImageFinder {
 
         if (boardElement instanceof Checkpoint){
             int number = ((Checkpoint) boardElement).getNumber();
-            return BASE_DIRECTORY + CHECKPOINTS + number;
+            return BASE_DIRECTORY + CHECKPOINTS + "checkpoint" + number + ".png";
         }
 
         return "";
