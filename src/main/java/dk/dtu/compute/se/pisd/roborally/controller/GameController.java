@@ -21,6 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
@@ -386,4 +387,11 @@ public class GameController {
 		assert false;
 	}
 
+	/**
+	 * <p>Ends the game while announcing that the given player has won.</p>
+	 *  @author Tobias Maneschijn, s205422@student.dtu.dk
+	 */
+	public void TriggerWin(Player player) {
+
+	}
 }

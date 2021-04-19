@@ -200,4 +200,6 @@ public class Game extends Subject {
 	public void setPlayerActivationQueue(PriorityQueue<Player> activationQueue){
 		this.playerActivationQueue = activationQueue;
 	}
+
+
 }

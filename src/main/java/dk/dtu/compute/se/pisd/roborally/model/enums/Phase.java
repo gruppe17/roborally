@@ -29,6 +29,7 @@ package dk.dtu.compute.se.pisd.roborally.model.enums;
  *
  * @author Ekkart Kindler, ekki@dtu.dk
  * @author Rasmus Nylander, s205418@student.dtu.dk
+ * @author Tobias Maneschijn, s205422@student.dtu.dk
  *
  */
 public enum Phase {
@@ -47,5 +48,9 @@ public enum Phase {
     /**
      * <p>Represents the program requiring user interaction.</p>
      */
-    PLAYER_INTERACTION
+    PLAYER_INTERACTION,
+    /**
+     * <p>Represents the game finishing</p>
+     */
+    GAME_FINISHED
 }
