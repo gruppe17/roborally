@@ -32,6 +32,11 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
 /**
@@ -71,6 +76,9 @@ public class Player extends Subject implements Spacebound, Directional {
     private CommandCardField[] program;
     private CommandCardField[] hand;
 
+    private LinkedList<CommandCard> deck;
+    private LinkedList<CommandCard> discardPile;
+
     private int energyCubes;
 
     public Player(@NotNull Game game, String color, @NotNull String name) {
@@ -81,6 +89,8 @@ public class Player extends Subject implements Spacebound, Directional {
         this.color = color;
 
         this.space = null;
+        this.deck = new LinkedList<>();
+        this.discardPile = new LinkedList<>();
 
         program = new CommandCardField[NO_REGISTERS];
         for (int i = 0; i < program.length; i++) {
@@ -91,6 +101,8 @@ public class Player extends Subject implements Spacebound, Directional {
         for (int i = 0; i < hand.length; i++) {
             hand[i] = new CommandCardField(this);
         }
+
+
 
         //// TODO: this should probably be done somewhere else
         this.laser = new Laser(6, true, DamageType.LASER, this);
@@ -217,6 +229,14 @@ public class Player extends Subject implements Spacebound, Directional {
      */
     public CommandCardField[] getHand(){
         return hand;
+    }
+
+    public LinkedList<CommandCard> getDeck(){
+        return deck;
+    }
+
+    public LinkedList<CommandCard> getDiscardPile(){
+        return discardPile;
     }
 
     /**

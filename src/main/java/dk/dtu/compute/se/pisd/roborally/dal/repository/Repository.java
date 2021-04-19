@@ -354,8 +354,8 @@ class Repository implements IRepository {
 		for (Player player : players) {
 			createPlayerProgramInDatabase(player);
 			createPlayerHandInDatabase(player);
-			//createPlayerDeckInDatabase(player);
-			//createPlayerDiscardInDatabase(player); //?
+			createPlayerDeckInDatabase(player);
+			createPlayerDiscardInDatabase(player);
 			//createPlayerUpgradeCardsInDatabase(player)
 		}
 	}
@@ -383,9 +383,32 @@ class Repository implements IRepository {
 	}
 
 	/**
-	 * <p>Create a list of {@link CommandCardField}s in the database
-	 * belonging to a specified player's specified deck. I.e. their
-	 * program, hand, discard pile, program deck, and so on</p>
+	 * <p>Creates the specified player's discard pile in the database.</p>
+	 * @param player the player whose discard pile is to be created in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @throws SQLException
+	 */
+	private void createPlayerDiscardInDatabase(Player player) throws SQLException {
+		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_DISCARD, player.getDeck().toArray(new CommandCard[0]));
+	}
+
+	/**
+	 * <p>Creates the specified player's deck in the database.</p>
+	 * @param player the player whose deck is to be created in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @throws SQLException
+	 */
+	private void createPlayerDeckInDatabase(Player player) throws SQLException {
+		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_DECK, player.getDeck().toArray(new CommandCard[0]));
+	}
+
+	/**
+	 * <p>Create a list of {@link CommandCard}s in the database
+	 * belonging to the {@link CommandCardField} a specified player's
+	 * specified deck. I.e. their program, hand, discard pile,
+	 * program deck, and so on</p>
 	 *
 	 * @param gameID   the ID of the game that the player belongs to
 	 * @param playerID the ID of the player whom the deck belongs to
@@ -395,14 +418,33 @@ class Repository implements IRepository {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void createCardsInDB(int gameID, int playerID, int cardType, CommandCardField[] cCFields) throws SQLException {
+		CommandCard[] commandCards = new CommandCard[cCFields.length];
+		for (int i = 0; i < commandCards.length; i++) {
+			commandCards[i] = cCFields[i].getCard();
+		}
+		createCardsInDB(gameID, playerID, cardType, commandCards);
+	}
+
+	/**
+	 * <p>Create a list of {@link CommandCard}s in the database
+	 * belonging to a specified player's specified deck. I.e. their
+	 * program, hand, discard pile, program deck, and so on</p>
+	 *
+	 * @param gameID   the ID of the game that the player belongs to
+	 * @param playerID the ID of the player whom the deck belongs to
+	 * @param cardType the type of the deck
+	 * @param cCards the deck that is to be created in the database
+	 * @throws SQLException
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void createCardsInDB(int gameID, int playerID, int cardType, @NotNull CommandCard[] cCards) throws SQLException {
 		PreparedStatement preparedStatement = preparedStatements.getSelectCardStatementUpdatable();
 		preparedStatement.setInt(1, gameID);
 		preparedStatement.setInt(2, playerID);
 		ResultSet resultSetCards = preparedStatement.executeQuery();
 
-		for (int i = 0; i < cCFields.length; i++) {
-			CommandCardField cCardField = cCFields[i];
-			if (cCardField.getCard() == null) continue;
+		for (int i = 0; i < cCards.length; i++) {
+			if (cCards[i] == null) continue;
 			long cardID;
 			while (true) {
 				cardID = random.nextLong();
@@ -419,32 +461,32 @@ class Repository implements IRepository {
 					if (e.getErrorCode() != 1062) throw e; //1062 == duplicate entry
 				}
 			}
-			createCardCommandsInDatabase(cardID, cCardField);
+			createCardCommandsInDatabase(cardID, cCards[i]);
 		}
-
-
 	}
 
 	/**
 	 * <p>Saves the {@link Command}s of a {@link CommandCard} in the database.</p>
 	 *
-	 * @param cardID     the primary key of the card in the database
-	 * @param cCardField the card field of the card whose commands are to be saved in the database
+	 * @param cardID    the primary key of the card in the database
+	 * @param cCard     the card whose commands are to be saved in the database
 	 * @throws SQLException
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private void createCardCommandsInDatabase(long cardID, CommandCardField cCardField) throws SQLException {
+	private void createCardCommandsInDatabase(long cardID, CommandCard cCard) throws SQLException {
 		PreparedStatement ps = preparedStatements.getInsertCardCommandStatement();
 		ps.setLong(1, cardID);
-
-		List<Command> commands = cCardField.getCard().command.getOptions();
-		if (commands.isEmpty()) commands = Collections.singletonList(cCardField.getCard().command);
+/*
+		List<Command> commands = cCard.command.getOptions();
+		if (commands.isEmpty()) commands = Collections.singletonList(cCard.command);
 		for (Command command : commands) {
 			ps.setInt(2, command.ordinal());
 			ps.execute();
 		}
+ */
+		ps.setInt(2, cCard.command.ordinal());
+		ps.execute();
 	}
-
 
 	/**
 	 * <p>Deletes the cards of the specified players in the database</p>
@@ -478,11 +520,13 @@ class Repository implements IRepository {
 
 
 	/**
-	 * <p>Reads cards from database and assigns them to the right positions on all players.</p>
+	 * <p>Reads cards from database and assigns them to the right
+	 * positions in all decks of all specified players.</p>
 	 *
-	 * @param players
+	 * @param players the players whose cards are to be read from the database
 	 * @throws SQLException
 	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void loadPlayerCardsFromDB(Player... players) throws SQLException {
 		PreparedStatement ps = preparedStatements.getSelectCardStatementUpdatable();
@@ -507,14 +551,14 @@ class Repository implements IRepository {
 						player.getHandField(position).setCard(card);
 						break;
 					case DatabaseConstants.CARD_TYPE_DECK:
+						player.playerController.addCardToDeck(card);
 						break;
 					case DatabaseConstants.CARD_TYPE_DISCARD:
+						player.playerController.addCardToDiscardPile(card);
 						break;
 					case DatabaseConstants.CARD_TYPE_UPGRADE:
 						break;
 				}
-
-
 
 			}
 
@@ -605,19 +649,14 @@ class Repository implements IRepository {
 		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
-		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
-		// Something should be done to deal with that.
-		Player player;
-		int i = 0;
-		while ((player = game.nextPlayer()) != null) {
+		Player[] activationQueue = game.getPlayerActivationQueue();
+		for (int i = 0; i < activationQueue.length; i++) {
 			resultSet.moveToInsertRow();
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_GAMEID, game.getGameId());
-			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
+			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(activationQueue[i]));
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PRIORITY, i);
 			resultSet.insertRow();
-			i++;
 		}
 		resultSet.close();
-		loadActivationQueueFromDatabase(game);
 	}
 }

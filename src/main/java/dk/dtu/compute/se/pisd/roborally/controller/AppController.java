@@ -78,13 +78,16 @@ public class AppController implements Observer {
 		//     here we just create an empty board with the required number of players.
 		//Todo: players choose board
 		Board board = BoardLoader.loadBoard("defaultboard");
-		//BoardLoader.saveBoard(board, "defaultboard");
+		BoardLoader.saveBoard(board, "test");
 		Game game = new Game(board);
 		gameController = new GameController(game);
 		int no = result.get();
 		for (int i = 0; i < no; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
 			game.addPlayer(player);
+			for (int j = 0; j < 20; j++) {
+				player.playerController.addCardToDeck(player.playerController.generateRandomCommandCard());
+			}
 			player.setSpace(board.getSpace(i % board.width, i));
 		}
 
