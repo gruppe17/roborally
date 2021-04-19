@@ -80,7 +80,7 @@ public class AppController implements Observer {
 		Board board = BoardLoader.loadBoard("defaultboard");
 		//BoardLoader.saveBoard(board, "defaultboard");
 		Game game = new Game(board);
-		gameController = new GameController(game);
+		gameController = new GameController(game, this);
 		int no = result.get();
 		for (int i = 0; i < no; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
@@ -172,7 +172,7 @@ public class AppController implements Observer {
 		String choice = game.get();
 		choice = choice.substring(0, choice.indexOf('.'));
 
-		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id));
+		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id), this);
 		roboRally.createGameView(gameController);
 	}
 

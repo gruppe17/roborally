@@ -45,8 +45,11 @@ public class GameController {
 
 	final public Game game;
 
-	public GameController(@NotNull Game game) {
+	final AppController appController;
+
+	public GameController(@NotNull Game game, AppController appController) {
 		this.game = game;
+		this.appController = appController;
 	}
 
 	/**
