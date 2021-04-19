@@ -649,19 +649,14 @@ class Repository implements IRepository {
 		PreparedStatement preparedStatement = preparedStatements.getSelectActivationQueueStatementUpdatable();
 		preparedStatement.setInt(1, game.getGameId());
 		ResultSet resultSet = preparedStatement.executeQuery();
-		//todo: this changes the Game. If the game is to be continued, then it must be reloaded.
-		// Something should be done to deal with that.
-		Player player;
-		int i = 0;
-		while ((player = game.nextPlayer()) != null) {
+		Player[] activationQueue = game.getPlayerActivationQueue();
+		for (int i = 0; i < activationQueue.length; i++) {
 			resultSet.moveToInsertRow();
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_GAMEID, game.getGameId());
-			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(player));
+			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PLAYERID, game.getPlayerNumber(activationQueue[i]));
 			resultSet.updateInt(DatabaseConstants.ACTIVATION_QUEUE_PRIORITY, i);
 			resultSet.insertRow();
-			i++;
 		}
 		resultSet.close();
-		loadActivationQueueFromDatabase(game);
 	}
 }
