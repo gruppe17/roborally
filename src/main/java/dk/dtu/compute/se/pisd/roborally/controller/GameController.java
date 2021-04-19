@@ -21,13 +21,11 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.RoboRally;
-import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;

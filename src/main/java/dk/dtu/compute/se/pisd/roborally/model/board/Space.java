@@ -26,7 +26,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoard
 import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
 import org.jetbrains.annotations.NotNull;
 
