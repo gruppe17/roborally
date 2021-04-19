@@ -171,6 +171,7 @@ public class GameView extends VBox implements ViewObserver {
                 ", Player = " + game.getCurrentPlayer().getName() +
                 ", Step: " + game.getStep() +
                 ", Energy Cubes: " + game.getCurrentPlayer().getEnergyCubes() +
-                ", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint();
+                ", Last Checkpoint: " + game.getCurrentPlayer().getLastCheckpoint() ;
+
     }
 }
