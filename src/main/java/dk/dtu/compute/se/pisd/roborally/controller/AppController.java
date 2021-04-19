@@ -29,6 +29,7 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
 import dk.dtu.compute.se.pisd.roborally.dal.repository.RepositoryAccess;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
+import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
@@ -40,9 +41,7 @@ import javafx.scene.control.Alert.AlertType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * ...
@@ -79,26 +78,40 @@ public class AppController implements Observer {
 		//     here we just create an empty board with the required number of players.
 		//Todo: players choose board
 		Board board = BoardLoader.loadBoard("defaultboard");
-		BoardLoader.saveBoard(board, "test");
+		//BoardLoader.saveBoard(board, "test");
 		Game game = new Game(board);
 		gameController = new GameController(game, this);
 		int no = result.get();
 		for (int i = 0; i < no; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
 			game.addPlayer(player);
-			for (int j = 0; j < 20; j++) {
-				player.playerController.addCardToDeck(player.playerController.generateRandomCommandCard());
-			}
+
 			player.setSpace(board.getSpace(i % board.width, i));
 		}
+		chooseRobots(game);
 
-
-		// XXX: V2
-		// board.setCurrentPlayer(board.getPlayer(0));
 		gameController.startProgrammingPhase();
-
 		roboRally.createGameView(gameController);
+	}
 
+	private void chooseRobots(Game game){
+		//todo: get players' choices
+		//todo: assign each player their choice
+
+		for (Player player: game.getPlayers()) {
+			player.playerController.addCardsToDeck(getPlayerDeck(player));
+		//todo: assign each player their starting position
+		}
+
+	}
+
+	private LinkedList<CommandCard> getPlayerDeck(Player player){
+		//todo: implement this returning the deck associated with the player's robot
+		LinkedList<CommandCard> deck = new LinkedList<>();
+		for (int i = 0; i < 50; i++) {
+			deck.add(player.playerController.generateRandomCommandCard());
+		}
+		return deck;
 	}
 
 	/**
@@ -145,7 +158,7 @@ public class AppController implements Observer {
 			name = dialog.showAndWait();
 			if (!name.isPresent()) return null;
 			if (name.get().isBlank()) {
-				//todo: inform the user of their wrong doing!
+				//todo: inform the user of their wrongdoing!
 				continue;
 			}
 			break;
