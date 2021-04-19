@@ -35,65 +35,65 @@ import java.util.List;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public enum Command {
-    /**
-     * Move forward by one.
-     */
-    FORWARD("Fwd"),
-    /**
-     * Turn -π/4, i.e. 90° clockwise.
-     */
-    RIGHT("Turn Right"),
-    /**
-     * Turn π/4, ie 90° anti-clockwise.
-     */
-    LEFT("Turn Left"),
-    /**
-     * Move forward by two.
-     */
-    FAST_FORWARD("Fast Fwd"),
-    /**
-     * Player choice between {@link #LEFT} and {@link #RIGHT}.
-     */
-    OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+	/**
+	 * Move forward by one.
+	 */
+	FORWARD("Fwd"),
+	/**
+	 * Turn -π/4, i.e. 90° clockwise.
+	 */
+	RIGHT("Turn Right"),
+	/**
+	 * Turn π/4, ie 90° anti-clockwise.
+	 */
+	LEFT("Turn Left"),
+	/**
+	 * Move forward by two.
+	 */
+	FAST_FORWARD("Fast Fwd"),
+	/**
+	 * Player choice between {@link #LEFT} and {@link #RIGHT}.
+	 */
+	OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
 
-    /**
-     * <p>The name of the command</p>
-     */
-    final public String displayName;
+	/**
+	 * <p>The name of the command</p>
+	 */
+	final public String displayName;
 
-    /**
-     * <p>The list of commands that can be chosen between.</p>
-     */
-    final private List<Command> options;
+	/**
+	 * <p>The list of commands that can be chosen between.</p>
+	 */
+	final private List<Command> options;
 
-    /**
-     * <p>Creates an instance of Command</p>
-     *
-     * @param displayName The display name of the command
-     * @param options     A list of Command objects representing the possible commands to choose between
-     */
-    Command(String displayName, Command... options) {
-        this.displayName = displayName;
-        this.options = List.of(options);
-    }
+	/**
+	 * <p>Creates an instance of Command</p>
+	 *
+	 * @param displayName The display name of the command
+	 * @param options     A list of Command objects representing the possible commands to choose between
+	 */
+	Command(String displayName, Command... options) {
+		this.displayName = displayName;
+		this.options = List.of(options);
+	}
 
-    /**
-     * <p>Returns true if the commands is interactive.</p>
-     * <p>An interactive command lets the player select between options.</p>
-     *
-     * @return A boolean indicating if the command is interactive
-     */
-    public boolean isInteractive() {
-        return !options.isEmpty();
-    }
+	/**
+	 * <p>Returns true if the commands is interactive.</p>
+	 * <p>An interactive command lets the player select between options.</p>
+	 *
+	 * @return A boolean indicating if the command is interactive
+	 */
+	public boolean isInteractive() {
+		return !options.isEmpty();
+	}
 
-    /**
-     * <p>Returns the commands that can be selected between.</p>
-     *
-     * @return A list of possible commands
-     */
-    public List<Command> getOptions() {
-        return options;
-    }
+	/**
+	 * <p>Returns the commands that can be selected between.</p>
+	 *
+	 * @return A list of possible commands
+	 */
+	public List<Command> getOptions() {
+		return options;
+	}
 
 }

@@ -41,7 +41,7 @@ import com.google.gson.JsonSerializer;
  * the class hierarchy resp. to the static type, which is dynamically sub-typed
  * in the structure. Note that this solution does not work if instances of
  * E itself need to be serialized (typically E would be abstract).
- * 
+ *
  * @author Menelaos Perdikeas, https://github.com/mperdikeas
  * @author Ekkart Kindler, ekki@dtu.dk
  *
@@ -49,35 +49,35 @@ import com.google.gson.JsonSerializer;
  */
 public class Adapter<E> implements JsonSerializer<E>, JsonDeserializer<E>{
 
-    private static final String CLASSNAME = "CLASSNAME";
-    private static final String INSTANCE  = "INSTANCE";
+	private static final String CLASSNAME = "CLASSNAME";
+	private static final String INSTANCE  = "INSTANCE";
 
-    @Override
-    public JsonElement serialize(E src, Type typeOfSrc,
-            JsonSerializationContext context) {
+	@Override
+	public JsonElement serialize(E src, Type typeOfSrc,
+	                             JsonSerializationContext context) {
 
-        JsonObject retValue = new JsonObject();
-        String className = src.getClass().getName();
-        retValue.addProperty(CLASSNAME, className);
-        JsonElement elem = context.serialize(src); 
-        retValue.add(INSTANCE, elem);
-        return retValue;
-    }
+		JsonObject retValue = new JsonObject();
+		String className = src.getClass().getName();
+		retValue.addProperty(CLASSNAME, className);
+		JsonElement elem = context.serialize(src);
+		retValue.add(INSTANCE, elem);
+		return retValue;
+	}
 
-    @Override
-    public E deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException  {
-        JsonObject jsonObject = json.getAsJsonObject();
-        JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
-        String className = prim.getAsString();
+	@Override
+	public E deserialize(JsonElement json, Type typeOfT,
+	                     JsonDeserializationContext context) throws JsonParseException  {
+		JsonObject jsonObject = json.getAsJsonObject();
+		JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
+		String className = prim.getAsString();
 
-        Class<?> klass;
-        try {
-            klass = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new JsonParseException(e.getMessage());
-        }
-        return context.deserialize(jsonObject.get(INSTANCE), klass);
-    }
+		Class<?> klass;
+		try {
+			klass = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new JsonParseException(e.getMessage());
+		}
+		return context.deserialize(jsonObject.get(INSTANCE), klass);
+	}
 }

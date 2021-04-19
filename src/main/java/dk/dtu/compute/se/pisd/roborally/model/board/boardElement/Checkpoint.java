@@ -10,25 +10,25 @@ import org.jetbrains.annotations.NotNull;
 public class Checkpoint extends ActivationElement {
 
 
-    private int number = 1;
+	private int number = 1;
 
-    public int getNumber() {
-        return number;
-    }
+	public int getNumber() {
+		return number;
+	}
 
-    public Checkpoint(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority) {
-        super(position, impassableFrom, opaqueFrom, direction, priority);
-    }
+	public Checkpoint(Heading[] position, Heading[] impassableFrom, Heading[] opaqueFrom, Heading direction, int priority) {
+		super(position, impassableFrom, opaqueFrom, direction, priority);
+	}
 
-    @Override
-    public CheckpointController getController() {
-        return (CheckpointController) super.getController();
-    }
+	@Override
+	public CheckpointController getController() {
+		return (CheckpointController) super.getController();
+	}
 
-    @Override
-    protected CheckpointController createContoller() {
-        return new CheckpointController(this);
-    }
+	@Override
+	protected CheckpointController createContoller() {
+		return new CheckpointController(this);
+	}
 
 
 }

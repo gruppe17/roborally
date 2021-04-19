@@ -33,24 +33,24 @@ package dk.dtu.compute.se.pisd.roborally.model.enums;
  *
  */
 public enum Phase {
-    /**
-     * <p>Represents the game being initialised.</p>
-     */
-    INITIALISATION,
-    /**
-     * <p>Represents the programming phase.</p>
-     */
-    PROGRAMMING,
-    /**
-     * <p>Represents the activation phase.</p>
-     */
-    ACTIVATION,
-    /**
-     * <p>Represents the program requiring user interaction.</p>
-     */
-    PLAYER_INTERACTION,
-    /**
-     * <p>Represents the game finishing</p>
-     */
-    GAME_FINISHED
+	/**
+	 * <p>Represents the game being initialised.</p>
+	 */
+	INITIALISATION,
+	/**
+	 * <p>Represents the programming phase.</p>
+	 */
+	PROGRAMMING,
+	/**
+	 * <p>Represents the activation phase.</p>
+	 */
+	ACTIVATION,
+	/**
+	 * <p>Represents the program requiring user interaction.</p>
+	 */
+	PLAYER_INTERACTION,
+	/**
+	 * <p>Represents the game finishing</p>
+	 */
+	GAME_FINISHED
 }
