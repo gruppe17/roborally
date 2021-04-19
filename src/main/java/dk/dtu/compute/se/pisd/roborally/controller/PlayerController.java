@@ -140,7 +140,7 @@ public class PlayerController {
      * @return
      * @author Tobias Maneschijn, s205422@student.dtu.dk
      */
-    private CommandCard generateRandomCommandCard() {
+    public CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
