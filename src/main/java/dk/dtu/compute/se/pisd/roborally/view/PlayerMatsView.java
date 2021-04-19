@@ -38,29 +38,29 @@ import javafx.scene.control.TabPane;
  */
 public class PlayerMatsView extends TabPane implements ViewObserver {
 
-    private Game game;
+	private Game game;
 
-    private PlayerMatView[] playerMatViews;
+	private PlayerMatView[] playerMatViews;
 
-    public PlayerMatsView(GameController gameController) {
-        game = gameController.game;
+	public PlayerMatsView(GameController gameController) {
+		game = gameController.game;
 
-        this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		this.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-        playerMatViews = new PlayerMatView[game.getNumPlayers()];
-        for (int i = 0; i < game.getNumPlayers(); i++) {
-            playerMatViews[i] = new PlayerMatView(gameController, game.getPlayer(i));
-            this.getTabs().add(playerMatViews[i]);
-        }
-        game.attach(this);
-        update(game);
-    }
+		playerMatViews = new PlayerMatView[game.getNumPlayers()];
+		for (int i = 0; i < game.getNumPlayers(); i++) {
+			playerMatViews[i] = new PlayerMatView(gameController, game.getPlayer(i));
+			this.getTabs().add(playerMatViews[i]);
+		}
+		game.attach(this);
+		update(game);
+	}
 
-    @Override
-    public void updateView(Subject subject) {
-        if (subject != game) return;
-        Player current = game.getCurrentPlayer();
-        this.getSelectionModel().select(game.getPlayerNumber(current));
-    }
+	@Override
+	public void updateView(Subject subject) {
+		if (subject != game) return;
+		Player current = game.getCurrentPlayer();
+		this.getSelectionModel().select(game.getPlayerNumber(current));
+	}
 
 }

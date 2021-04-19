@@ -40,111 +40,111 @@ import javafx.stage.Stage;
  *
  */
 public class RoboRally extends Application {
-    private static final int MIN_APP_WIDTH = 550;
-    private static final int MIN_APP_HEIGHT = 750;
+	private static final int MIN_APP_WIDTH = 550;
+	private static final int MIN_APP_HEIGHT = 750;
 
-    private Stage stage;
-    private BorderPane gameRoot;
-    // private RoboRallyMenuBar menuBar;
+	private Stage stage;
+	private BorderPane gameRoot;
+	// private RoboRallyMenuBar menuBar;
 
-    // private AppController appController;
-
-
-    @Override
-    public void init() throws Exception {
-        super.init();
-    }
+	// private AppController appController;
 
 
-    @Override
-    public void start(Stage primaryStage) {
-        stage = primaryStage;
-
-        AppController appController = new AppController(this);
-
-        // create the primary scene with the a menu bar and a pane for
-        // the board view (which initially is empty); it will be filled
-        // when the user creates a new game or loads a game
-        RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
-        gameRoot = new BorderPane();
-        VBox vbox = new VBox(menuBar, gameRoot);
-        vbox.setMinWidth(MIN_APP_WIDTH);
-
-        bindWidth(menuBar, vbox.widthProperty(), 1);
-
-        bindWidth(gameRoot, vbox.widthProperty(), 1);
-        gameRoot.minHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
-        gameRoot.maxHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
-
-        Scene primaryScene = new Scene(vbox);
-        //bindSize(vbox, primaryStage.widthProperty(), primaryStage.heightProperty(), 1, 1);
-        vbox.maxHeightProperty().bind(primaryScene.heightProperty());
-        vbox.maxWidthProperty().bind(primaryScene.widthProperty());
-
-        stage.setScene(primaryScene);
-        stage.setTitle("RoboRally");
-        stage.setOnCloseRequest(
-                e -> {
-                    e.consume();
-                    appController.exit();} );
-        stage.setResizable(false);
-        stage.sizeToScene();
-        stage.show();
-    }
-
-    public void createGameView(GameController gameController) {
-        // if present, remove old GameView
-        gameRoot.getChildren().clear();
-
-        if (gameController != null) {
-            ((VBox) gameRoot.parentProperty().get()).setMinHeight(MIN_APP_HEIGHT);
-            // create and add view for new game
-            GameView gameView = new GameView(gameController);
-            bindSize(gameView, gameRoot, 1, 1);
-            gameRoot.setCenter(gameView);
-        }
-
-        stage.sizeToScene();
-    }
-
-    @Override
-    public void stop() throws Exception {
-        super.stop();
-
-        // XXX just in case we need to do something here eventually;
-        //     but right now the only way for the user to exit the app
-        //     is delegated to the exit() method in the AppController,
-        //     so that the AppController can take care of that.
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+	@Override
+	public void init() throws Exception {
+		super.init();
+	}
 
 
-    /**
-     * Temporary method. Binds the size of one region to another. Shouldn't be here (and should probably be done differently).
-     */
+	@Override
+	public void start(Stage primaryStage) {
+		stage = primaryStage;
 
-    public static void bindSize(Region a, Region b, double widthPercent, double heightPercent){
-        bindSize(a, b.widthProperty(), b.heightProperty(), widthPercent, heightPercent);
-    }
+		AppController appController = new AppController(this);
 
-    public static void bindSize(Region a, ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height, double widthPercent, double heightPercent){
-        bindWidth(a, width, widthPercent);
-        bindHeight(a, height, heightPercent);
-    }
+		// create the primary scene with the a menu bar and a pane for
+		// the board view (which initially is empty); it will be filled
+		// when the user creates a new game or loads a game
+		RoboRallyMenuBar menuBar = new RoboRallyMenuBar(appController);
+		gameRoot = new BorderPane();
+		VBox vbox = new VBox(menuBar, gameRoot);
+		vbox.setMinWidth(MIN_APP_WIDTH);
 
-    public static void bindWidth(Region a, ReadOnlyDoubleProperty b, double widthPercent){
-        a.prefWidthProperty().bind(b.multiply(widthPercent));
-        a.minWidthProperty().bind(b.multiply(widthPercent));
-        a.maxWidthProperty().bind(b.multiply(widthPercent));
-    }
+		bindWidth(menuBar, vbox.widthProperty(), 1);
 
-    public static void bindHeight(Region a, ReadOnlyDoubleProperty b, double heightPercent){
-        a.prefHeightProperty().bind(b.multiply(heightPercent));
-        a.minHeightProperty().bind(b.multiply(heightPercent));
-        a.maxHeightProperty().bind(b.multiply(heightPercent));
-    }
+		bindWidth(gameRoot, vbox.widthProperty(), 1);
+		gameRoot.minHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+		gameRoot.maxHeightProperty().bind(vbox.heightProperty().subtract(menuBar.heightProperty()));
+
+		Scene primaryScene = new Scene(vbox);
+		//bindSize(vbox, primaryStage.widthProperty(), primaryStage.heightProperty(), 1, 1);
+		vbox.maxHeightProperty().bind(primaryScene.heightProperty());
+		vbox.maxWidthProperty().bind(primaryScene.widthProperty());
+
+		stage.setScene(primaryScene);
+		stage.setTitle("RoboRally");
+		stage.setOnCloseRequest(
+				e -> {
+					e.consume();
+					appController.exit();} );
+		stage.setResizable(false);
+		stage.sizeToScene();
+		stage.show();
+	}
+
+	public void createGameView(GameController gameController) {
+		// if present, remove old GameView
+		gameRoot.getChildren().clear();
+
+		if (gameController != null) {
+			((VBox) gameRoot.parentProperty().get()).setMinHeight(MIN_APP_HEIGHT);
+			// create and add view for new game
+			GameView gameView = new GameView(gameController);
+			bindSize(gameView, gameRoot, 1, 1);
+			gameRoot.setCenter(gameView);
+		}
+
+		stage.sizeToScene();
+	}
+
+	@Override
+	public void stop() throws Exception {
+		super.stop();
+
+		// XXX just in case we need to do something here eventually;
+		//     but right now the only way for the user to exit the app
+		//     is delegated to the exit() method in the AppController,
+		//     so that the AppController can take care of that.
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+
+	/**
+	 * Temporary method. Binds the size of one region to another. Shouldn't be here (and should probably be done differently).
+	 */
+
+	public static void bindSize(Region a, Region b, double widthPercent, double heightPercent){
+		bindSize(a, b.widthProperty(), b.heightProperty(), widthPercent, heightPercent);
+	}
+
+	public static void bindSize(Region a, ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height, double widthPercent, double heightPercent){
+		bindWidth(a, width, widthPercent);
+		bindHeight(a, height, heightPercent);
+	}
+
+	public static void bindWidth(Region a, ReadOnlyDoubleProperty b, double widthPercent){
+		a.prefWidthProperty().bind(b.multiply(widthPercent));
+		a.minWidthProperty().bind(b.multiply(widthPercent));
+		a.maxWidthProperty().bind(b.multiply(widthPercent));
+	}
+
+	public static void bindHeight(Region a, ReadOnlyDoubleProperty b, double heightPercent){
+		a.prefHeightProperty().bind(b.multiply(heightPercent));
+		a.minHeightProperty().bind(b.multiply(heightPercent));
+		a.maxHeightProperty().bind(b.multiply(heightPercent));
+	}
 
 }
