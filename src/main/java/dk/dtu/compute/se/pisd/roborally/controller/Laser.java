@@ -32,9 +32,11 @@ public class Laser implements Observer, IActivateable, Spacebound, Directional {
 	/**
 	 * <p>The current position of the laser.</p>
 	 */
-	protected Space position;
+	protected transient Space position;
 	/**
-	 * <p>In what direction the laser is currently pointing</p>
+	 * <p>The direction the laser is currently pointing.</p>
+	 * <p>Heading is not {@code transient} as it may be separate
+	 * from the heading of the wielder of the laser.</p>
 	 */
 	protected Heading direction;
 
@@ -112,5 +114,6 @@ public class Laser implements Observer, IActivateable, Spacebound, Directional {
 		setSpace(((Spacebound) subject).getSpace());
 		setDirection(((Directional) subject).getDirection());
 	}
+
 
 }

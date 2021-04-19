@@ -4,6 +4,7 @@ import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.Energy
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * ...
@@ -25,11 +26,13 @@ public class EnergySpace extends ActivationElement {
     }
 
     @Override
+    @NotNull
     public EnergySpaceController getController() {
         return (EnergySpaceController) super.getController();
     }
 
     @Override
+    @NotNull
     protected EnergySpaceController createContoller() {
         return new EnergySpaceController(this);
     }
