@@ -21,17 +21,17 @@
  */
 package dk.dtu.compute.se.pisd.roborally.fileaccess;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.BoardLaserController;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.BoardTemplate;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -71,7 +71,6 @@ public class BoardLoader {
 			// TODO these constants should be defined somewhere
 			return new Board(8, 8);
 		}
-
 
 		// In simple cases, we can create a Gson object with: new Gson()
 		GsonBuilder simpleBuilder = new GsonBuilder().registerTypeAdapter(
@@ -118,6 +117,7 @@ public class BoardLoader {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	public static void saveBoard(@NotNull Board board, String name) {
+		detachAllLasers(board); //Todo: this really should not be necessary. Find a proper solution.
 		BoardTemplate template = boardToBoardTemplate(board, name);
 
 		ClassLoader classLoader = BoardLoader.class.getClassLoader();
@@ -125,7 +125,6 @@ public class BoardLoader {
 		//       when the folder "resources" does not exist! But, it does not need
 		//       the file "simpleCards.json" to exist!
 		String filename = classLoader.getResource(BOARDSFOLDER + "/" + name  + JSON_EXT).getPath();
-
 
 		// In simple cases, we can create a Gson object with new:
 		//
@@ -162,16 +161,8 @@ public class BoardLoader {
 				} catch (IOException e2) {
 				}
 			}
-			for (int i = 0; i < board.width; i++) {
-				for (int j = 0; j < board.height; j++) {
-					Space space = board.getSpace(i, j);
-					if (space == null) continue;
-					for (IBoardElementController aEController: space.getActivationElementControllers()) {
-						aEController.getBoardElement().setSpace(space);
-					}
-				}
-			}
 		}
+		attachAllLasers(board); //Todo: this really should not be necessary. Find a proper solution.
 	}
 
 	/**
@@ -190,10 +181,10 @@ public class BoardLoader {
 			//todo add all method in space?
 			for (BoardElement boardElement : spaceTemplate.boardElements) {
 				space.addBoardElement(boardElement);
-				if (boardElement instanceof ActivationElement) ((ActivationElement) boardElement).setSpace(space);
 			}
 
 		}
+		attachAllLasers(board); //Todo: this really should not be necessary. Find a proper solution.
 		return board;
 	}
 
@@ -235,17 +226,47 @@ public class BoardLoader {
 		SpaceTemplate spaceTemplate = new SpaceTemplate();
 		spaceTemplate.x = space.x;
 		spaceTemplate.y = space.y;
-        /*
-        for (BoardElement boardElement: space.getElements()) {
-            spaceTemplate.boardElements.add(boardElementToBoardElementTemplate(boardElement));
-        }
-         */
 		spaceTemplate.boardElements.addAll(Arrays.asList(space.getElements()));
-		for (IBoardElementController aEController: space.getActivationElementControllers()) {
-			//todo: maybe readyToSave and restoreAfterSave should be methods in Space?
-			aEController.readyToSave();
-		}
 		return spaceTemplate;
 	}
+
+	/**
+	 * This method detaches all lasers from their
+	 * board laser. <b>Very icky!</b> and really should
+	 * not be necessary. Find a better way!
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private static void detachAllLasers(Board board){
+		for (int x = 0; x < board.width; x++) {
+			for (int y = 0; y < board.height; y++) {
+				Space space = board.getSpace(x, y);
+				if (space == null) continue;
+				for (IBoardElementController aEController: space.getActivationElementControllers()) {
+					if (!(aEController instanceof BoardLaserController)) continue;
+					aEController.getBoardElement().detach(((BoardLaser)aEController.getBoardElement()).getLaser());
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method attaches all lasers to their
+	 * board laser. <b>Very icky!</b> and really should
+	 * not be necessary. Find a better way!
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private static void attachAllLasers(Board board){
+		for (int x = 0; x < board.width; x++) {
+			for (int y = 0; y < board.height; y++) {
+				Space space = board.getSpace(x, y);
+				if (space == null) continue;
+				for (IBoardElementController aEController: space.getActivationElementControllers()) {
+					if (!(aEController instanceof BoardLaserController)) continue;
+					aEController.getBoardElement().attach(((BoardLaser)aEController.getBoardElement()).getLaser());
+				}
+			}
+		}
+	}
+
 
 }

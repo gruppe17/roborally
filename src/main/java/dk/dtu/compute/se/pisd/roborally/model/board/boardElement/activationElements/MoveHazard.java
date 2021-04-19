@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.MoveHazardType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>Represents a {@link ActivationElement} that moves the player.
@@ -28,8 +29,6 @@ public class MoveHazard extends ActivationElement {
      * the element.</p>
      */
     protected MoveHazardType moveHazardType;
-
-
 
     public MoveHazard(Heading direction, int priority, int rotation, int distance, MoveHazardType moveHazardType){
         this(new Heading[0], new Heading[0], direction, priority, rotation, distance, moveHazardType);
@@ -55,11 +54,13 @@ public class MoveHazard extends ActivationElement {
     }
 
     @Override
+    @NotNull
     public MoveHazardController getController() {
         return (MoveHazardController) super.getController();
     }
 
     @Override
+    @NotNull
     protected MoveHazardController createContoller() {
         return new MoveHazardController(this);
     }

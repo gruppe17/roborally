@@ -165,7 +165,10 @@ public class Space extends Subject {
 	public void removeBoardElement(BoardElement boardElement) {
 		if (boardElement == null || elements == null) return;
 		elements.remove(boardElement);
-		if (boardElement instanceof ActivationElement) removeActivationElementControllers(((ActivationElement) boardElement).getController());
+		if (boardElement instanceof ActivationElement) {
+			((ActivationElement) boardElement).setSpace(null);
+			removeActivationElementControllers(((ActivationElement) boardElement).getController());
+		}
 		notifyChange();
 	}
 
