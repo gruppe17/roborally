@@ -34,12 +34,4 @@ public class EnergySpaceController implements IBoardElementController {
     public @NotNull EnergySpace getBoardElement() {
         return model;
     }
-
-    /**
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    public void readyToSave(){
-        model.setSpace(null);
-        model.setControllerNull();
-    }
 }

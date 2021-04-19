@@ -136,6 +136,23 @@
       "y": 6,
       "boardElements": [
         {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser",
+          "INSTANCE": {
+            "laser": {
+              "priority": 6,
+              "isEM": true,
+              "damageType": "LASER",
+              "direction": "NORTH"
+            },
+            "priority": 6,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "NORTH",
+            "observers": []
+          }
+        },
+        {
           "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
           "INSTANCE": {
             "impassableFrom": [

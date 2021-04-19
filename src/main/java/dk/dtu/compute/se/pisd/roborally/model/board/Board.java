@@ -64,8 +64,6 @@ public class Board {
 			}
 		}
 
-		spaces[2][6].addBoardElement(new BoardLaser(Heading.NORTH));
-
 		//TODO: implement this for real
 		prioritySpace = spaces[1][1];
 	}
