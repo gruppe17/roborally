@@ -21,6 +21,7 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
@@ -44,8 +45,13 @@ public class GameController {
 
 	final public Game game;
 
-	public GameController(@NotNull Game game) {
+
+
+	final AppController appController;
+
+	public GameController(@NotNull Game game, AppController appController) {
 		this.game = game;
+		this.appController = appController;
 	}
 
 	/**
@@ -369,6 +375,10 @@ public class GameController {
 	public void notImplemented() {
 		// XXX just for now to indicate that the actual method is not yet implemented
 		assert false;
+	}
+
+	public AppController getAppController() {
+		return appController;
 	}
 
 }

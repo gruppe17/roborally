@@ -38,6 +38,7 @@ public class BoardTemplate {
 	public String name;
 	public int width;
 	public int height;
+	public int checkpointCount;
 
 	public List<SpaceTemplate> spaces = new ArrayList<>();
 

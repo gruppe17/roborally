@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import org.jetbrains.annotations.NotNull;
 
@@ -175,6 +176,7 @@ public class BoardLoader {
 	@NotNull
 	private static Board boardFromBoardTemplate(BoardTemplate template) {
 		Board board = new Board(template.width, template.height, template.name);
+		board.setCheckpointAmount(template.checkpointCount);
 		for (SpaceTemplate spaceTemplate : template.spaces) {
 			Space space = board.getSpace(spaceTemplate.x, spaceTemplate.y);
 			if (space == null) continue;
@@ -184,6 +186,7 @@ public class BoardLoader {
 			}
 
 		}
+
 		attachAllLasers(board); //Todo: this really should not be necessary. Find a proper solution.
 		return board;
 	}
@@ -202,7 +205,7 @@ public class BoardLoader {
 		template.name = name;
 		template.width = board.width;
 		template.height = board.height;
-
+		template.checkpointCount = board.getCheckpointAmount();
 		if (name == null) template.name = board.getBoardName();
 
 		for (int i = 0; i < board.width; i++) {

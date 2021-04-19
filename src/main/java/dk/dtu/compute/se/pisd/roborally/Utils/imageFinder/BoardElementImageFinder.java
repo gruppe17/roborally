@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
@@ -18,6 +19,7 @@ public class BoardElementImageFinder {
     final private static String BASE_DIRECTORY = "images/tiles/boardElements/";
     final private static String WALLS = "walls/";
     final private static String MOVEHAZARD = "movement/";
+    final private static String CHECKPOINTS = "checkpoints/";
 
     /**
      * <p>Determines the correct image for a given {@link BoardElement} and
@@ -53,6 +55,11 @@ public class BoardElementImageFinder {
             String moveHazardName = moveHazardName((MoveHazard) boardElement);
             if (moveHazardName == null) return "";
             return BASE_DIRECTORY + MOVEHAZARD + moveHazardName;
+        }
+
+        if (boardElement instanceof Checkpoint){
+            int number = ((Checkpoint) boardElement).getNumber();
+            return BASE_DIRECTORY + CHECKPOINTS + "checkpoint" + number + ".png";
         }
 
         return "";

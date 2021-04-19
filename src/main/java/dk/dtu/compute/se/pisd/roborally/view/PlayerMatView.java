@@ -439,6 +439,12 @@ public class PlayerMatView extends Tab implements ViewObserver {
                 stepButton.setDisable(false);
                 break;
 
+            case GAME_FINISHED:
+                finishButton.setDisable(true);
+                executeButton.setDisable(true);
+                stepButton.setDisable(true);
+                break;
+
             default:
                 finishButton.setDisable(true);
                 executeButton.setDisable(true);

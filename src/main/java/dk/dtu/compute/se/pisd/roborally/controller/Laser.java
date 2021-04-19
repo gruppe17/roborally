@@ -91,6 +91,8 @@ public class Laser implements Observer, IActivateable, Spacebound, Directional {
 	@Override
 	public void activate() {
 		Space currentSpace = getSpace();
+		if (currentSpace == null) return;
+
 		while (true){
 			currentSpace = currentSpace.getNeighbor(direction, isEM);
 			if (currentSpace == null) return;
