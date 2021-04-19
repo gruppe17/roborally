@@ -20,8 +20,6 @@ public class CheckpointController implements IBoardElementController {
         Player player = model.getSpace().getPlayer();
         if (player == null) return;
 
-
-
         // if player has reached all checkpoints, trigger win.
 
         if(player.getLastCheckpoint() == model.getNumber()-1){
@@ -44,11 +42,5 @@ public class CheckpointController implements IBoardElementController {
         return model;
     }
 
-    /**
-     * @author Rasmus Nylander, s205418@student.dtu.dk
-     */
-    public void readyToSave(){
-        model.setSpace(null);
-        model.setControllerNull();
-    }
+
 }
