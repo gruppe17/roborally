@@ -176,24 +176,13 @@ public class BoardLoader {
 	@NotNull
 	private static Board boardFromBoardTemplate(BoardTemplate template) {
 		Board board = new Board(template.width, template.height, template.name);
+		board.setCheckpointAmount(template.checkpointCount);
 		for (SpaceTemplate spaceTemplate : template.spaces) {
 			Space space = board.getSpace(spaceTemplate.x, spaceTemplate.y);
 			if (space == null) continue;
 			//todo add all method in space?
 			for (BoardElement boardElement : spaceTemplate.boardElements) {
 				space.addBoardElement(boardElement);
-			}
-
-		}
-
-		// Count checkpoints
-		for (Space[] space : board.getSpaces()) {
-			for (Space space1 : space) {
-				for (BoardElement element : space1.getElements()) {
-					if(element.getClass() == Checkpoint.class)
-						board.setCheckpointAmount(board.getCheckpointAmount() + 1);
-				}
-
 			}
 
 		}
@@ -216,7 +205,7 @@ public class BoardLoader {
 		template.name = name;
 		template.width = board.width;
 		template.height = board.height;
-
+		template.checkpointCount = board.getCheckpointAmount();
 		if (name == null) template.name = board.getBoardName();
 
 		for (int i = 0; i < board.width; i++) {

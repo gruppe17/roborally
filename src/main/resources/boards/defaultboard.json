@@ -2,6 +2,7 @@
   "name": "defaultboard",
   "width": 8,
   "height": 8,
+  "checkpointCount": 1,
   "spaces": [
     {
       "x": 0,
@@ -21,6 +22,24 @@
             "position": [
               "NORTH"
             ],
+            "direction": "NORTH",
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint",
+          "INSTANCE": {
+            "number": 1,
+            "priority": 7,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
             "direction": "NORTH",
             "observers": []
           }
@@ -446,24 +465,6 @@
             ],
             "direction": "EAST",
             "observers": []
-          }
-        }
-      ]
-    },
-    {
-      "x": 0,
-      "y": 1,
-      "boardElements": [
-        {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint",
-          "INSTANCE": {
-            "priority": 7,
-            "impassableFrom": [],
-            "opaqueFrom": [],
-            "position": [],
-            "direction": "NORTH",
-            "observers": [],
-            "number": 1
           }
         }
       ]
