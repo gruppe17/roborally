@@ -432,6 +432,45 @@
           }
         }
       ]
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint",
+          "INSTANCE": {
+            "rotation": 0,
+            "distance": 1,
+            "moveHazardType": "PUSH_PANEL",
+            "priority": 2,
+            "impassableFrom": [],
+            "opaqueFrom": [],
+            "position": [],
+            "direction": "EAST",
+            "observers": [],
+            "number": 1
+          }
+        },
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
+          "INSTANCE": {
+            "impassableFrom": [
+              "WEST",
+              "EAST"
+            ],
+            "opaqueFrom": [
+              "WEST",
+              "EAST"
+            ],
+            "position": [
+              "WEST"
+            ],
+            "direction": "EAST",
+            "observers": []
+          }
+        }
+      ]
     }
   ]
 }
