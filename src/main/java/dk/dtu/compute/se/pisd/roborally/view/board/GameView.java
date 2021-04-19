@@ -95,7 +95,6 @@ public class GameView extends VBox implements ViewObserver {
         initBoardView(gameController.game.getBoard());
         initPlayerMatsView(gameController);
         initStatusLabel();
-
         this.getChildren().add(boardView);
         this.getChildren().add(playerMatsView);
         this.getChildren().add(statusLabel);
@@ -153,7 +152,7 @@ public class GameView extends VBox implements ViewObserver {
 
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Game Finished!");
-            a.setContentText(String.format("Player %s has won", winner));
+            a.setContentText(String.format("%s has won", winner.getName()));
             a.showAndWait();
 
         }
