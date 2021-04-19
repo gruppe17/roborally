@@ -31,6 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,6 +185,19 @@ public class BoardLoader {
 			}
 
 		}
+
+		// Count checkpoints
+		for (Space[] space : board.getSpaces()) {
+			for (Space space1 : space) {
+				for (BoardElement element : space1.getElements()) {
+					if(element.getClass() == Checkpoint.class)
+						board.setCheckpointAmount(board.getCheckpointAmount() + 1);
+				}
+
+			}
+
+		}
+
 		attachAllLasers(board); //Todo: this really should not be necessary. Find a proper solution.
 		return board;
 	}

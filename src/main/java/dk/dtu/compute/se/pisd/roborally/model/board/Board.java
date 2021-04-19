@@ -21,6 +21,8 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +68,11 @@ public class Board {
 
 		//TODO: implement this for real
 		prioritySpace = spaces[1][1];
+
+
+
 	}
+
 
 	public Board(int width, int height) {
 		this(width, height, "defaultboard");
@@ -161,4 +167,9 @@ public class Board {
 	public int getCheckpointAmount() {
 		return checkpointAmount;
 	}
+
+	public Space[][] getSpaces() {
+		return spaces;
+	}
+
 }

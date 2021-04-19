@@ -451,40 +451,19 @@
       ]
     },
     {
-      "x": 4,
-      "y": 7,
+      "x": 0,
+      "y": 1,
       "boardElements": [
         {
           "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint",
           "INSTANCE": {
-            "rotation": 0,
-            "distance": 1,
-            "moveHazardType": "PUSH_PANEL",
-            "priority": 2,
+            "priority": 7,
             "impassableFrom": [],
             "opaqueFrom": [],
             "position": [],
-            "direction": "EAST",
+            "direction": "NORTH",
             "observers": [],
             "number": 1
-          }
-        },
-        {
-          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall",
-          "INSTANCE": {
-            "impassableFrom": [
-              "WEST",
-              "EAST"
-            ],
-            "opaqueFrom": [
-              "WEST",
-              "EAST"
-            ],
-            "position": [
-              "WEST"
-            ],
-            "direction": "EAST",
-            "observers": []
           }
         }
       ]
