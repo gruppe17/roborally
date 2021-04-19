@@ -23,6 +23,12 @@ public class PlayerController {
 		this.player = player;
 	}
 
+	/*
+	****************
+		Movement
+	****************
+	*/
+
 	/**
 	 * <p>Moves the player in a certain direction by the specified distance.
 	 * If another player is in the way, they are pushed along by the robot.</p>
@@ -134,6 +140,14 @@ public class PlayerController {
 		player.setDirection(player.getDirection().prev());
 	}
 
+
+	/*
+	**************
+		Cards
+	**************
+	*/
+
+
 	/**
 	 * Returns a random CommandCard
 	 *
@@ -231,6 +245,12 @@ public class PlayerController {
 		}
 	}
 
+	/*
+	*************
+		Energy
+	*************
+	*/
+
 	/**
 	 * Try to pay with energy cubes
 	 *
@@ -246,6 +266,12 @@ public class PlayerController {
 			return false;
 		}
 	}
+
+	/*
+	***************
+		Damage
+	***************
+	*/
 
 	/**
 	 *
