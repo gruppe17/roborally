@@ -1,4 +1,4 @@
-package dk.dtu.compute.se.pisd.roborally.model.board.boardElement;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
 
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.CheckpointController;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
