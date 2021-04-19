@@ -164,9 +164,10 @@ public class PlayerController {
      *
      * @param card the card to be added to the player's deck
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @return true if the deck changed
      */
-    public void addCardToDeck(CommandCard card) {
-        player.getDeck().add(card);
+    public boolean addCardToDeck(CommandCard card) {
+        return player.getDeck().add(card);
     }
 
     /**
@@ -174,9 +175,10 @@ public class PlayerController {
      *
      * @param card the card to be added to the player's discard pile
      * @author Rasmus Nylander, s205418@student.dtu.dk
+     * @return true if the deck changed
      */
-    public void addCardToDiscardPile(CommandCard card) {
-        player.getDiscardPile().add(card);
+    public boolean addCardToDiscardPile(CommandCard card) {
+        return player.getDiscardPile().add(card);
     }
 
     /**
