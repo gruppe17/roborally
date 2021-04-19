@@ -75,6 +75,20 @@ public abstract class BoardElement extends Subject implements Directional {
         return false;
     }
 
+    /**
+     * <p>Whether the element blocks light
+     * moving from the specified headings through
+     * the element.</p>
+     * @param heading the heading of the light relative to the element
+     * @return true if the element blocks light from the specified heading
+     * @author Rasmus Nylander, s205418@student.dtu.dk
+     */
+    public boolean isOpaqueFrom(Heading heading){
+        for (Heading direction: opaqueFrom) {
+            if (heading == direction) return true;
+        }
+        return false;
+    }
 
     public Heading[] getImpassableFrom(){ return impassableFrom.clone();}
 
