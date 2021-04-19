@@ -355,7 +355,7 @@ class Repository implements IRepository {
 			createPlayerProgramInDatabase(player);
 			createPlayerHandInDatabase(player);
 			createPlayerDeckInDatabase(player);
-			//createPlayerDiscardInDatabase(player); //?
+			createPlayerDiscardInDatabase(player);
 			//createPlayerUpgradeCardsInDatabase(player)
 		}
 	}
@@ -383,6 +383,17 @@ class Repository implements IRepository {
 	}
 
 	/**
+	 * <p>Creates the specified player's discard pile in the database.</p>
+	 * @param player the player whose discard pile is to be created in the database
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @throws SQLException
+	 */
+	private void createPlayerDiscardInDatabase(Player player) throws SQLException {
+		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_DISCARD, player.getDeck().toArray(new CommandCard[0]));
+	}
+
+	/**
 	 * <p>Creates the specified player's deck in the database.</p>
 	 * @param player the player whose deck is to be created in the database
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
@@ -390,7 +401,7 @@ class Repository implements IRepository {
 	 */
 	private void createPlayerDeckInDatabase(Player player) throws SQLException {
 		int gameID = player.game.getGameId(), playerID = player.game.getPlayerNumber(player);
-		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_DECK, player.getDeck());
+		createCardsInDB(gameID, playerID, DatabaseConstants.CARD_TYPE_DECK, player.getDeck().toArray(new CommandCard[0]));
 	}
 
 	/**
@@ -509,9 +520,10 @@ class Repository implements IRepository {
 
 
 	/**
-	 * <p>Reads cards from database and assigns them to the right positions on all players.</p>
+	 * <p>Reads cards from database and assigns them to the right
+	 * positions in all decks of all specified players.</p>
 	 *
-	 * @param players
+	 * @param players the players whose cards are to be read from the database
 	 * @throws SQLException
 	 * @author Tobias Nyholm Maneschijn, s205422@student.dtu.dk
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
@@ -542,12 +554,11 @@ class Repository implements IRepository {
 						player.playerController.addCardToDeck(card);
 						break;
 					case DatabaseConstants.CARD_TYPE_DISCARD:
+						player.playerController.addCardToDiscardPile(card);
 						break;
 					case DatabaseConstants.CARD_TYPE_UPGRADE:
 						break;
 				}
-
-
 
 			}
 
