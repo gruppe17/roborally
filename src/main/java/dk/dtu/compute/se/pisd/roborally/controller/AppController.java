@@ -104,6 +104,7 @@ public class AppController implements Observer {
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	private void initPlayers(Game game, int numberOfPlayers) {
+		//Todo: this method should maybe be in game
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
 			game.addPlayer(player);
@@ -126,8 +127,12 @@ public class AppController implements Observer {
 		//todo: assign each player their choice
 	}
 
+	/**
+	 * ...
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
 	private LinkedList<CommandCard> getPlayerDeck(){
-		//todo: read from file
+		//Todo: Read from file
 		CommandCard[] commandCards = {
 				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
 				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
