@@ -304,8 +304,17 @@ public class GameController {
 			//     (this concerns the way cards are modelled as well as the way they are executed).
 
 			switch (command) {
+				case BACKUP:
+					player.playerController.moveForward(-1);
+					break;
 				case FORWARD:
-					player.playerController.moveForward();
+					player.playerController.moveForward(1);
+					break;
+				case FAST_FORWARD:
+					player.playerController.moveForward(2);
+					break;
+				case MOVE3:
+					player.playerController.moveForward(3);
 					break;
 				case RIGHT:
 					player.playerController.turn();
@@ -313,8 +322,15 @@ public class GameController {
 				case LEFT:
 					player.playerController.turnLeft();
 					break;
-				case FAST_FORWARD:
-					player.playerController.moveForward(2);
+				case UTURN:
+					player.playerController.turn(2);
+					break;
+				case REPEAT:
+					if (player.game.getStep() == 0) break;
+					executeCommand(player, player.getProgramField(player.game.getStep() - 1).getCard().command);
+					break;
+				case ENERGISE:
+					player.addEnergyCubes(1);
 					break;
 				default:
 					// DO NOTHING (for now)

@@ -37,17 +37,18 @@ public class PlayerController {
 	 *
 	 * @param direction The direction in which to move
 	 * @param distance  The amount of spaces to move
-	 * @return the distance moved by the player
+	 * @return  the (absolute) distance moved by the player
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 * @see #moveForward(int)
 	 */
 	public int move(@NotNull Heading direction, int distance) {
 		Space currentSpace = player.getSpace();
 		if (currentSpace == null) return -1;
+		if (distance < 0) return move(direction.next().next(), -distance);
 
 		int distanceMoved;
 		for (distanceMoved = 0; distanceMoved < distance; distanceMoved++) {
-			Space target = currentSpace.board.getNeighbour(currentSpace, direction);
+			Space target = currentSpace.getNeighbor(direction);
 			if (target == null) break;
 
 			if (!pushRobots(target, direction, distance - distanceMoved)) break;
