@@ -351,27 +351,32 @@ public class PlayerMatView extends Tab implements ViewObserver {
 				continue;
 			}
 
+			//This card is to be executed in the future
+			if (i > player.game.getStep()){
+				cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
+				continue;
+			}
+
 			//This card was executed last round
 			if (i < player.game.getStep()) {
 				cardFieldView.setBackground(CardFieldView.BG_DONE);
 				continue;
 			}
 
-			if (i == player.game.getStep()) {
-				//This card is about to be executed
-				if (player.game.getCurrentPlayer() == player) {
-					cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
-					continue;
-				}
-
-				//This card was executed earlier this round
-				if (player.game.getPlayerNumber(player.game.getCurrentPlayer()) > player.game.getPlayerNumber(player)) {
-					cardFieldView.setBackground(CardFieldView.BG_DONE);
-					continue;
-				}
+			//This card is about to be executed
+			if (player.game.getCurrentPlayer() == player) {
+				cardFieldView.setBackground(CardFieldView.BG_ACTIVE);
+				continue;
 			}
-			//This card is to be executed in the future
-			cardFieldView.setBackground(CardFieldView.BG_DEFAULT);
+
+			//This card was executed earlier this round
+			//NB! This must be below the check for the current player, as the player is
+			//removed from the queue when set as the current player
+			if (!player.game.isPlayerInActivationQueue(player)) {
+				cardFieldView.setBackground(CardFieldView.BG_DONE);
+				continue;
+			}
+
 		}
 	}
 

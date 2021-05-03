@@ -39,11 +39,17 @@ public class Game extends Subject {
 	 * <p>The current activation queue of the players. The players are queued in order of
 	 * proximity to the priority antenna. In case of two players equidistant to the
 	 * priority antenna they are ordered arbitrarily.</p>
+	 * <p><b>Notice:</b> during the {@link Phase#ACTIVATION} phase, the {@link #current}
+	 * is <i>not</i> in the activation queue</p>
 	 *
 	 * @see Player#getDistanceToPrioritySpace()
 	 */
 	private Queue<Player> playerActivationQueue = new PriorityQueue<>(6, Comparator.comparingInt(Player::getDistanceToPrioritySpace));
 
+	/**
+	 * The current player of the game. During the activation phase,
+	 * the player currently being activated.
+	 */
 	private Player current;
 
 	private Phase phase = INITIALISATION;
@@ -184,6 +190,15 @@ public class Game extends Subject {
 	 */
 	public Player[] getPlayerActivationQueue(){
 		return playerActivationQueue.toArray(new Player[0]);
+	}
+
+	/**
+	 * <p>Returns whether the specified {@link Player} currently is in the {@link #playerActivationQueue}.</p>
+	 * @param player the player to check if in activation queue
+	 * @return true if the player is in the activation queue
+	 */
+	public boolean isPlayerInActivationQueue(Player player){
+		return playerActivationQueue.contains(player);
 	}
 
 	/**
