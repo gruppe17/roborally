@@ -35,15 +35,12 @@ import java.sql.Statement;
  *
  */
 class Connector {
-    private static final String HOST     = "localhost";
-	//private static final String HOST     = "104.223.62.200";
-    private static final int    PORT     = 3306;
-	//private static final String DATABASE = "tobiasma_roborally";
+    private static final String HOST     = "38.17.53.108";
+    private static final int    PORT     = 29440;
 	private static final String DATABASE = "roborally";
-	//private static final String USERNAME = "tobiasma_robouser";
-	private static final String USERNAME = "root";
-	//private static final String PASSWORD = "K1y#.%YuPHu#";
-	private static final String PASSWORD = "";
+	//Todo: this probably should not be hardcoded
+	private static final String USERNAME = "jaman";
+	private static final String PASSWORD = "Bacon1234";
 
     private static final String DELIMITER = ";;";
     
@@ -57,8 +54,6 @@ class Connector {
 	}
     private Connector() {
 		try {
-			// String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;
-			//String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE + "?serverTimezone=UTC";
 			String url = "jdbc:mariadb://" + HOST + ":" + PORT + "/" + DATABASE;
 			connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
 
