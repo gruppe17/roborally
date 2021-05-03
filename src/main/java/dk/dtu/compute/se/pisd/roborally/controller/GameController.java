@@ -75,9 +75,7 @@ public class GameController {
 			player.playerController.fillHand();
 		}
 
-		setProgramFieldsVisibility(true);
-
-		setHandFieldsVisibility(true);
+		updateCardFieldVisibility();
 	}
 
 	/**
@@ -89,12 +87,62 @@ public class GameController {
 	 * @author Oscar
 	 */
 	public void finishProgrammingPhase() {
-		setProgramFieldsVisibility(false);
-		makeProgramFieldVisible(0);
 		game.setPhase(Phase.ACTIVATION);
 		game.playerQueueForceRepopulate();
 		game.setCurrentPlayer(game.nextPlayer());
 		game.setStep(0);
+
+		updateCardFieldVisibilityActivation();
+	}
+
+	/**
+	 * <p>Updates the visibility of the player programs and
+	 * hands.</p>
+	 * @return true if card fields could be updated
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	public boolean updateCardFieldVisibility(){
+		//Why is this not done through by the card fields themselves?
+		switch (game.getPhase()){
+			case PROGRAMMING -> {
+				return updateCardFieldVisibilityProgramming();
+			}
+			case ACTIVATION -> {
+				return updateCardFieldVisibilityActivation();
+			}
+			default -> {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * <p>Updates the card fields of the game appropriately
+	 * where the current phase is the programming phase </p>
+	 * @return true if the card fields could be updated
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private boolean updateCardFieldVisibilityProgramming(){
+		if (game.getPhase() != Phase.PROGRAMMING) return false;
+		setProgramFieldsVisibility(true);
+		setHandFieldsVisibility(true);
+		return true;
+	}
+
+	/**
+	 * <p>Updates the card fields of the game appropriately
+	 * where the current phase is the activation phase </p>
+	 * @return true if the card fields could be updated
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private boolean updateCardFieldVisibilityActivation(){
+		if (game.getPhase() != Phase.ACTIVATION) return false;
+		setHandFieldsVisibility(false);
+		setProgramFieldsVisibility(false);
+		for (int i = 0; i <= game.getStep(); i++) {
+			makeProgramFieldVisible(i);
+		}
+		return true;
 	}
 
 	/**

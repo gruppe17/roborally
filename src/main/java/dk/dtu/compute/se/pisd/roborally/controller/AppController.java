@@ -229,6 +229,7 @@ public class AppController implements Observer {
 		choice = choice.substring(0, choice.indexOf('.'));
 
 		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBList.get(Integer.parseInt(choice)-1).id), this);
+		gameController.updateCardFieldVisibility();
 		roboRally.createGameView(gameController);
 	}
 
