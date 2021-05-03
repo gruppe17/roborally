@@ -1,6 +1,6 @@
 package dk.dtu.compute.se.pisd.roborally.interfaces;
 
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.ActivationElement;
 import org.jetbrains.annotations.NotNull;
 
 /**

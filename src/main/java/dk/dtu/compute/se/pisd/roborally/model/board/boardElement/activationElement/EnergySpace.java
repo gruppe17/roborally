@@ -1,8 +1,6 @@
-package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements;
+package dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement;
 
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.EnergySpaceController;
-import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
-import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 

@@ -29,20 +29,21 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
 import dk.dtu.compute.se.pisd.roborally.dal.repository.RepositoryAccess;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
+import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import dk.dtu.compute.se.pisd.roborally.model.Game;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * ...
@@ -75,30 +76,80 @@ public class AppController implements Observer {
 		// give the user the option to save the game or abort this operation!
 		if (gameController != null && !stopGame()) return;
 
-		// XXX the board should eventually be created programmatically or loaded from a file
-		//     here we just create an empty board with the required number of players.
-		//Todo: players choose board
-		Board board = BoardLoader.loadBoard("defaultboard");
-		BoardLoader.saveBoard(board, "test");
-		Game game = new Game(board);
+		Game game = new Game(getBoardFromUsers());
+		//BoardLoader.saveBoard(game.getBoard(), "test");
 		gameController = new GameController(game, this);
-		int no = result.get();
-		for (int i = 0; i < no; i++) {
+
+		initPlayers(game, result.get());
+		chooseRobots(game);
+		gameController.startProgrammingPhase();
+		roboRally.createGameView(gameController);
+	}
+
+	/**
+	 * <p>Returns a board chosen by the players.</p>
+	 * @return a board chosen by the players
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private Board getBoardFromUsers(){
+		//Todo: implement this method
+		return BoardLoader.loadBoard(null);
+	}
+
+	/**
+	 * <p>Initialises the specified number of players in
+	 * the specified game.</p>
+	 * @param game the game whose players are to be initialised
+	 * @param numberOfPlayers the number of players to initialise
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void initPlayers(Game game, int numberOfPlayers) {
+		//Todo: this method should maybe be in game
+		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(game, PLAYER_COLORS.get(i), "Player " + (i + 1));
 			game.addPlayer(player);
-			for (int j = 0; j < 20; j++) {
-				player.playerController.addCardToDeck(player.playerController.generateRandomCommandCard());
-			}
-			player.setSpace(board.getSpace(i % board.width, i));
+			//Cards are added to the discard pile so that when the player
+			// attempts to draw a card,the cards will be *shuffled* into the deck.
+			player.playerController.addCardsToDiscardPile(getPlayerDeck());
+			player.setSpace(game.getBoard().getSpace(i % game.getBoard().width, i));
 		}
+	}
 
+	/**
+	 * <p>Makes each player in the specified game who does
+	 * not already have a robot choose one and set the
+	 * corresponding {@link Player}'s robot accordingly.</p>
+	 * @param game the game whose player's are to choose their robots
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private void chooseRobots(Game game){
+		//todo: get players' choices
+		//todo: assign each player their choice
+	}
 
-		// XXX: V2
-		// board.setCurrentPlayer(board.getPlayer(0));
-		gameController.startProgrammingPhase();
+	/**
+	 * ...
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private LinkedList<CommandCard> getPlayerDeck(){
+		//Todo: Read from file
+		CommandCard[] commandCards = {
+				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
+				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
+				new CommandCard(Command.OPTION_LEFT_RIGHT), new CommandCard(Command.OPTION_LEFT_RIGHT),
+				new CommandCard(Command.UTURN),
+				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
+				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
+				new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD),
+				new CommandCard(Command.MOVE3),
+				new CommandCard(Command.BACKUP),
+				new CommandCard(Command.REPEAT), new CommandCard(Command.REPEAT),
+				new CommandCard(Command.ENERGISE)
+		};
+		LinkedList<CommandCard> deck = new LinkedList<>();
+		deck.addAll(Arrays.asList(commandCards));
 
-		roboRally.createGameView(gameController);
-
+		return deck;
 	}
 
 	/**
@@ -145,7 +196,7 @@ public class AppController implements Observer {
 			name = dialog.showAndWait();
 			if (!name.isPresent()) return null;
 			if (name.get().isBlank()) {
-				//todo: inform the user of their wrong doing!
+				//todo: inform the user of their wrongdoing!
 				continue;
 			}
 			break;
@@ -194,11 +245,12 @@ public class AppController implements Observer {
 
 		// here we save the game (without asking the user).
 
-		if(gameController.game.getPhase() != Phase.GAME_FINISHED)
-		saveGame();
+		if(gameController.game.getPhase() != Phase.GAME_FINISHED) saveGame();
 
 		gameController = null;
+
 		roboRally.createGameView(null);
+
 		return true;
 	}
 

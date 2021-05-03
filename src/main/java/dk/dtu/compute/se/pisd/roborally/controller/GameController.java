@@ -21,18 +21,20 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
-import dk.dtu.compute.se.pisd.roborally.RoboRally;
+import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.BoardLaserController;
 import dk.dtu.compute.se.pisd.roborally.controller.boardElementController.IBoardElementController;
 import dk.dtu.compute.se.pisd.roborally.interfaces.IActivateable;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import dk.dtu.compute.se.pisd.roborally.model.Game;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.ActivationElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.ActivationElement;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.PriorityQueue;
 
 /**
@@ -276,8 +278,16 @@ public class GameController {
 		PriorityQueue<IActivateable> elementActivationQueue = new PriorityQueue<>();
 		for (int x = 0; x < board.width; x++) {
 			for (int y = 0; y < board.height; y++) {
-				IActivateable[] activateables = board.getSpace(x, y).getActivationElementControllers();
-				elementActivationQueue.addAll(Arrays.asList(activateables));
+				Space space = board.getSpace(x, y);
+				IBoardElementController[] activateables = space.getActivationElementControllers();
+				for (IBoardElementController aEController: activateables) {
+					if (aEController instanceof BoardLaserController) {
+						elementActivationQueue.add(aEController);
+						continue;
+					}
+					if (space.getPlayer() != null) elementActivationQueue.add(aEController);
+				}
+				//elementActivationQueue.addAll(Arrays.asList(activateables));
 			}
 		}
 		for (Player player: game.getPlayers()) {
@@ -306,8 +316,17 @@ public class GameController {
 			//     (this concerns the way cards are modelled as well as the way they are executed).
 
 			switch (command) {
+				case BACKUP:
+					player.playerController.moveForward(-1);
+					break;
 				case FORWARD:
-					player.playerController.moveForward();
+					player.playerController.moveForward(1);
+					break;
+				case FAST_FORWARD:
+					player.playerController.moveForward(2);
+					break;
+				case MOVE3:
+					player.playerController.moveForward(3);
 					break;
 				case RIGHT:
 					player.playerController.turn();
@@ -315,8 +334,15 @@ public class GameController {
 				case LEFT:
 					player.playerController.turnLeft();
 					break;
-				case FAST_FORWARD:
-					player.playerController.fastForward();
+				case UTURN:
+					player.playerController.turn(2);
+					break;
+				case REPEAT:
+					if (player.game.getStep() == 0) break;
+					executeCommand(player, player.getProgramField(player.game.getStep() - 1).getCard().command);
+					break;
+				case ENERGISE:
+					player.addEnergyCubes(1);
 					break;
 				default:
 					// DO NOTHING (for now)

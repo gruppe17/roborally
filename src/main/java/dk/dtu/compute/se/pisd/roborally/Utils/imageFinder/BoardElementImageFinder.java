@@ -1,11 +1,11 @@
 package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.EnergySpace;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.MoveHazard;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.BoardLaser;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.EnergySpace;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.MoveHazard;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import javafx.scene.image.Image;
 

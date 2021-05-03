@@ -31,8 +31,7 @@ import dk.dtu.compute.se.pisd.roborally.fileaccess.model.SpaceTemplate;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Checkpoint;
-import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElements.BoardLaser;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.BoardLaser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;

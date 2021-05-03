@@ -7,6 +7,7 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -23,6 +24,12 @@ public class PlayerController {
 		this.player = player;
 	}
 
+	/*
+	****************
+		Movement
+	****************
+	*/
+
 	/**
 	 * <p>Moves the player in a certain direction by the specified distance.
 	 * If another player is in the way, they are pushed along by the robot.</p>
@@ -30,17 +37,18 @@ public class PlayerController {
 	 *
 	 * @param direction The direction in which to move
 	 * @param distance  The amount of spaces to move
-	 * @return the distance moved by the player
+	 * @return  the (absolute) distance moved by the player
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 * @see #moveForward(int)
 	 */
 	public int move(@NotNull Heading direction, int distance) {
 		Space currentSpace = player.getSpace();
 		if (currentSpace == null) return -1;
+		if (distance < 0) return move(direction.next().next(), -distance);
 
 		int distanceMoved;
 		for (distanceMoved = 0; distanceMoved < distance; distanceMoved++) {
-			Space target = currentSpace.board.getNeighbour(currentSpace, direction);
+			Space target = currentSpace.getNeighbor(direction);
 			if (target == null) break;
 
 			if (!pushRobots(target, direction, distance - distanceMoved)) break;
@@ -64,9 +72,9 @@ public class PlayerController {
 	 */
 	private boolean pushRobots(@NotNull Space space, @NotNull Heading direction, int distance) {
 		if (space.getPlayer() == null) return true;
+
 		space.getPlayer().playerController.move(direction, distance);
-		if (space.getPlayer() == null) return true;
-		return false;
+		return space.getPlayer() == null;
 	}
 
 	/**
@@ -134,6 +142,14 @@ public class PlayerController {
 		player.setDirection(player.getDirection().prev());
 	}
 
+
+	/*
+	**************
+		Cards
+	**************
+	*/
+
+
 	/**
 	 * Returns a random CommandCard
 	 *
@@ -144,19 +160,6 @@ public class PlayerController {
 		Command[] commands = Command.values();
 		int random = (int) (Math.random() * commands.length);
 		return new CommandCard(commands[random]);
-	}
-
-	/**
-	 * adds a card to an empty card field if possible
-	 *
-	 * @author Tobias Maneschijn, s205422@student.dtu.dk
-	 * @deprecated
-	 */
-	public void addCard(CommandCard card) {
-		CommandCardField emptyCardField = player.getEmptyCardField();
-
-		if (emptyCardField == null || card == null) return;
-		emptyCardField.setCard(card);
 	}
 
 	/**
@@ -171,6 +174,18 @@ public class PlayerController {
 	}
 
 	/**
+	 * <p>Adds a {@link Collection} of {@link CommandCard}s
+	 * to the player's deck</p>
+	 *
+	 * @param cards the cards to be added to the player's deck
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @return true if the deck changed
+	 */
+	public boolean addCardsToDeck(Collection<CommandCard> cards){
+		return player.getDeck().addAll(cards);
+	}
+
+	/**
 	 * <p>Adds a {@link CommandCard} to the player's discard pile</p>
 	 *
 	 * @param card the card to be added to the player's discard pile
@@ -179,6 +194,18 @@ public class PlayerController {
 	 */
 	public boolean addCardToDiscardPile(CommandCard card) {
 		return player.getDiscardPile().add(card);
+	}
+
+	/**
+	 * <p>Adds a {@link Collection} of {@link CommandCard}s
+	 * to the player's discard pile</p>
+	 *
+	 * @param cards the cards to be added to the player's discard pile
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 * @return true if the deck changed
+	 */
+	public boolean addCardsToDiscardPile(Collection<CommandCard> cards){
+		return player.getDiscardPile().addAll(cards);
 	}
 
 	/**
@@ -244,6 +271,12 @@ public class PlayerController {
 		}
 	}
 
+	/*
+	*************
+		Energy
+	*************
+	*/
+
 	/**
 	 * Try to pay with energy cubes
 	 *
@@ -259,6 +292,12 @@ public class PlayerController {
 			return false;
 		}
 	}
+
+	/*
+	***************
+		Damage
+	***************
+	*/
 
 	/**
 	 *

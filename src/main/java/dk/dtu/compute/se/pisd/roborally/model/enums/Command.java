@@ -35,10 +35,23 @@ import java.util.List;
  * @author Rasmus Nylander, s205418@student.dtu.dk
  */
 public enum Command {
+	//Todo: This needs to be done differently
+	/**
+	 * Move forward by -1.
+	 */
+	BACKUP("Move back"),
 	/**
 	 * Move forward by one.
 	 */
 	FORWARD("Fwd"),
+	/**
+	 * Move forward by two.
+	 */
+	FAST_FORWARD("Fast Fwd"),
+	/**
+	 * Move forward by three.
+	 */
+	MOVE3("Move 3"),
 	/**
 	 * Turn -π/4, i.e. 90° clockwise.
 	 */
@@ -48,13 +61,21 @@ public enum Command {
 	 */
 	LEFT("Turn Left"),
 	/**
-	 * Move forward by two.
+	 * Turn by π/2
 	 */
-	FAST_FORWARD("Fast Fwd"),
+	UTURN("U-Turn"),
 	/**
 	 * Player choice between {@link #LEFT} and {@link #RIGHT}.
 	 */
-	OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT);
+	OPTION_LEFT_RIGHT("Left OR Right", LEFT, RIGHT),
+	/**
+	 * Repeat the execution of last command.
+	 */
+	REPEAT("Again"),
+	/**
+	 * Increase player energy by one.
+	 */
+	ENERGISE("Power up");
 
 	/**
 	 * <p>The name of the command</p>
