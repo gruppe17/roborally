@@ -205,12 +205,10 @@ public class AppController implements Observer {
 	}
 
 	/**
-	 *
+	 * Asks the users to chose a game from the database and loads it
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	public void loadGame() {
-		// XXX needs to be implememted eventually
-		// for now, we just create a new game
 		if (gameController != null) return;
 		GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
 		//MenuItem[] games = new MenuItem[gameInDBs.length];
