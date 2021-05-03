@@ -1,6 +1,7 @@
 package dk.dtu.compute.se.pisd.roborally.Utils.imageFinder;
 
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.Wall;
 import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.activationElement.BoardLaser;
@@ -60,6 +61,10 @@ public class BoardElementImageFinder {
 		if (boardElement instanceof Checkpoint){
 			int number = ((Checkpoint) boardElement).getNumber();
 			return BASE_DIRECTORY + CHECKPOINTS + "checkpoint" + number + ".png";
+		}
+
+		if (boardElement instanceof PriorityAntenna){
+			return BASE_DIRECTORY + "priorityAntenna.png";
 		}
 
 		return "";

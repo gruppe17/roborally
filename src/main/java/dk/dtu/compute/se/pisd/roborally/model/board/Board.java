@@ -21,6 +21,8 @@
  */
 package dk.dtu.compute.se.pisd.roborally.model.board;
 
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.BoardElement;
+import dk.dtu.compute.se.pisd.roborally.model.board.boardElement.PriorityAntenna;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +50,7 @@ public class Board {
 	/**
 	 * <p>The space containing the priority antenna</p>
 	 */
-	private final Space prioritySpace; //A direct reference is stored as it is needed frequently.
+	private Space prioritySpace; //A direct reference is stored as it is needed frequently.
 
 	public Board(int width, int height, @NotNull String boardName) {
 		super();
@@ -63,10 +65,7 @@ public class Board {
 			}
 		}
 
-
-
-		//TODO: implement this for real
-		prioritySpace = spaces[1][1];
+		spaces[1][5].addBoardElement(new PriorityAntenna());
 	}
 
 
@@ -87,9 +86,33 @@ public class Board {
 	 * <p>Returns the {@link #prioritySpace}</p>
 	 *
 	 * @return A space containing the priority antenna
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
 	public Space getPrioritySpace() {
+		if (prioritySpace == null) setPrioritySpace();
 		return prioritySpace;
+	}
+
+	/**
+	 * <p>Searches the board top to bottom, column by column for a
+	 * {@link PriorityAntenna} and set the {@link #prioritySpace} to
+	 * the space the first space containing such an element.</p>
+	 * @return true if a PriorityAntenna was found
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	private boolean setPrioritySpace(){
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				BoardElement[] elements = getSpace(x, y).getElements();
+				for (BoardElement boardElement: elements) {
+					if(boardElement instanceof PriorityAntenna){
+						prioritySpace = getSpace(x, y);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -149,7 +172,7 @@ public class Board {
 	 * @see #getRectilinearDistance(Space, Space)
 	 */
 	public int getRectilinearDistanceToPrioritySpace(Space from) {
-		return getRectilinearDistance(from, prioritySpace);
+		return getRectilinearDistance(from, getPrioritySpace());
 	}
 
 	public String getBoardName() {
