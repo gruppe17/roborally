@@ -134,8 +134,8 @@ public class AppController implements Observer {
 	private LinkedList<CommandCard> getPlayerDeck(){
 		//Todo: Read from file
 		CommandCard[] commandCards = {
-				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
-				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
+				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
+				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
 				new CommandCard(Command.OPTION_LEFT_RIGHT), new CommandCard(Command.OPTION_LEFT_RIGHT),
 				new CommandCard(Command.UTURN),
 				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
