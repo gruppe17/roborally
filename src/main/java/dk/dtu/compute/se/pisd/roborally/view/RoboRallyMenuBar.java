@@ -85,12 +85,12 @@ public class RoboRallyMenuBar extends MenuBar {
 			stopGame.setVisible(true);
 			saveGame.setVisible(true);
 			loadGame.setVisible(false);
-		} else {
-			newGame.setVisible(true);
-			stopGame.setVisible(false);
-			saveGame.setVisible(false);
-			loadGame.setVisible(true);
+			return;
 		}
+		newGame.setVisible(true);
+		stopGame.setVisible(false);
+		saveGame.setVisible(false);
+		//todo: should not show load game if database has no games
+		loadGame.setVisible(true);
 	}
-
 }

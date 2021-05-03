@@ -210,11 +210,14 @@ public class AppController implements Observer {
 	 */
 	public void loadGame() {
 		if (gameController != null) return;
-		GameInDB[] gameInDBs = RepositoryAccess.getRepository().getGames().toArray(new GameInDB[0]);
+		List<GameInDB> gameInDBList = RepositoryAccess.getRepository().getGames();
+		if (gameInDBList == null || gameInDBList.isEmpty()) return;
 		//MenuItem[] games = new MenuItem[gameInDBs.length];
-		String[] names = new String[gameInDBs.length];
-		for (int i = 0; i < gameInDBs.length; i++) {
-			names[i] = (i + 1) + ". " + gameInDBs[i].name;
+		String[] names = new String[gameInDBList.size()];
+		int i = 0;
+		for (GameInDB gameInDB: gameInDBList) {
+			names[i] = (i + 1) + ". " + gameInDB.name;
+			i++;
 		}
 
 		ChoiceDialog<String> dialog = new ChoiceDialog<>(names[0], names);
@@ -225,7 +228,7 @@ public class AppController implements Observer {
 		String choice = game.get();
 		choice = choice.substring(0, choice.indexOf('.'));
 
-		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBs[Integer.parseInt(choice)-1].id), this);
+		gameController = new GameController(RepositoryAccess.getRepository().loadGameFromDB(gameInDBList.get(Integer.parseInt(choice)-1).id), this);
 		roboRally.createGameView(gameController);
 	}
 
