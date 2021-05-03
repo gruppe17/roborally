@@ -73,6 +73,36 @@
       ]
     },
     {
+      "x": 1,
+      "y": 5,
+      "boardElements": [
+        {
+          "CLASSNAME": "dk.dtu.compute.se.pisd.roborally.model.board.boardElement.PriorityAntenna",
+          "INSTANCE": {
+            "impassableFrom": [
+              "SOUTH",
+              "WEST",
+              "NORTH",
+              "EAST"
+            ],
+            "opaqueFrom": [
+              "SOUTH",
+              "WEST",
+              "NORTH",
+              "EAST"
+            ],
+            "position": [
+              "SOUTH",
+              "WEST",
+              "NORTH",
+              "EAST"
+            ],
+            "observers": []
+          }
+        }
+      ]
+    },
+    {
       "x": 2,
       "y": 0,
       "boardElements": [

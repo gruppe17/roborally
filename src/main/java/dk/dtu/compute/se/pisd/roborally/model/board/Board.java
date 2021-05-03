@@ -64,8 +64,6 @@ public class Board {
 				spaces[x][y] = space;
 			}
 		}
-
-		spaces[1][5].addBoardElement(new PriorityAntenna());
 	}
 
 
