@@ -28,14 +28,12 @@ import dk.dtu.compute.se.pisd.roborally.interfaces.Directional;
 import dk.dtu.compute.se.pisd.roborally.interfaces.Spacebound;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.board.Space;
+import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.DamageType;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Heading;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static dk.dtu.compute.se.pisd.roborally.model.enums.Heading.SOUTH;
 
@@ -110,6 +108,32 @@ public class Player extends Subject implements Spacebound, Directional {
 
 		//// TODO: this should probably be done somewhere else
 		this.laser = new Laser(6, true, DamageType.LASER, this);
+	}
+
+	/**
+	 * Creates a new list containing a full standard deck of programming cards.
+	 * @return a new {@link LinkedList} containing an entire standard player deck
+	 * @author Rasmus Nylander, s205418@student.dtu.dk
+	 */
+	public static LinkedList<CommandCard> newPlayerDeck(){
+		//Todo: Read from file
+		CommandCard[] commandCards = {
+				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
+				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
+				new CommandCard(Command.OPTION_LEFT_RIGHT), new CommandCard(Command.OPTION_LEFT_RIGHT),
+				new CommandCard(Command.UTURN),
+				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
+				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
+				new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD),
+				new CommandCard(Command.MOVE3),
+				new CommandCard(Command.BACKUP),
+				new CommandCard(Command.REPEAT), new CommandCard(Command.REPEAT),
+				new CommandCard(Command.ENERGISE)
+		};
+		LinkedList<CommandCard> deck = new LinkedList<>();
+		deck.addAll(Arrays.asList(commandCards));
+
+		return deck;
 	}
 
 	public String getName() {

@@ -29,12 +29,10 @@ import dk.dtu.compute.se.pisd.roborally.RoboRally;
 import dk.dtu.compute.se.pisd.roborally.dal.GameInDB;
 import dk.dtu.compute.se.pisd.roborally.dal.repository.RepositoryAccess;
 import dk.dtu.compute.se.pisd.roborally.fileaccess.BoardLoader;
-import dk.dtu.compute.se.pisd.roborally.model.CommandCard;
 import dk.dtu.compute.se.pisd.roborally.model.board.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 
 import dk.dtu.compute.se.pisd.roborally.model.Game;
-import dk.dtu.compute.se.pisd.roborally.model.enums.Command;
 import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -109,7 +107,7 @@ public class AppController implements Observer {
 			game.addPlayer(player);
 			//Cards are added to the discard pile so that when the player
 			// attempts to draw a card,the cards will be *shuffled* into the deck.
-			player.playerController.addCardsToDiscardPile(newPlayerDeck());
+			player.playerController.addCardsToDiscardPile(Player.newPlayerDeck());
 			player.setSpace(game.getBoard().getSpace(i % game.getBoard().width, i));
 		}
 	}
@@ -124,32 +122,6 @@ public class AppController implements Observer {
 	private void chooseRobots(Game game){
 		//todo: get players' choices
 		//todo: assign each player their choice
-	}
-
-	/**
-	 * Creates a new list containing a full standard deck of programming cards.
-	 * @return a new {@link LinkedList} containing an entire standard player deck
-	 * @author Rasmus Nylander, s205418@student.dtu.dk
-	 */
-	private LinkedList<CommandCard> newPlayerDeck(){
-		//Todo: Read from file
-		CommandCard[] commandCards = {
-				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
-				new CommandCard(Command.RIGHT), new CommandCard(Command.RIGHT),
-				new CommandCard(Command.OPTION_LEFT_RIGHT), new CommandCard(Command.OPTION_LEFT_RIGHT),
-				new CommandCard(Command.UTURN),
-				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
-				new CommandCard(Command.FORWARD), new CommandCard(Command.FORWARD),
-				new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD), new CommandCard(Command.FAST_FORWARD),
-				new CommandCard(Command.MOVE3),
-				new CommandCard(Command.BACKUP),
-				new CommandCard(Command.REPEAT), new CommandCard(Command.REPEAT),
-				new CommandCard(Command.ENERGISE)
-		};
-		LinkedList<CommandCard> deck = new LinkedList<>();
-		deck.addAll(Arrays.asList(commandCards));
-
-		return deck;
 	}
 
 	/**
