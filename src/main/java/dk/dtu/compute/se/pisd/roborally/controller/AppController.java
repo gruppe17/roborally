@@ -39,7 +39,6 @@ import dk.dtu.compute.se.pisd.roborally.model.enums.Phase;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,7 +109,7 @@ public class AppController implements Observer {
 			game.addPlayer(player);
 			//Cards are added to the discard pile so that when the player
 			// attempts to draw a card,the cards will be *shuffled* into the deck.
-			player.playerController.addCardsToDiscardPile(getPlayerDeck());
+			player.playerController.addCardsToDiscardPile(newPlayerDeck());
 			player.setSpace(game.getBoard().getSpace(i % game.getBoard().width, i));
 		}
 	}
@@ -128,10 +127,11 @@ public class AppController implements Observer {
 	}
 
 	/**
-	 * ...
+	 * Creates a new list containing a full standard deck of programming cards.
+	 * @return a new {@link LinkedList} containing an entire standard player deck
 	 * @author Rasmus Nylander, s205418@student.dtu.dk
 	 */
-	private LinkedList<CommandCard> getPlayerDeck(){
+	private LinkedList<CommandCard> newPlayerDeck(){
 		//Todo: Read from file
 		CommandCard[] commandCards = {
 				new CommandCard(Command.LEFT), new CommandCard(Command.LEFT),
